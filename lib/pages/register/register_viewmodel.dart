@@ -1,6 +1,6 @@
 import 'package:sitter_swipe/models/base_viewmodel.dart';
 
-class InterestedPageViewModel extends BaseViewModel {
+class RegisterViewModel extends BaseViewModel {
   @override
   void dispose() {
     // TODO: implement dispose

@@ -41,6 +41,11 @@ dependencies:
   location: ^4.2.0
   unicons: any
   eva_icons_flutter: 
+  lottie: ^1.4.3
+  carousel_slider: ^4.1.1
+  google_place: ^0.4.7   # pick one
+  flutter_google_places: ^0.3.0  # pick one
+  loading_indicator: ^3.1.0
 
 dev_dependencies:
   flutter_test:

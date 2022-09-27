@@ -1,6 +1,7 @@
 // families or other babysitters interested
 // part of baseScreen
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/resources/strings.dart';
 
 class InterestedPage extends StatefulWidget {
   const InterestedPage({Key? key}) : super(key: key);
@@ -12,8 +13,11 @@ class InterestedPage extends StatefulWidget {
 class _InterestedPageState extends State<InterestedPage> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Interested"),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(PageTitles.interested),
+      ),
     );
   }
 }

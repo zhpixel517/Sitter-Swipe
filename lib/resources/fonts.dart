@@ -9,8 +9,22 @@ class Fonts {
       fontWeight: FontWeight.w300,
       color: TanPallete.tan,
       fontSize: FontSizes.secondaryFontSize);
+  static TextStyle mediumStyle = poppins.copyWith(
+      fontWeight: FontWeight.w500,
+      color: TanPallete.darkGrey,
+      fontSize: FontSizes.stateRendererMessageSize);
+  static TextStyle smallText = poppins.copyWith(
+    fontWeight: FontWeight.w200,
+    color: TanPallete.lightGrey,
+  );
+  static TextStyle swipeScreenLocationTitle = poppins.copyWith(
+    fontWeight: FontWeight.w300,
+    color: TanPallete.darkGrey,
+    fontSize: 15.0,
+  );
 }
 
 class FontSizes {
   static double secondaryFontSize = 15.0;
+  static double stateRendererMessageSize = 16.0;
 }

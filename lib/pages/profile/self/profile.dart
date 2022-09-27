@@ -1,5 +1,6 @@
 // show profile screen
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/resources/strings.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,6 +12,11 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(PageTitles.profile),
+      ),
+    );
   }
 }

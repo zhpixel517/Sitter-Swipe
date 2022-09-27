@@ -3,7 +3,7 @@ import 'package:sitter_swipe/pages/base_screen.dart';
 import 'package:sitter_swipe/pages/forgot_password/forgot_password.dart';
 import 'package:sitter_swipe/pages/login/login.dart';
 import 'package:sitter_swipe/pages/onboarding/onboarding.dart';
-import 'package:sitter_swipe/pages/profile/profile.dart';
+import 'package:sitter_swipe/pages/profile/self/profile.dart';
 import 'package:sitter_swipe/pages/register/register.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 

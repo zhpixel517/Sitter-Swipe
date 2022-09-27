@@ -11,3 +11,7 @@ class SwipeViewModel extends BaseViewModel {
     // TODO: implement start
   }
 }
+
+abstract class SwipeViewModelOutput {
+  Stream<List> get sittersListOutput;
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 
 InputDecoration getLoginInputDecoration(
@@ -7,6 +8,7 @@ InputDecoration getLoginInputDecoration(
 ) {
   return InputDecoration(
       labelText: labelText,
+      errorStyle: Fonts.bold.copyWith(color: Colors.red),
       errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(
               width: AppSizes.focusedInputBorderSize, color: Colors.red)),

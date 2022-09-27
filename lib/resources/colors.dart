@@ -7,13 +7,3 @@ class TanPallete {
   static const Color creamWhite = Color(0xFFFAE1DF);
   static const Color tan = Color(0xFFE4C3AD);
 }
-
-class PinkPallete {
-  static const Color babyPink = Color(0xFFDFBBB1);
-  static const Color fieryRose = Color(0xFFF56476);
-  static const Color cerise = Color(0xFFE43F6F);
-  static const Color smitten = Color(0xFFBE3E82);
-  static const Color eggplant = Color(0xFF5E4352);
-}
-
-class SitterSwipeColors {}

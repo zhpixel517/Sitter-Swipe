@@ -1,5 +1,8 @@
 // onboarding
+
+//! do I even need this?
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/resources/colors.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -11,6 +14,8 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Scaffold(
+      backgroundColor: TanPallete.tan,
+    );
   }
 }

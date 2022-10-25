@@ -22,6 +22,8 @@ class Fonts {
     color: TanPallete.darkGrey,
     fontSize: 15.0,
   );
+  static TextStyle interestedTitle = poppins.copyWith(
+      fontWeight: FontWeight.w300, color: Colors.white, fontSize: 10.0);
 }
 
 class FontSizes {

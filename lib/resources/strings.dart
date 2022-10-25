@@ -20,10 +20,22 @@ class AppStrings {
 
   static const String sitterSearch = "Find sitter...";
   static const String messageSearch = "Search messages...";
+
+  static const String imageHeroTag = "profileImageTag";
+  static const String interestedHeading =
+      "Users who have swiped right on your profile";
 }
 
 class PageTitles {
   static const chat = "Chats";
   static const interested = "Interested";
   static const profile = "Profile";
+  static const notifications = "Notifications";
+  static const settings = "Settings";
+}
+
+class ButtonLabels {
+  static const pass = "Pass";
+  static const like = "Like";
+  static const message = "Message";
 }

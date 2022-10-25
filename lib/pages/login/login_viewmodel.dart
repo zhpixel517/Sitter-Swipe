@@ -55,6 +55,7 @@ class LoginViewModel extends BaseViewModel
 
   @override
   setEmail(String email) {
+    print("set email was called");
     inputEmail.add(email);
     _email = email;
     _validate();
@@ -62,6 +63,7 @@ class LoginViewModel extends BaseViewModel
 
   @override
   setPassword(String password) {
+    print("set password was called");
     inputPassword.add(password);
     _password = password;
     _validate();

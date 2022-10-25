@@ -41,6 +41,7 @@ ThemeData getApplicationTheme() {
             borderRadius:
                 BorderRadius.circular(AppSizes.elevatedButtonBorderRadius))),
     textTheme: TextTheme(
+      bodyText1: Fonts.poppins.copyWith(fontSize: 15),
       headline1:
           Fonts.poppins.copyWith(fontWeight: FontWeight.w800, fontSize: 25),
     ),
@@ -77,7 +78,10 @@ InputDecoration searchBarDecoration(FocusNode focusNode, String labelText) {
   return InputDecoration(
       filled: true,
       fillColor: TanPallete.creamWhite,
-      prefixIcon: const Icon(EvaIcons.search),
+      prefixIcon: Icon(
+        EvaIcons.search,
+        color: focusNode.hasFocus ? TanPallete.tan : TanPallete.darkGrey,
+      ),
       labelText: labelText,
       labelStyle: Fonts.smallText,
       floatingLabelBehavior: FloatingLabelBehavior.never,

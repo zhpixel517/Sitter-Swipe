@@ -1,17 +1,18 @@
 //swipe on families or babysitters
 // part of baseScreen
-
-import 'dart:collection';
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/card_content.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/custom_icon_button.dart';
+import 'package:sitter_swipe/pages/swipe/widgets/discovery_settings.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
+import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/resources/theme.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
 class SwipePage extends StatefulWidget {
@@ -26,8 +27,9 @@ class _SwipePageState extends State<SwipePage> {
   List<SwipeItem> cards = [
     SwipeItem(
         content: const CardContent(
-          image:
-              "https://img.itch.zone/aW1nLzgxMzEyOTguanBn/315x250%23c/9yD9hv.jpg",
+          rating: 4.2,
+          hourlyRate: '17',
+          image: edp445Image,
           fullName: "Smelvin",
           userName: "smelvin_1",
           age: "23",
@@ -37,8 +39,9 @@ class _SwipePageState extends State<SwipePage> {
         likeAction: () {}),
     SwipeItem(
       content: const CardContent(
-        image:
-            "https://img.itch.zone/aW1nLzgxMzEyOTguanBn/315x250%23c/9yD9hv.jpg",
+        rating: 4.0,
+        hourlyRate: '14',
+        image: edp445Image,
         userName: "joe_mama_69",
         fullName: "Joe Mama",
         age: "55",
@@ -48,8 +51,9 @@ class _SwipePageState extends State<SwipePage> {
     ),
     SwipeItem(
       content: const CardContent(
-        image:
-            "https://img.itch.zone/aW1nLzgxMzEyOTguanBn/315x250%23c/9yD9hv.jpg",
+        rating: 5.0,
+        hourlyRate: '20',
+        image: edp445Image,
         userName: "chorb12",
         fullName: "Chorbius",
         age: "17",
@@ -94,7 +98,11 @@ class _SwipePageState extends State<SwipePage> {
                     );
                   },
                   itemBuilder: (item, index) {
-                    return cards[index].content;
+                    return cards.isNotEmpty
+                        ? cards[index].content
+                        : const Center(
+                            child: Text(
+                                "No more sitters found. Try change your discovery preferences?"));
                   },
                 ),
               ),
@@ -134,7 +142,8 @@ class _SwipePageState extends State<SwipePage> {
                   const Icon(EvaIcons.pin, color: TanPallete.tan),
                   Text.rich(TextSpan(
                       text: "Franklin",
-                      style: Fonts.swipeScreenLocationTitle,
+                      style: Fonts.swipeScreenLocationTitle
+                          .copyWith(fontWeight: FontWeight.bold),
                       children: [
                         TextSpan(
                             text: ", Tennessee",
@@ -146,7 +155,9 @@ class _SwipePageState extends State<SwipePage> {
           ),
         ),
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.notifications);
+            },
             icon: const Icon(
               EvaIcons.bellOutline,
               color: TanPallete.darkGrey,
@@ -168,13 +179,15 @@ class _SwipePageState extends State<SwipePage> {
         ),
         Expanded(
           flex: 3,
-          child: CustomIconButton(
-              () {},
+          child: CustomIconButton(() {
+            // slide up sheet with discovery preferences?
+            showDiscoveryPreferences(context, true); // true for now
+          },
               const Icon(
                 EvaIcons.settingsOutline,
-                color: Colors.white,
+                color: TanPallete.richBlack,
               ),
-              const EdgeInsets.all(12.0)),
+              const EdgeInsets.all(9.0)),
         ),
       ],
     );

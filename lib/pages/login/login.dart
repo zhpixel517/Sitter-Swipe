@@ -27,10 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     _bind();
-    _emailController
-        .addListener(() => _viewModel.setEmail(_emailController.text));
-    _passwordController
-        .addListener(() => _viewModel.setPassword(_passwordController.text));
     super.initState();
     emailNode.addListener(() {
       setState(() {});
@@ -42,6 +38,10 @@ class _LoginPageState extends State<LoginPage> {
 
   _bind() {
     _viewModel.start();
+    _emailController
+        .addListener(() => _viewModel.setEmail(_emailController.text));
+    _passwordController
+        .addListener(() => _viewModel.setPassword(_passwordController.text));
   }
 
   @override

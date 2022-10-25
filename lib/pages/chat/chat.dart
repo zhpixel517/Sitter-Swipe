@@ -1,75 +1,143 @@
-// messaging
-// part of baseScreen
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:sitter_swipe/pages/chat/chat_viewmodel.dart';
-import 'package:sitter_swipe/pages/login/login.dart';
+import 'package:sitter_swipe/app/constants.dart';
+import 'package:sitter_swipe/pages/chat/widgets/chat_bubble.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
-import 'package:sitter_swipe/resources/strings.dart';
-import 'package:sitter_swipe/resources/theme.dart';
 
+// the actual messaging screen
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+  String name;
+  String? userName; // for firebase?
+  ChatPage(this.userName, {required this.name, Key? key}) : super(key: key);
 
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final ChatViewModel _viewModel = instance<ChatViewModel>();
-  final FocusNode messageSearchFocusNode = FocusNode();
+  final TextEditingController chatTextController = TextEditingController();
+  ScrollController scrollController = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-    messageSearchFocusNode.addListener(() {
-      setState(() {});
-    });
-  }
+  List chats = [
+    const ChatBubble(
+      text: "Hey! Need a sitter?",
+      isSelf: true,
+    ),
+    const ChatBubble(
+      text: "Yeah, that would be great. What does you schedule look like? ",
+      isSelf: false,
+    ),
+    const ChatBubble(
+      text: "Pretty free this next weekend.",
+      isSelf: true,
+    ),
+    const ChatBubble(
+      text: "How's yours looking?",
+      isSelf: true,
+    )
+  ];
+
+  List<String> popUpMenuItems = ["View Profile", "Call", "Block", "Report"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(PageTitles.chat),
+        title: Row(
+          children: [
+            const CircleAvatar(
+              backgroundImage: NetworkImage(edp445Image),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.03,
+            ),
+            Text(widget.name),
+          ],
+        ),
+        leading: IconButton(
+          icon: const Icon(EvaIcons.arrowBack),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          PopupMenuButton(
+              icon: const Icon(
+                EvaIcons.moreVertical,
+              ),
+              itemBuilder: ((context) {
+                return popUpMenuItems
+                    .map((String item) => PopupMenuItem(
+                          textStyle: Fonts.mediumStyle,
+                          value: item,
+                          child: Text(item),
+                        ))
+                    .toList();
+              }))
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: AppPadding.globalContentSidePadding),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(
-                  focusNode: messageSearchFocusNode,
-                  decoration: searchBarDecoration(
-                      messageSearchFocusNode, AppStrings.messageSearch)),
-              Column(
-                children: const [
-                  ListTile(
-                    leading: CircleAvatar(),
-                    title: Text("New message from so and so"),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 9,
+            child: ListView.builder(
+                controller: scrollController,
+                itemCount: chats.length,
+                itemBuilder: (builder, index) {
+                  return chats[index];
+                }),
+          ),
+          const Divider(
+            color: TanPallete.darkGrey,
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: AppPadding.globalContentSidePadding),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: AppPadding.p18),
+                      child: TextField(
+                          controller: chatTextController,
+                          decoration: InputDecoration(
+                              prefixIcon: IconButton(
+                                  icon: const Icon(EvaIcons.attach),
+                                  onPressed: () {}))),
+                    ),
                   ),
-                  ListTile(
-                    leading: CircleAvatar(),
-                    title: Text("New message from so and so"),
-                  ),
-                  ListTile(
-                    leading: CircleAvatar(),
-                    title: Text("New message from so and so"),
-                  ),
-                  ListTile(
-                    leading: CircleAvatar(),
-                    title: Text("New message from so and so"),
-                  ),
+                  Expanded(
+                      flex: 2,
+                      child: IconButton(
+                          color: TanPallete.tan,
+                          icon: const Icon(
+                            EvaIcons.paperPlane,
+                            size: AppSizes.mediumIconSize,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (scrollController.hasClients) {
+                                final bottomPosition =
+                                    scrollController.position.maxScrollExtent;
+                                scrollController.jumpTo(bottomPosition);
+                              }
+                              if (chatTextController.text.isNotEmpty) {
+                                chats.add(ChatBubble(
+                                    text: chatTextController.text,
+                                    isSelf: true));
+                              }
+                            });
+                          }))
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

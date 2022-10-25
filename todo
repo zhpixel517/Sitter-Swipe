@@ -1,9 +1,27 @@
 Start with frontend first.
 
     - Registration flow 
+    - hourly rates?
     - login text field checking
     - responsive layout!!
-    - Main Swipe screen, follow dribbble shot
-    - build on what the dribbble shot gives that make sense
     - permissions
+    - report users somehow? pedo shield is a must
 
+
+Login:
+    - viewmodel isn't sending any data
+
+Swipe:
+    - when swipe card is empty
+    - discovery preferences slideup sheet
+
+Notifications Screen:
+    - swipable cards
+
+Chats:
+    - confirm delete
+    - search for a user
+    - complete mark as read - viewmodel usage?
+
+Interested:
+    -   more explanation on what it is

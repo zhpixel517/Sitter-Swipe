@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/chat/chat_selection.dart';
 import 'package:sitter_swipe/pages/interested/interested.dart';
 import 'package:sitter_swipe/pages/profile/profile.dart';
 import 'package:sitter_swipe/pages/swipe/swipe.dart';
+import 'package:sitter_swipe/resources/colors.dart';
+import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/theme.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:sitter_swipe/services/responsive.dart';
 import 'package:sitter_swipe/services/storage.dart';
 
 class BaseScreen extends StatefulWidget {
-  int screenIndex = 0; // starts with 0
+  int screenIndex; // starts with 0
+  static GlobalKey globalKey = GlobalKey();
   // ! Did this so that I can come to certain spots from the notification screen
-  BaseScreen({Key? key}) : super(key: key);
-
+  BaseScreen({this.screenIndex = 0, Key? key}) : super(key: key);
   @override
   _BaseScreen createState() => _BaseScreen();
 }
@@ -41,10 +45,17 @@ class _BaseScreen extends State<BaseScreen> {
     const SwipePage(),
     const InterestedPage(),
     const ChatSelection(),
-    UserProfile(ThisUser.name, ThisUser.name, true)
+    UserProfile(
+      ThisUser.name,
+      ThisUser.name,
+      true,
+      false,
+      "18",
+      profileImage: boy2,
+    )
   ];
 
-  void _updateIndex(int newIndex) {
+  void updateIndex(int newIndex) {
     HapticFeedback.selectionClick();
     setState(() {
       widget.screenIndex = newIndex;
@@ -53,10 +64,23 @@ class _BaseScreen extends State<BaseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar: getBottomNavigationBarTheme(
-          bottomNavigationbarItems, widget.screenIndex, _updateIndex),
+      bottomNavigationBar: BottomNavigationBarTheme(
+          data: const BottomNavigationBarThemeData(
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              elevation: 0,
+              unselectedIconTheme: IconThemeData(
+                  color: TanPallete.darkGrey, size: AppSizes.largeIconSize),
+              selectedIconTheme:
+                  IconThemeData(color: TanPallete.tan, size: 40.0)),
+          child: BottomNavigationBar(
+              key: BaseScreen.globalKey,
+              items: bottomNavigationbarItems,
+              currentIndex: widget.screenIndex,
+              onTap: updateIndex)),
       body: pages[widget.screenIndex],
     );
   }

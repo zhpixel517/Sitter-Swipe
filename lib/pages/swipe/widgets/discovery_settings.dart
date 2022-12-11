@@ -1,55 +1,60 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sitter_swipe/models/enums/prefferred_gender.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class DiscoveryPreferences extends StatefulWidget {
-  final PanelController controller;
-  DiscoveryPreferences(this.controller, {Key? key}) : super(key: key);
+class GenderChip extends StatefulWidget {
+  bool selected;
+  PreferredGender preferredGender;
+  IconData icon;
+  GenderChip(
+      {required this.preferredGender,
+      required this.icon,
+      this.selected = false,
+      Key? key})
+      : super(key: key);
 
   @override
-  _DiscoveryPreferencesState createState() => _DiscoveryPreferencesState();
+  _GenderChipState createState() => _GenderChipState();
 }
 
-class _DiscoveryPreferencesState extends State<DiscoveryPreferences> {
-  double? range = 0;
-  PreferredGender preferredGender =
-      PreferredGender.any; // only if lookingForSitter is true
-  int? minAge;
-  int? maxage;
+class _GenderChipState extends State<GenderChip> {
+  String _getCorrectText(PreferredGender pg) {
+    switch (pg) {
+      case PreferredGender.male:
+        return "Male";
+      case PreferredGender.female:
+        return "Female";
+      case PreferredGender.any:
+        return "Any/Other";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SlidingUpPanel(
-      controller: widget.controller,
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                "Discovery Settings",
-                style: Fonts.bold,
-              ),
-            ),
-            Expanded(
-              child: Slider(
-                label: "Range",
-                max: 100.0,
-                value: range!,
-                activeColor: TanPallete.tan,
-                onChanged: (value) {
-                  setState(() {
-                    range = value;
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
+    return ChoiceChip(
+      avatar: Icon(
+        widget.icon,
+        color: Colors.white,
       ),
+      disabledColor: TanPallete.creamWhite,
+      selectedColor: TanPallete.tan,
+      label: Text(
+        _getCorrectText(widget.preferredGender),
+        style: widget.selected
+            ? const TextStyle(
+                fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold)
+            : const TextStyle(fontSize: 15, color: Colors.white),
+      ),
+      selected: widget.selected,
+      onSelected: (value) {
+        setState(() {
+          widget.selected = value;
+        });
+      },
     );
   }
 }
@@ -59,13 +64,14 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
   // lookingFor Sitter will be true if the user is a parent looking to hire someone
   // temp vars for getting user inputted data, bring in from getPrefs
   // ! ex: int? range = getPrefs('range');
-  double? range = 0;
+  int? range = 25;
+  double? minimumRating = 3.5;
   PreferredGender preferredGender; // only if lookingForSitter is true
   int? minAge;
   int? maxage;
   return showModalBottomSheet(
       elevation: 6.0,
-      enableDrag: false,
+      useRootNavigator: true,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(AppSizes.searchBarBorderRadius),
@@ -98,12 +104,14 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
+                            flex: 1,
                             child: Text(
                               "Discovery Settings",
                               style: Fonts.bold.copyWith(fontSize: 25),
                             ),
                           ),
                           Expanded(
+                            flex: 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -111,13 +119,12 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
                                     style: Fonts.bold.copyWith(fontSize: 17)),
                                 Slider(
                                   divisions: 300,
-                                  label: "Range",
                                   max: 300.0,
-                                  value: range!,
+                                  value: range!.toDouble(),
                                   activeColor: TanPallete.tan,
                                   onChanged: (value) {
                                     setState(() {
-                                      range = value.round().toDouble();
+                                      range = value.round().toInt();
                                     });
                                   },
                                 ),
@@ -125,6 +132,7 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
                             ),
                           ),
                           Expanded(
+                            flex: 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -137,59 +145,55 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Expanded(
-                                      child: ChoiceChip(
-                                        avatar: const Icon(Icons.transgender),
-                                        disabledColor: TanPallete.creamWhite,
-                                        selectedColor: TanPallete.tan,
-                                        label: const Text("Any/Other"),
-                                        selected: any_other,
-                                        onSelected: (value) {
-                                          setState(() {
-                                            any_other = value;
-                                          });
-                                        },
-                                      ),
-                                    ),
+                                        child: GenderChip(
+                                      preferredGender: PreferredGender.any,
+                                      icon: Icons.transgender,
+                                      selected: any_other,
+                                    )),
                                     Expanded(
-                                      child: ChoiceChip(
-                                        avatar: const Icon(Icons.male),
-                                        disabledColor: TanPallete.creamWhite,
-                                        selectedColor: TanPallete.tan,
-                                        label: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            "Male",
-                                            style: Fonts.bold
-                                                .copyWith(fontSize: 15),
-                                          ),
-                                        ),
-                                        selected: male,
-                                        onSelected: (value) {
-                                          setState(() {
-                                            male = value;
-                                          });
-                                        },
-                                      ),
-                                    ),
+                                        child: GenderChip(
+                                      preferredGender: PreferredGender.male,
+                                      icon: Icons.male,
+                                      selected: male,
+                                    )),
                                     Expanded(
-                                      child: ChoiceChip(
-                                        avatar: const Icon(Icons.female),
-                                        disabledColor: TanPallete.creamWhite,
-                                        selectedColor: TanPallete.tan,
-                                        label: const Text("Female"),
-                                        selected: female,
-                                        onSelected: (value) {
-                                          setState(() {
-                                            female = value;
-                                          });
-                                        },
-                                      ),
-                                    )
+                                        child: GenderChip(
+                                      preferredGender: PreferredGender.female,
+                                      icon: Icons.female,
+                                      selected: female,
+                                    ))
                                   ],
                                 )
                               ],
                             ),
                           ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Minimum Rating - $minimumRating",
+                                  style: Fonts.bold.copyWith(fontSize: 17),
+                                ),
+                                Center(
+                                  child: RatingBar.builder(
+                                      initialRating: 3, //get preferences
+                                      minRating: 1,
+                                      allowHalfRating: true,
+                                      itemBuilder: (context, index) {
+                                        return const Icon(EvaIcons.star,
+                                            color: Colors.amber);
+                                      },
+                                      onRatingUpdate: (rating) {
+                                        setState(() {
+                                          minimumRating = rating;
+                                        });
+                                      }),
+                                )
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),

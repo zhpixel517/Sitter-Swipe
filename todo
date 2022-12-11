@@ -1,19 +1,18 @@
 Start with frontend first.
 
-    - Registration flow 
-    - hourly rates?
+
+    - Registration flow!!!
+        -   image cropper, mandatory image sizes
+    - hourly rates? where's the payment going to come in?
     - login text field checking
     - responsive layout!!
     - permissions
-    - report users somehow? pedo shield is a must
+    - report users somehow? pedo shield is a MUST
+        - how to implement this background check?
 
 
 Login:
     - viewmodel isn't sending any data
-
-Swipe:
-    - when swipe card is empty
-    - discovery preferences slideup sheet
 
 Notifications Screen:
     - swipable cards
@@ -25,3 +24,11 @@ Chats:
 
 Interested:
     -   more explanation on what it is
+
+what happens when there's a match???
+when do they leave a review????
+sent requests screen?
+previous completed connections?
+
+premium:
+    sitters say they are immediately available nearby - notifications

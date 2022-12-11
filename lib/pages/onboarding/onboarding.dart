@@ -14,8 +14,12 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: TanPallete.tan,
+    return  Scaffold(
+      body: Column(
+        children: [
+          
+        ],
+      ),
     );
   }
 }

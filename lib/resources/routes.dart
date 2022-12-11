@@ -19,6 +19,11 @@ class Routes {
 
   // swipe, chats, and interested don't need to be here
   // they will be inside baseScreen
+
+  static const homeIndex = 0;
+  static const interestedIndex = 1;
+  static const messagesIndex = 2;
+  static const profileIndex = 3;
 }
 
 class RouteGenerator {

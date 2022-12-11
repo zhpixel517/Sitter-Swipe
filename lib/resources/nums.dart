@@ -10,7 +10,7 @@ class AppPadding {
 
   static const double conversationChoiceVerticalPadding = 10.0;
 
-  static const double chatBubbleHorizontalBuffer = 70.0;
+  static const double chatBubbleHorizontalBuffer = 130.0;
 }
 
 class AppSizes {

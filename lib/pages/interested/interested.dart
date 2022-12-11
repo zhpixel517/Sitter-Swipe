@@ -1,6 +1,7 @@
 // families or other babysitters interested
 // part of baseScreen
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/interested/widgets/interested_person.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
@@ -16,13 +17,11 @@ class InterestedPage extends StatefulWidget {
 
 class _InterestedPageState extends State<InterestedPage> {
   List<InterestedPerson> interestedPeople = [
-    InterestedPerson("Joe", "@joe"),
-    InterestedPerson("test", "@joeeeeeeeeeeeeeeeeeee"),
-    InterestedPerson("Mane", "@adf"),
-    InterestedPerson("What", "@sdfg"),
-    InterestedPerson("The", "@asd"),
-    InterestedPerson("Hail", "@hail4566777"),
-    InterestedPerson("Boa", "@boa"),
+    InterestedPerson("Bianca", "@joe", girl1, "16"),
+    InterestedPerson("Michael", "@joeeeeeeeeeeeeeeeeeee", boy1, "15"),
+    InterestedPerson("Emily", "@adf", girl2, "14"),
+    InterestedPerson("Ammon", "@sdfg", boy2, "18"),
+    InterestedPerson("Avery", "@asd", girl3, "15"),
   ];
   @override
   Widget build(BuildContext context) {
@@ -54,19 +53,22 @@ class _InterestedPageState extends State<InterestedPage> {
             Expanded(
               flex: 9,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppPadding.globalContentSidePadding),
-                child: GridView.builder(
-                    itemCount: interestedPeople.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 5),
-                    itemBuilder: (context, index) {
-                      return interestedPeople[index];
-                    }),
-              ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppPadding.globalContentSidePadding),
+                  child: interestedPeople.isNotEmpty
+                      ? GridView.builder(
+                          itemCount: interestedPeople.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 5),
+                          itemBuilder: (context, index) {
+                            return interestedPeople[index];
+                          })
+                      : const Center(
+                          child: Icon(Icons.question_answer),
+                        )),
             ),
           ],
         ));

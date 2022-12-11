@@ -1,8 +1,12 @@
 //swipe on families or babysitters
 // part of baseScreen
+import 'dart:developer';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sitter_swipe/app/constants.dart';
+import 'package:sitter_swipe/pages/swipe/swipe_viewmodel.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/card_content.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/custom_icon_button.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/discovery_settings.dart';
@@ -13,7 +17,10 @@ import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/resources/theme.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
+
+import '../../services/di.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -27,45 +34,101 @@ class _SwipePageState extends State<SwipePage> {
   List<SwipeItem> cards = [
     SwipeItem(
         content: const CardContent(
+          alignment: Alignment.centerRight,
           rating: 4.2,
           hourlyRate: '17',
-          image: edp445Image,
-          fullName: "Smelvin",
-          userName: "smelvin_1",
-          age: "23",
-          occupation: "Jobless freak",
+          image: girl1,
+          fullName: "Bianca",
+          userName: "bianca_15",
+          age: "16",
+          isFamily: false,
           distance: "5",
         ),
         likeAction: () {}),
     SwipeItem(
       content: const CardContent(
+        alignment: Alignment.centerRight,
         rating: 4.0,
         hourlyRate: '14',
-        image: edp445Image,
-        userName: "joe_mama_69",
-        fullName: "Joe Mama",
-        age: "55",
-        occupation: "Retired",
+        image: boy1,
+        userName: "mDog420",
+        fullName: "Michael",
+        age: "15",
+        isFamily: false,
         distance: "15",
       ),
     ),
     SwipeItem(
+      onSlideUpdate: (SlideRegion? slideRegion) async {
+        log("Region $slideRegion");
+      },
       content: const CardContent(
+        alignment: Alignment.center,
         rating: 5.0,
         hourlyRate: '20',
-        image: edp445Image,
-        userName: "chorb12",
-        fullName: "Chorbius",
-        age: "17",
-        occupation: "Student",
+        image: girl3,
+        userName: "avery123",
+        fullName: "Avery",
+        age: "15",
+        isFamily: false,
         distance: "3",
       ),
-    )
+    ),
+    SwipeItem(
+      content: const CardContent(
+        alignment: Alignment.center,
+        rating: 5.0,
+        hourlyRate: '20',
+        image: boy2,
+        userName: "a_m_m_o_n",
+        fullName: "Ammon",
+        age: "18",
+        isFamily: false,
+        distance: "3",
+      ),
+    ),
   ]; // need to get these from the viewmodel/firebase
+
+/*
+  Widget _returnCorrectSwipeIndicator(SlideRegion? slideRegion) {
+    setState(() {
+      switch (slideRegion) {
+        case SlideRegion.inNopeRegion:
+          return Center(
+              child: Text(
+            "TESTING!!!!",
+            style: Fonts.bold.copyWith(color: Colors.white),
+          ));
+        case SlideRegion.inLikeRegion:
+          return Center(
+              child: Text(
+            "TESTING!!!!",
+            style: Fonts.bold.copyWith(color: Colors.white),
+          ));
+
+        case SlideRegion.inSuperLikeRegion:
+          return Center(
+              child: Text(
+            "TESTING!!!!",
+            style: Fonts.bold.copyWith(color: Colors.white),
+          ));
+        default:
+          return Center(
+              child: Text(
+            "TESTING!!!!",
+            style: Fonts.bold.copyWith(color: Colors.white),
+          ));
+      }
+    });
+  }
+  */
+
+  final SwipeViewModel _viewModel = instance<SwipeViewModel>();
 
   @override
   void initState() {
     super.initState();
+    _viewModel.start();
     searchBarFocusNode.addListener(() {
       setState(() {});
     });
@@ -73,6 +136,7 @@ class _SwipePageState extends State<SwipePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool noCardsLeft = false;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -88,24 +152,46 @@ class _SwipePageState extends State<SwipePage> {
             Expanded(
               flex: 7,
               child: Center(
-                child: SwipeCards(
-                  matchEngine: MatchEngine(swipeItems: cards),
-                  onStackFinished: () {
-                    print("the stack has finished!!!@");
-                    return const Center(
-                      child: Text(
-                          "No more babysitters found. Change your search preferences?"),
-                    );
-                  },
-                  itemBuilder: (item, index) {
-                    return cards.isNotEmpty
-                        ? cards[index].content
-                        : const Center(
-                            child: Text(
-                                "No more sitters found. Try change your discovery preferences?"));
-                  },
-                ),
-              ),
+                  child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          EvaIcons.questionMarkCircleOutline,
+                          size: 30,
+                        ),
+                      ),
+                      Text(
+                        "Can't find anymore sitters!",
+                        style: Fonts.bold,
+                      ),
+                      const SizedBox(height: 30),
+                      ElevatedButton(
+                          onPressed: () {
+                            showDiscoveryPreferences(context, true);
+                          },
+                          child: const Text("Change Discovery Settings"))
+                    ],
+                  ),
+                  SwipeCards(
+                    upSwipeAllowed: false,
+                    matchEngine: MatchEngine(swipeItems: cards),
+                    onStackFinished: () {},
+                    itemBuilder: (item, index) {
+                      return cards.isNotEmpty
+                          ? cards[index].content
+                          : const Center(
+                              child: Text(
+                                  "No more sitters found. Try change your discovery preferences?"));
+                    },
+                  ),
+                ],
+              )),
             ),
           ],
         ),
@@ -185,7 +271,7 @@ class _SwipePageState extends State<SwipePage> {
           },
               const Icon(
                 EvaIcons.settingsOutline,
-                color: TanPallete.richBlack,
+                color: Colors.white,
               ),
               const EdgeInsets.all(9.0)),
         ),

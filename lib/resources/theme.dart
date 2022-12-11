@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/pages/base_screen.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
@@ -58,20 +59,6 @@ ThemeData getApplicationTheme() {
       ),
     )),
   );
-}
-
-BottomNavigationBarTheme getBottomNavigationBarTheme(
-    List<BottomNavigationBarItem> items, int index, Function(int) onTap) {
-  return BottomNavigationBarTheme(
-      data: const BottomNavigationBarThemeData(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          elevation: 0,
-          unselectedIconTheme: IconThemeData(
-              color: TanPallete.darkGrey, size: AppSizes.largeIconSize),
-          selectedIconTheme: IconThemeData(color: TanPallete.tan, size: 40.0)),
-      child:
-          BottomNavigationBar(items: items, currentIndex: index, onTap: onTap));
 }
 
 InputDecoration searchBarDecoration(FocusNode focusNode, String labelText) {

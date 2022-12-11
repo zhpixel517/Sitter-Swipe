@@ -38,6 +38,7 @@ dependencies:
   internet_connection_checker: 
   permission_handler: ^10.0.1
   geolocator: ^9.0.2
+  geocoding: ^2.0.5
   location: ^4.2.0
   eva_icons_flutter: 
   lottie: ^1.4.3
@@ -48,6 +49,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   pinput: ^2.2.12
   sliding_up_panel: ^2.0.0+1
+  cloud_firestore: ^4.0.5
 
 dev_dependencies:
   flutter_test:

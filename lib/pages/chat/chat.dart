@@ -5,12 +5,18 @@ import 'package:sitter_swipe/pages/chat/widgets/chat_bubble.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
+import 'package:sitter_swipe/resources/strings.dart';
 
 // the actual messaging screen
 class ChatPage extends StatefulWidget {
-  String name;
+  String? name;
   String? userName; // for firebase?
-  ChatPage(this.userName, {required this.name, Key? key}) : super(key: key);
+  bool
+      cameFromProfile; // "View Profile" butotn won't show if they already came from the profile screen
+  final String? profileImageLocator;
+  ChatPage(this.userName, this.cameFromProfile,
+      {required this.name, required this.profileImageLocator, Key? key})
+      : super(key: key);
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -40,20 +46,20 @@ class _ChatPageState extends State<ChatPage> {
   ];
 
   List<String> popUpMenuItems = ["View Profile", "Call", "Block", "Report"];
-
+  List<String> popUpFromProfile = ["Call", "Block", "Report"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            const CircleAvatar(
-              backgroundImage: NetworkImage(edp445Image),
+            CircleAvatar(
+              backgroundImage: NetworkImage(widget.profileImageLocator!),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.03,
             ),
-            Text(widget.name),
+            Text(widget.name!),
           ],
         ),
         leading: IconButton(
@@ -68,7 +74,9 @@ class _ChatPageState extends State<ChatPage> {
                 EvaIcons.moreVertical,
               ),
               itemBuilder: ((context) {
-                return popUpMenuItems
+                return (widget.cameFromProfile
+                        ? popUpFromProfile
+                        : popUpMenuItems)
                     .map((String item) => PopupMenuItem(
                           textStyle: Fonts.mediumStyle,
                           value: item,
@@ -82,12 +90,21 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           Expanded(
             flex: 9,
-            child: ListView.builder(
-                controller: scrollController,
-                itemCount: chats.length,
-                itemBuilder: (builder, index) {
-                  return chats[index];
-                }),
+            child: chats.isNotEmpty
+                ? ListView.builder(
+                    controller: scrollController,
+                    itemCount: chats.length,
+                    itemBuilder: (builder, index) {
+                      return chats[index];
+                    })
+                : Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      " ${AppStrings.youStartedAConversation} ${widget.name}",
+                      style:
+                          Fonts.smallText.copyWith(color: TanPallete.lightGrey),
+                    ),
+                  ),
           ),
           const Divider(
             color: TanPallete.darkGrey,
@@ -127,9 +144,12 @@ class _ChatPageState extends State<ChatPage> {
                                 scrollController.jumpTo(bottomPosition);
                               }
                               if (chatTextController.text.isNotEmpty) {
-                                chats.add(ChatBubble(
-                                    text: chatTextController.text,
-                                    isSelf: true));
+                                setState(() {
+                                  chats.add(ChatBubble(
+                                      text: chatTextController.text,
+                                      isSelf: true));
+                                  chatTextController.text = "";
+                                });
                               }
                             });
                           }))

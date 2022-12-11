@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: CircleAvatar(
                   radius: 100.0,
                   backgroundColor: TanPallete.tan,
-                  backgroundImage: NetworkImage(edp445Image),
+                  backgroundImage: NetworkImage(boy2),
                 )),
               ),
               SizedBox(
@@ -49,11 +49,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     children: [
                       Text(
-                        "Joe",
+                        "Zachary Haslam",
                         style: Fonts.bold.copyWith(fontSize: 30.0),
                       ),
                       Text(
-                        "@joe_mom",
+                        "@zach_attack",
                         style: Fonts.smallText,
                       )
                     ],

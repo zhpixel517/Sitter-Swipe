@@ -13,9 +13,11 @@ class Conversation extends StatefulWidget {
   String time;
   bool? latestMessageWasSelf;
   bool read;
+  final String? image;
   Conversation(this.profileImage, this.latestMessage, this.time,
       {required this.name,
       required this.read,
+      required this.image,
       this.userName,
       this.latestMessageWasSelf,
       Key? key})
@@ -39,15 +41,20 @@ class _ConversationState extends State<Conversation> {
               Radius.circular(AppSizes.searchBarBorderRadius)),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ChatPage(widget.userName, name: widget.name);
+              return ChatPage(
+                widget.userName,
+                false,
+                name: widget.name,
+                profileImageLocator: widget.image,
+              );
             }));
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 backgroundColor: TanPallete.tan,
-                backgroundImage: NetworkImage(edp445Image),
+                backgroundImage: NetworkImage(widget.image!),
               ),
               Expanded(
                 flex: 8,

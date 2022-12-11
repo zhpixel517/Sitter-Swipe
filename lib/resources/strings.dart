@@ -24,6 +24,9 @@ class AppStrings {
   static const String imageHeroTag = "profileImageTag";
   static const String interestedHeading =
       "Users who have swiped right on your profile";
+
+  static const String youStartedAConversation =
+      "You started a conversation with";
 }
 
 class PageTitles {

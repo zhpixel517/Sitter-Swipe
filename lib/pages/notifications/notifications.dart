@@ -22,7 +22,51 @@ class _NotificationsPageState extends State<NotificationsPage> {
   final NotificationPageViewModel _viewModel =
       instance<NotificationPageViewModel>();
 
-  final List<NotificationCard> notifications = [
+  final List<NotificationCard> notifications = [];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text(PageTitles.notifications),
+          leading: IconButton(
+            icon: const Icon(EvaIcons.arrowBack),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppPadding.globalContentSidePadding),
+            child: notifications.isNotEmpty
+                ? ListView.builder(
+                    itemCount: notifications.length,
+                    itemBuilder: (context, index) {
+                      return notifications[index];
+                    })
+                : _noNotifications()));
+  }
+
+  _noNotifications() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(
+            EvaIcons.smilingFace,
+            color: TanPallete.lightGrey,
+            size: 30.0,
+          ),
+          Text(
+            "All caught up!",
+            style: Fonts.smallText.copyWith(fontSize: 18.0),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+/*
     NotificationCard(
         read: true,
         profilePictureLocator: '',
@@ -51,45 +95,4 @@ class _NotificationsPageState extends State<NotificationsPage> {
             notificationType: NotificationType.other,
             fromUserImage: "",
             customText: "New changes to privacy policy"))
-  ];
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text(PageTitles.notifications),
-          leading: IconButton(
-            icon: const Icon(EvaIcons.arrowBack),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-        body: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppPadding.globalContentSidePadding),
-            child: ListView.builder(
-                itemCount: notifications.length,
-                itemBuilder: (context, index) {
-                  return notifications.isNotEmpty
-                      ? notifications[index]
-                      : _noNotifications();
-                })));
-  }
-
-  _noNotifications() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(
-            EvaIcons.smilingFace,
-            color: TanPallete.lightGrey,
-          ),
-          Text(
-            "All caught up!",
-            style: Fonts.smallText,
-          )
-        ],
-      ),
-    );
-  }
-}
+            */

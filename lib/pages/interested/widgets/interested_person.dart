@@ -6,8 +6,11 @@ import 'package:sitter_swipe/resources/nums.dart';
 
 class InterestedPerson extends StatefulWidget {
   String name; // display name
-  String userName; // send into firebase
-  InterestedPerson(this.name, this.userName, {Key? key}) : super(key: key);
+  String userName; // send into firebase and get more information
+  String image;
+  String age;
+  InterestedPerson(this.name, this.userName, this.image, this.age, {Key? key})
+      : super(key: key);
 
   @override
   _InterestedPersonState createState() => _InterestedPersonState();
@@ -26,7 +29,14 @@ class _InterestedPersonState extends State<InterestedPerson> {
       child: GestureDetector(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return UserProfile(widget.userName, widget.name, false);
+            return UserProfile(
+              widget.userName,
+              widget.name,
+              false,
+              false,
+              widget.age,
+              profileImage: widget.image,
+            );
           }));
         },
         child: LayoutBuilder(builder: (context, constraints) {
@@ -39,11 +49,12 @@ class _InterestedPersonState extends State<InterestedPerson> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  const Image(
-                      fit: BoxFit.fill,
+                  Image(
+                      fit: BoxFit.cover,
                       image: NetworkImage(
-                        edp445Image,
+                        widget.image,
                       )),
+                  imageBlur(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(

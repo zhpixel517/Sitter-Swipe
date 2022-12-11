@@ -9,5 +9,6 @@ class ChatViewModel extends BaseViewModel {
   @override
   void start() {
     // TODO: implement start
+    // add information about this chat to firebase and make sure that it saves
   }
 }

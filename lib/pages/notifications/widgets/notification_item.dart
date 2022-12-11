@@ -64,36 +64,40 @@ class _NotificationCardState extends State<NotificationCard> {
       onDismissed: (direction) {},
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.08,
-        child: InkWell(
-          onTap: () {
-            // hop to a certain page index at baseScreen?
-          },
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: _returnCorrectNotificationIcon(
-                      widget.notificationData!.notificationType!)),
-              Expanded(
-                  flex: 7,
-                  child: Text(
-                    _getCorrectNotificationText(
-                        widget.notificationData!.notificationType!,
-                        fromUser: widget.notificationData!.fromUser!),
-                    style: widget.read
-                        ? Fonts.bold.copyWith(fontSize: 15)
-                        : Fonts.mediumStyle.copyWith(fontSize: 15),
-                  )),
-              Expanded(
-                child: Container(
-                  child: Center(
-                      child: Text(
-                    "4:55",
-                    style: Fonts.smallText,
-                  )),
-                ),
-              )
-            ],
+        child: Container(
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: InkWell(
+            onTap: () {
+              // hop to a certain page index at baseScreen?
+            },
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: _returnCorrectNotificationIcon(
+                        widget.notificationData!.notificationType!)),
+                Expanded(
+                    flex: 5,
+                    child: Text(
+                      _getCorrectNotificationText(
+                          widget.notificationData!.notificationType!,
+                          fromUser: widget.notificationData!.fromUser!),
+                      style: widget.read
+                          ? Fonts.bold.copyWith(fontSize: 15)
+                          : Fonts.mediumStyle.copyWith(fontSize: 15),
+                    )),
+                Expanded(
+                  child: Container(
+                    child: Center(
+                        child: Text(
+                      "4:55",
+                      style: Fonts.smallText,
+                    )),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

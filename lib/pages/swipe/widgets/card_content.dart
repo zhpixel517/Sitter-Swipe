@@ -10,19 +10,21 @@ class CardContent extends StatelessWidget {
   final String? userName;
   final String? fullName;
   final String? age;
-  final String? occupation;
   final String? distance;
   final String? hourlyRate;
   final double? rating;
+  final bool? isFamily;
+  final AlignmentGeometry? alignment;
   const CardContent(
       {required this.image,
       required this.userName,
       required this.fullName,
       required this.age,
-      required this.occupation,
       required this.rating,
       required this.distance,
       required this.hourlyRate,
+      required this.isFamily,
+      required this.alignment,
       Key? key})
       : super(key: key);
 
@@ -34,8 +36,14 @@ class CardContent extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      UserProfile(userName, fullName, false)));
+                  builder: (context) => UserProfile(
+                        userName,
+                        fullName,
+                        false,
+                        isFamily!,
+                        age!,
+                        profileImage: image,
+                      )));
         },
         child: Container(
           decoration: const BoxDecoration(
@@ -57,11 +65,12 @@ class CardContent extends StatelessWidget {
                         fit: StackFit.expand,
                         children: [
                           Image(
+                            alignment: alignment!,
                             errorBuilder: (context, error, stackTrace) {
                               return const Center(
                                   child: Icon(EvaIcons.questionMarkCircle));
                             },
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fitHeight,
                             image: NetworkImage(image!),
                           ),
                           Align(

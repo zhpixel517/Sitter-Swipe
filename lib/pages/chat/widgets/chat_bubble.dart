@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sitter_swipe/resources/colors.dart';
+import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 
 class ChatBubble extends StatefulWidget {
@@ -27,21 +28,40 @@ class _ChatBubbleState extends State<ChatBubble> {
       child: Align(
         alignment:
             widget.isSelf! ? Alignment.centerRight : Alignment.centerLeft,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: widget.isSelf! ? TanPallete.tan : TanPallete.lightGrey,
-            borderRadius: BorderRadius.circular(AppSizes.searchBarBorderRadius),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(AppPadding.p10),
-            child: Text(
-              widget.text!,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .copyWith(color: Colors.white),
+        child: Column(
+          crossAxisAlignment: widget.isSelf!
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                  color: widget.isSelf! ? TanPallete.tan : TanPallete.lightGrey,
+                  borderRadius: BorderRadius.only(
+                      topLeft: !widget.isSelf!
+                          ? const Radius.circular(0)
+                          : const Radius.circular(
+                              AppSizes.searchBarBorderRadius),
+                      bottomLeft:
+                          const Radius.circular(AppSizes.searchBarBorderRadius),
+                      bottomRight:
+                          const Radius.circular(AppSizes.searchBarBorderRadius),
+                      topRight: widget.isSelf!
+                          ? const Radius.circular(0)
+                          : const Radius.circular(
+                              AppSizes.searchBarBorderRadius))),
+              child: Padding(
+                padding: const EdgeInsets.all(AppPadding.p10),
+                child: Text(
+                  widget.text!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Colors.white),
+                ),
+              ),
             ),
-          ),
+            Text("3:01 PM", style: Fonts.smallText)
+          ],
         ),
       ),
     );

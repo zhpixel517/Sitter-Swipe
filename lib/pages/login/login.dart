@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailNode.addListener(() {
       setState(() {});
+      print("updated this junk here");
     });
     passwordNode.addListener(() {
       setState(() {});
@@ -47,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -54,7 +56,16 @@ class _LoginPageState extends State<LoginPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Placeholder(),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 150.0),
+                    child: Text(
+                      "SitterSwipe",
+                      style: Fonts.bold
+                          .copyWith(color: TanPallete.tan, fontSize: 50),
+                    ),
+                  ),
+                ),
                 Column(
                   children: [
                     Padding(

@@ -3,6 +3,7 @@
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/chat/chat_viewmodel.dart';
 import 'package:sitter_swipe/pages/chat/widgets/conversation.dart';
 import 'package:sitter_swipe/pages/login/login.dart';
@@ -27,8 +28,9 @@ class _ChatSelectionState extends State<ChatSelection> {
       "",
       "My little brother loves legoes too!",
       "1 hr",
-      name: "Janice",
+      name: "Bianca",
       userName: "jj89",
+      image: girl1,
       read: false,
       latestMessageWasSelf: false,
     ),
@@ -36,8 +38,9 @@ class _ChatSelectionState extends State<ChatSelection> {
       "",
       "Need a sitter?",
       "5 min",
-      name: "Joseph",
-      userName: "zach-attack",
+      name: "Michael",
+      userName: "mDog420",
+      image: boy1,
       read: true,
       latestMessageWasSelf: true,
     ),
@@ -45,35 +48,9 @@ class _ChatSelectionState extends State<ChatSelection> {
       "",
       "Need a sitter?",
       "5 min",
-      name: "Zachary",
+      name: "Avery",
       userName: "zach-attack",
-      read: true,
-      latestMessageWasSelf: false,
-    ),
-    Conversation(
-      "",
-      "Need a sitter?",
-      "5 min",
-      name: "Zachary",
-      userName: "zach-attack",
-      read: true,
-      latestMessageWasSelf: false,
-    ),
-    Conversation(
-      "",
-      "Need a sitter?",
-      "5 min",
-      name: "Zachary",
-      userName: "zach-attack",
-      read: true,
-      latestMessageWasSelf: false,
-    ),
-    Conversation(
-      "",
-      "Need a sitter?",
-      "5 min",
-      name: "Zachary",
-      userName: "zach-attack",
+      image: girl2,
       read: true,
       latestMessageWasSelf: false,
     ),

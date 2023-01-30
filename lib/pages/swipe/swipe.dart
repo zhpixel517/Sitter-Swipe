@@ -26,10 +26,10 @@ class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
 
   @override
-  _SwipePageState createState() => _SwipePageState();
+  SwipePageState createState() => SwipePageState();
 }
 
-class _SwipePageState extends State<SwipePage> {
+class SwipePageState extends State<SwipePage> {
   final FocusNode searchBarFocusNode = FocusNode();
   List<SwipeItem> cards = [
     SwipeItem(
@@ -85,6 +85,7 @@ class _SwipePageState extends State<SwipePage> {
         age: "18",
         isFamily: false,
         distance: "3",
+        // matchEngineInstance: matchEngine,
       ),
     ),
   ]; // need to get these from the viewmodel/firebase
@@ -124,6 +125,7 @@ class _SwipePageState extends State<SwipePage> {
   */
 
   final SwipeViewModel _viewModel = instance<SwipeViewModel>();
+  static MatchEngine? matchEngine;
 
   @override
   void initState() {
@@ -137,6 +139,7 @@ class _SwipePageState extends State<SwipePage> {
   @override
   Widget build(BuildContext context) {
     bool noCardsLeft = false;
+    matchEngine = MatchEngine(swipeItems: cards);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -180,7 +183,7 @@ class _SwipePageState extends State<SwipePage> {
                   ),
                   SwipeCards(
                     upSwipeAllowed: false,
-                    matchEngine: MatchEngine(swipeItems: cards),
+                    matchEngine: matchEngine!,
                     onStackFinished: () {},
                     itemBuilder: (item, index) {
                       return cards.isNotEmpty

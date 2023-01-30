@@ -123,6 +123,7 @@ class _ChatPageState extends State<ChatPage> {
                       child: TextField(
                           controller: chatTextController,
                           decoration: InputDecoration(
+                              hintText: "Aa",
                               prefixIcon: IconButton(
                                   icon: const Icon(EvaIcons.attach),
                                   onPressed: () {}))),

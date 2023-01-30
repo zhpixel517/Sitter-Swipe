@@ -17,7 +17,7 @@ import 'package:sitter_swipe/services/responsive.dart';
 final instance = GetIt.instance;
 
 Future<void> initAppModule() async {
-  final sharedPrefs = await SharedPreferences.getInstance();
+  final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
 
   // shared preferences instance
   instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);

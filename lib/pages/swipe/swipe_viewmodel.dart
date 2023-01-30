@@ -25,6 +25,8 @@ class SwipeViewModel extends BaseViewModel with SwipeViewModelOutput {
       try {
         List<Placemark> placeMark = await placemarkFromCoordinates(
             position.latitude, position.longitude);
+        print("The returned placemark is $placeMark");
+        _cityName.add(placeMark);
         // give this to the viewmodel
       } catch (error) {
         print(error);

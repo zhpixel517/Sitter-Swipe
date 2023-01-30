@@ -5,5 +5,5 @@ class TanPallete {
   static const Color darkGrey = Color(0xFF546A7B);
   static const Color lightGrey = Color(0xFF9EA3B0);
   static const Color creamWhite = Color(0xFFFAE1DF);
-  static const Color tan = Color(0xFFE4C3AD);
+  static const Color tan = Color(0xFFCC8F66);
 }

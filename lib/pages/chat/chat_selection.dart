@@ -23,38 +23,7 @@ class ChatSelection extends StatefulWidget {
 class _ChatSelectionState extends State<ChatSelection> {
   final ChatViewModel _viewModel = instance<ChatViewModel>();
   final FocusNode messageSearchFocusNode = FocusNode();
-  List<Conversation> conversations = [
-    Conversation(
-      "",
-      "My little brother loves legoes too!",
-      "1 hr",
-      name: "Bianca",
-      userName: "jj89",
-      image: girl1,
-      read: false,
-      latestMessageWasSelf: false,
-    ),
-    Conversation(
-      "",
-      "Need a sitter?",
-      "5 min",
-      name: "Michael",
-      userName: "mDog420",
-      image: boy1,
-      read: true,
-      latestMessageWasSelf: true,
-    ),
-    Conversation(
-      "",
-      "Need a sitter?",
-      "5 min",
-      name: "Avery",
-      userName: "zach-attack",
-      image: girl2,
-      read: true,
-      latestMessageWasSelf: false,
-    ),
-  ];
+  List<Conversation> conversations = [];
 
   @override
   void initState() {
@@ -116,7 +85,8 @@ class _ChatSelectionState extends State<ChatSelection> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "No messages. Why don't you start one?",
+                            "No messages. Why don't you start swiping to get started?",
+                            textAlign: TextAlign.center,
                             style: Fonts.smallText,
                           )
                         ],

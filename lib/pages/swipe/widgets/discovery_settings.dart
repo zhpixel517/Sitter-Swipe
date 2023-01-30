@@ -5,6 +5,7 @@ import 'package:sitter_swipe/models/enums/prefferred_gender.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
+import 'package:sitter_swipe/services/preferences/discovery_preferences.dart';
 
 class GenderChip extends StatefulWidget {
   bool selected;
@@ -36,9 +37,11 @@ class _GenderChipState extends State<GenderChip> {
   @override
   Widget build(BuildContext context) {
     return ChoiceChip(
+      labelPadding: const EdgeInsets.all(5.0),
       avatar: Icon(
         widget.icon,
         color: Colors.white,
+        size: 30,
       ),
       disabledColor: TanPallete.creamWhite,
       selectedColor: TanPallete.tan,
@@ -60,15 +63,18 @@ class _GenderChipState extends State<GenderChip> {
 }
 
 // this does not work
-dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
+dynamic showDiscoveryPreferences(
+    BuildContext context, bool lookingForSitter) async {
   // lookingFor Sitter will be true if the user is a parent looking to hire someone
   // temp vars for getting user inputted data, bring in from getPrefs
   // ! ex: int? range = getPrefs('range');
-  int? range = 25;
-  double? minimumRating = 3.5;
-  PreferredGender preferredGender; // only if lookingForSitter is true
-  int? minAge;
-  int? maxage;
+  DiscoveryPreferences prefs = await getDiscoveryPreferences();
+  int? range = prefs.range;
+  double? minimumRating = prefs.minimumRating;
+  PreferredGender? preferredGender =
+      prefs.preferredGender; // only if lookingForSitter is true
+  int? minAge = prefs.minAge;
+  int? maxAge = prefs.maxAge;
   return showModalBottomSheet(
       elevation: 6.0,
       useRootNavigator: true,
@@ -86,10 +92,7 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                       Radius.circular(AppSizes.searchBarBorderRadius))),
-              onClosing: () {
-                savePreferences();
-                print("closed");
-              },
+              onClosing: () {},
               builder: (context) {
                 return StatefulBuilder(builder: (context, setState) {
                   bool any_other = true;
@@ -118,8 +121,8 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
                                 Text("Range - ${range.toString()} miles",
                                     style: Fonts.bold.copyWith(fontSize: 17)),
                                 Slider(
-                                  divisions: 300,
-                                  max: 300.0,
+                                  divisions: 200,
+                                  max: 200.0,
                                   value: range!.toDouble(),
                                   activeColor: TanPallete.tan,
                                   onChanged: (value) {
@@ -178,7 +181,8 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
                                 ),
                                 Center(
                                   child: RatingBar.builder(
-                                      initialRating: 3, //get preferences
+                                      initialRating:
+                                          minimumRating!, //get preferences
                                       minRating: 1,
                                       allowHalfRating: true,
                                       itemBuilder: (context, index) {
@@ -201,11 +205,11 @@ dynamic showDiscoveryPreferences(BuildContext context, bool lookingForSitter) {
                 });
               });
         });
-      });
-}
-
-void savePreferences() {
-  // save the discovery preferences
-  // ! Provider to rebuild with new changes
-  // ! app preferences to make sure their choices are saved next time
+      }).then((value) => DiscoveryPreferences(
+          range: range,
+          minimumRating: minimumRating,
+          preferredGender: preferredGender,
+          minAge: minAge,
+          maxAge: maxAge)
+      .save());
 }

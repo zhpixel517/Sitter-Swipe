@@ -4,6 +4,7 @@ import 'package:sitter_swipe/pages/profile/profile.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
+import 'package:swipe_cards/swipe_cards.dart';
 
 class CardContent extends StatelessWidget {
   final String? image; // for now, the url to image. later, a firebase uri
@@ -15,6 +16,7 @@ class CardContent extends StatelessWidget {
   final double? rating;
   final bool? isFamily;
   final AlignmentGeometry? alignment;
+  // final MatchEngine? matchEngineInstance;
   const CardContent(
       {required this.image,
       required this.userName,
@@ -25,6 +27,7 @@ class CardContent extends StatelessWidget {
       required this.hourlyRate,
       required this.isFamily,
       required this.alignment,
+      // required this.matchEngineInstance,
       Key? key})
       : super(key: key);
 
@@ -42,6 +45,7 @@ class CardContent extends StatelessWidget {
                         false,
                         isFamily!,
                         age!,
+                        // matchEngineInstance: ,
                         profileImage: image,
                       )));
         },

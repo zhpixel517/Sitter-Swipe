@@ -34,7 +34,7 @@ dependencies:
   google_fonts: 
   swipe_cards: ^1.0.0
   get_it: ^7.2.0
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.17
   internet_connection_checker: 
   permission_handler: ^10.0.1
   geolocator: ^9.0.2
@@ -50,6 +50,7 @@ dependencies:
   pinput: ^2.2.12
   sliding_up_panel: ^2.0.0+1
   cloud_firestore: ^4.0.5
+  enum_to_string: ^2.0.1
 
 dev_dependencies:
   flutter_test:

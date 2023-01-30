@@ -15,7 +15,10 @@ Login:
     - viewmodel isn't sending any data
 
 Notifications Screen:
-    - swipable cards
+    - location element
+
+User Profile:
+    - more data
 
 Chats:
     - confirm delete
@@ -29,6 +32,8 @@ what happens when there's a match???
 when do they leave a review????
 sent requests screen?
 previous completed connections?
+
+**** what should the set up look like for sitters instead? ****
 
 premium:
     sitters say they are immediately available nearby - notifications

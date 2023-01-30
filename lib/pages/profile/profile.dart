@@ -10,12 +10,14 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/base_screen.dart';
 import 'package:sitter_swipe/pages/chat/chat.dart';
+import 'package:sitter_swipe/pages/swipe/swipe.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/services/responsive.dart';
+import 'package:swipe_cards/swipe_cards.dart';
 
 class UserProfile extends StatefulWidget {
   // what kinds of data points do I need to pass through?
@@ -27,9 +29,10 @@ class UserProfile extends StatefulWidget {
   bool isFamily; // is a group of children
   final String? profileImage;
   final String? age;
+  //final MatchEngine? matchEngineInstance;
   UserProfile(
       this.userName, this.fullName, this.isSelf, this.isFamily, this.age,
-      {required this.profileImage, Key? key})
+      {required this.profileImage, /*this.matchEngineInstance*/ Key? key})
       : super(key: key);
 
   @override
@@ -38,6 +41,13 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   List<String> listPopUpOptions = ["Call", "Block", "Report"];
+
+  @override
+  void initState() {
+    super.initState();
+
+    //TODO: either pull data from firebase or use cached data to populate this bit if self
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,14 +157,20 @@ class _UserProfileState extends State<UserProfile> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _buildProfileActionButton(
-                            EvaIcons.close, ButtonLabels.pass, () {}),
+                            EvaIcons.close, ButtonLabels.pass, () async {
+                          Navigator.pop(context);
+                          await Future.delayed(
+                              const Duration(milliseconds: 100), () {});
+                          SwipePageState.matchEngine!.currentItem!.nope();
+                          // update firebase?
+                        }),
                         _buildProfileActionButton(
                             EvaIcons.heart, ButtonLabels.like, () async {
                           Navigator.pop(context);
-                          await Future.delayed(const Duration(seconds: 1), () {
-                            print("timer finsihed");
-                          });
-                          _simulateSwipe(SwipeDirection.left, width, height);
+                          await Future.delayed(
+                              const Duration(milliseconds: 100), () {});
+                          SwipePageState.matchEngine!.currentItem!.like();
+                          // update firebase?
                         }),
                         _buildProfileActionButton(
                             EvaIcons.messageCircle, ButtonLabels.message, () {
@@ -263,22 +279,6 @@ class _UserProfileState extends State<UserProfile> {
         ),
       );
     }));
-  }
-
-  _simulateSwipe(SwipeDirection direction, var width, var height) {
-    print("called simulate swipe!");
-    WidgetsBinding.instance.handlePointerEvent(
-        PointerDownEvent(pointer: 0, position: Offset(width / 2, height / 2)));
-    WidgetsBinding.instance.handlePointerEvent(PointerMoveEvent(
-      pointer: 0,
-      //timeStamp: Duration(seconds:10),
-      position: Offset(height / 2, width / 2 + 100),
-      // delta: Offset(-10,Get.height/2),
-      // distanceMax: 0.05,
-    ));
-    WidgetsBinding.instance.handlePointerEvent(
-      const PointerUpEvent(pointer: 0),
-    );
   }
 
   Widget _customTopIconButton(IconData icon, Function callback) {

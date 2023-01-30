@@ -2,10 +2,13 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sitter_swipe/models/enums/prefferred_gender.dart';
+import 'package:sitter_swipe/pages/swipe/swipe_viewmodel.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/services/preferences/discovery_preferences.dart';
+
+import '../../../services/di.dart';
 
 class GenderChip extends StatefulWidget {
   bool selected;
@@ -69,6 +72,7 @@ dynamic showDiscoveryPreferences(
   // temp vars for getting user inputted data, bring in from getPrefs
   // ! ex: int? range = getPrefs('range');
   DiscoveryPreferences prefs = await getDiscoveryPreferences();
+  final SwipeViewModel _viewModel = instance<SwipeViewModel>();
   int? range = prefs.range;
   double? minimumRating = prefs.minimumRating;
   PreferredGender? preferredGender =
@@ -205,11 +209,14 @@ dynamic showDiscoveryPreferences(
                 });
               });
         });
-      }).then((value) => DiscoveryPreferences(
-          range: range,
-          minimumRating: minimumRating,
-          preferredGender: preferredGender,
-          minAge: minAge,
-          maxAge: maxAge)
-      .save());
+      }).then((value) {
+    _viewModel.getUserFeed();
+    return DiscoveryPreferences(
+            range: range,
+            minimumRating: minimumRating,
+            preferredGender: preferredGender,
+            minAge: minAge,
+            maxAge: maxAge)
+        .save();
+  });
 }

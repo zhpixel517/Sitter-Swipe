@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/profile/profile.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
+import 'package:sitter_swipe/resources/json_assets.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 
 class InterestedPerson extends StatefulWidget {
@@ -13,13 +15,25 @@ class InterestedPerson extends StatefulWidget {
       : super(key: key);
 
   @override
-  _InterestedPersonState createState() => _InterestedPersonState();
+  InterestedPersonState createState() => InterestedPersonState();
 }
 
-class _InterestedPersonState extends State<InterestedPerson> {
+class InterestedPersonState extends State<InterestedPerson>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _controller;
+  bool? wasLiked = false;
+
+  void showHeartAnimation() async {
+    setState(() {
+      wasLiked = true;
+    });
+  }
+
+  // TODO: figure out the little heart animation
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(vsync: this);
   }
 
   @override
@@ -73,6 +87,25 @@ class _InterestedPersonState extends State<InterestedPerson> {
                       ],
                     ),
                   ),
+                  wasLiked!
+                      ? Expanded(
+                          child: Container(
+                          color: Colors.white.withOpacity(0.4),
+                          child: Center(
+                            child: Lottie.asset(
+                              JsonAssets.heart_animation,
+                              controller: _controller,
+                              onLoaded: (composition) {
+                                // Configure the AnimationController with the duration of the
+                                // Lottie file and start the animation.
+                                _controller!
+                                  ..duration = composition.duration
+                                  ..forward();
+                              },
+                            ),
+                          ),
+                        ))
+                      : const SizedBox()
                 ],
               ),
             ),

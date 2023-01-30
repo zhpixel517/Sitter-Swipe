@@ -5,6 +5,7 @@ class AppStrings {
   static const String email = "Email";
   static const String password = "Password";
   static const String loading = "Loading";
+  static const String register = "Sign Up";
 
   static const String phoneNumber = 'Phone Number';
 
@@ -22,8 +23,7 @@ class AppStrings {
   static const String messageSearch = "Search messages...";
 
   static const String imageHeroTag = "profileImageTag";
-  static const String interestedHeading =
-      "Users who have swiped right on your profile";
+  static const String interestedHeading = "Users who've liked your profile";
 
   static const String youStartedAConversation =
       "You started a conversation with";

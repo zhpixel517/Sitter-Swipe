@@ -85,12 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                                     EvaIcons.email,
                                     color: emailNode.hasFocus
                                         ? Theme.of(context).primaryColor
-                                        : TanPallete.darkGrey,
+                                        : TanPallete.lightGrey,
                                   ),
                                   labelStyle: Fonts.bold.copyWith(
                                       color: emailNode.hasFocus
                                           ? Theme.of(context).primaryColor
-                                          : TanPallete.darkGrey,
+                                          : TanPallete.lightGrey,
                                       fontSize: AppSizes.textFieldLabelSize),
                                   labelText: AppStrings.email),
                             );
@@ -115,12 +115,12 @@ class _LoginPageState extends State<LoginPage> {
                                   EvaIcons.lock,
                                   color: passwordNode.hasFocus
                                       ? Theme.of(context).primaryColor
-                                      : TanPallete.darkGrey,
+                                      : TanPallete.lightGrey,
                                 ),
                                 labelStyle: Fonts.bold.copyWith(
                                     color: passwordNode.hasFocus
                                         ? Theme.of(context).primaryColor
-                                        : TanPallete.darkGrey,
+                                        : TanPallete.lightGrey,
                                     fontSize: AppSizes.textFieldLabelSize),
                               ),
                             );
@@ -155,14 +155,27 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, Routes.forgotPassword);
-                  },
-                  child: Text(
-                    AppStrings.forgotPassword,
-                    style: Fonts.secondaryFont,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.register);
+                        },
+                        child: Text(
+                          AppStrings.register,
+                          style: Fonts.secondaryFont,
+                        )),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.forgotPassword);
+                      },
+                      child: Text(
+                        AppStrings.forgotPassword,
+                        style: Fonts.secondaryFont,
+                      ),
+                    ),
+                  ],
                 ),
                 // TODO: Register text?
               ],

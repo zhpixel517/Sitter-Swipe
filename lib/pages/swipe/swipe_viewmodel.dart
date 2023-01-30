@@ -12,8 +12,12 @@ class SwipeViewModel extends BaseViewModel with SwipeViewModelOutput {
     // TODO: implement dispose
   }
 
-  @override
-  void start() async {
+  void getUserFeed() async {
+    // find matches based off of discovery preferences from firebase
+    // send them via stream into the view
+  }
+
+  void getCityName() async {
     LocationPermission locationPermissionStatus =
         await Geolocator.checkPermission();
     if (locationPermissionStatus == LocationPermission.whileInUse ||
@@ -33,9 +37,14 @@ class SwipeViewModel extends BaseViewModel with SwipeViewModelOutput {
       }
     }
   }
+
+  @override
+  void start() async {
+    getCityName();
+    getUserFeed();
+  }
 }
 
 abstract class SwipeViewModelOutput {
   // Stream<List> get sittersListOutput;
-
 }

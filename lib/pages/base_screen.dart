@@ -52,7 +52,7 @@ class _BaseScreen extends State<BaseScreen> {
       false,
       "18",
       profileImage: boy2,
-    )
+    ) // TODO: get profile data here from firebase
   ];
 
   void updateIndex(int newIndex) {

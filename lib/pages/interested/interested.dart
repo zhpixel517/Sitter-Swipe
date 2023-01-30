@@ -12,11 +12,11 @@ class InterestedPage extends StatefulWidget {
   const InterestedPage({Key? key}) : super(key: key);
 
   @override
-  _InterestedPageState createState() => _InterestedPageState();
+  InterestedPageState createState() => InterestedPageState();
 }
 
-class _InterestedPageState extends State<InterestedPage> {
-  List<InterestedPerson> interestedPeople = [
+class InterestedPageState extends State<InterestedPage> {
+  static List<InterestedPerson> interestedPeople = [
     InterestedPerson("Bianca", "@joe", girl1, "16"),
     InterestedPerson("Michael", "@joeeeeeeeeeeeeeeeeeee", boy1, "15"),
     InterestedPerson("Emily", "@adf", girl2, "14"),
@@ -43,7 +43,7 @@ class _InterestedPageState extends State<InterestedPage> {
                     child: Text(
                       AppStrings.interestedHeading,
                       style: Fonts.interestedTitle
-                          .copyWith(fontSize: 15, color: TanPallete.richBlack),
+                          .copyWith(fontSize: 15, color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                   ),

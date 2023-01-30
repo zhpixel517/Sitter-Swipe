@@ -1,5 +1,37 @@
 Start with frontend first.
 
+Login:
+    - viewmodel isn't sending any data
+    - forgot password page visual tweaks
+
+Swipe:
+    -  location picker
+
+Interested:
+    - more explanation
+    - two tabs? people who've liked you and people that you have liked
+    - like/pass animation
+
+Chat:
+    - search Function
+    - chat indicators - time
+    - confirm delete
+    - complete mark as read - viewmodel usage?
+
+Profile:
+    - carousel of images on the profile
+    - Reviews
+    - Edit bio? 
+
+Settings:
+    - what kinds of settings do we want?
+
+resources for babysitters - what to do, game ideas, dinner ideas, songs, homework
+resources for parents - what to do before your sitter gets here
+    - for subscription
+
+Notifications:
+    - visual tweaks
 
     - Registration flow!!!
         -   image cropper, mandatory image sizes
@@ -10,23 +42,6 @@ Start with frontend first.
     - report users somehow? pedo shield is a MUST
         - how to implement this background check?
 
-
-Login:
-    - viewmodel isn't sending any data
-
-Notifications Screen:
-    - location element
-
-User Profile:
-    - more data
-
-Chats:
-    - confirm delete
-    - search for a user
-    - complete mark as read - viewmodel usage?
-
-Interested:
-    -   more explanation on what it is
 
 what happens when there's a match???
 when do they leave a review????

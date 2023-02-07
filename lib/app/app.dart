@@ -20,7 +20,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: Routes.login, //TODO: check login/registered state here?
+        initialRoute:
+            Routes.login, //TODO: change to wrapper once you've setup Provider
         theme: getApplicationTheme());
   }
 }

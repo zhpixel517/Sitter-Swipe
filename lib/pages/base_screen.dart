@@ -46,8 +46,8 @@ class _BaseScreen extends State<BaseScreen> {
     const InterestedPage(),
     const ChatSelection(),
     UserProfile(
-      ThisUser.name,
-      ThisUser.name,
+      "Zachary",
+      "Zachary",
       true,
       false,
       "18",

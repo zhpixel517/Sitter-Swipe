@@ -93,7 +93,7 @@ class InterestedPersonState extends State<InterestedPerson>
                           color: Colors.white.withOpacity(0.4),
                           child: Center(
                             child: Lottie.asset(
-                              JsonAssets.heart_animation,
+                              JsonAssets.heartAnimation,
                               controller: _controller,
                               onLoaded: (composition) {
                                 // Configure the AnimationController with the duration of the

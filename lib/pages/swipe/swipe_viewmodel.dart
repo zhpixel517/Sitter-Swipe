@@ -3,9 +3,14 @@ import 'dart:async';
 import 'package:geocoding/geocoding.dart';
 import 'package:sitter_swipe/models/base_viewmodel.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:sitter_swipe/services/functions/location.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SwipeViewModel extends BaseViewModel with SwipeViewModelOutput {
   final StreamController _cityName = StreamController<String>.broadcast();
+  final StreamController _stateName = StreamController<String>.broadcast();
+
+  // TODO: add recieving sinks
 
   @override
   void dispose() {
@@ -17,30 +22,18 @@ class SwipeViewModel extends BaseViewModel with SwipeViewModelOutput {
     // send them via stream into the view
   }
 
-  void getCityName() async {
-    LocationPermission locationPermissionStatus =
-        await Geolocator.checkPermission();
-    if (locationPermissionStatus == LocationPermission.whileInUse ||
-        locationPermissionStatus == LocationPermission.always) {
-      // TODO: get the location and send it to the view
-      Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.bestForNavigation)
-          .timeout(const Duration(seconds: 10));
-      try {
-        List<Placemark> placeMark = await placemarkFromCoordinates(
-            position.latitude, position.longitude);
-        print("The returned placemark is $placeMark");
-        _cityName.add(placeMark);
-        // give this to the viewmodel
-      } catch (error) {
-        print(error);
-      }
-    }
+  Future<void> requestNeededPermissions() async {
+    await [Permission.location].request();
   }
 
   @override
   void start() async {
-    getCityName();
+    await requestNeededPermissions();
+    List<Placemark> cities = await getCityName();
+    String? userCity = cities[0].locality;
+    String? userState = cities[0].administrativeArea;
+    _cityName.add(userCity);
+    _stateName.add(userState);
     getUserFeed();
   }
 }

@@ -6,6 +6,7 @@ import 'package:sitter_swipe/pages/notifications/notifications.dart';
 import 'package:sitter_swipe/pages/onboarding/onboarding.dart';
 import 'package:sitter_swipe/pages/register/register.dart';
 import 'package:sitter_swipe/pages/settings/settings.dart';
+import 'package:sitter_swipe/pages/wrapper.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 
 class Routes {
@@ -16,7 +17,7 @@ class Routes {
   static const forgotPassword = '/forgot_password';
   static const notifications = "/notifications";
   static const settings = '/settings';
-
+  static const wrapper = '/wrapper';
   // swipe, chats, and interested don't need to be here
   // they will be inside baseScreen
 
@@ -43,6 +44,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const NotificationsPage());
       case Routes.settings:
         return MaterialPageRoute(builder: (_) => const SettingsPage());
+      case Routes.wrapper:
+        return MaterialPageRoute(builder: (_) => Wrapper());
       default:
         return unDefinedRoute();
     }

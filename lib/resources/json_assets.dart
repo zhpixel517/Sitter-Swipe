@@ -1,3 +1,3 @@
 class JsonAssets {
-  static const String heart_animation = "assets/heart-animation.json";
+  static const String heartAnimation = "assets/heart-animation.json";
 }

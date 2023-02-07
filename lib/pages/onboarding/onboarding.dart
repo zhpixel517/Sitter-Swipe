@@ -1,7 +1,9 @@
 // onboarding
 
 //! do I even need this?
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/pages/onboarding/widgets/onboarding_page.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -14,11 +16,17 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: Column(
-        children: [
-          
-        ],
+    return Scaffold(
+      body: SafeArea(
+        child: CarouselSlider(
+          options:
+              CarouselOptions(height: MediaQuery.of(context).size.height * 0.9),
+          items: [
+            CarouselPage(
+              pageText: "Welcome to Sitter Swipe",
+            )
+          ],
+        ),
       ),
     );
   }

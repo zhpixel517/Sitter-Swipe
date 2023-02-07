@@ -2,9 +2,7 @@
 //! this should come AFTER the onboarding screen
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:sitter_swipe/pages/onboarding/onboarding.dart';
-import 'package:sitter_swipe/pages/register/widgets/register_pages/phone.dart';
-import 'package:sitter_swipe/pages/register/widgets/register_pages/phone_verify.dart';
+import 'package:sitter_swipe/pages/register/pages.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -14,7 +12,15 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  List<Widget> registerPages = const [PhoneNumber(), VerifyPhone()];
+  List<Widget> registerPages = const [
+    PhoneNumber(),
+    VerifyPhone(),
+    Role(),
+    Name(),
+    Birthday(),
+    About(),
+    ProfileImages()
+  ];
   CarouselController controller = CarouselController();
   @override
   Widget build(BuildContext context) {

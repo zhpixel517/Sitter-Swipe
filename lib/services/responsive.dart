@@ -48,10 +48,10 @@ class Responsive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
-    return (_size.width >= 850 && tablet != null)
+    final Size size = MediaQuery.of(context).size;
+    return (size.width >= 850 && tablet != null)
         ? tablet!
-        : (_size.width < 850)
+        : (size.width < 850)
             ? mobile!
             : const Center(
                 child: Text("size err"),

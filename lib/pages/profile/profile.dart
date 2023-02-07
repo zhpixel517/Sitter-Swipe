@@ -10,7 +10,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/base_screen.dart';
 import 'package:sitter_swipe/pages/chat/chat.dart';
-import 'package:sitter_swipe/pages/interested/interested.dart';
 import 'package:sitter_swipe/pages/swipe/swipe.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
@@ -18,7 +17,6 @@ import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/services/responsive.dart';
-import 'package:swipe_cards/swipe_cards.dart';
 
 class UserProfile extends StatefulWidget {
   // what kinds of data points do I need to pass through?

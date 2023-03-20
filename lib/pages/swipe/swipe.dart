@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/swipe/swipe_viewmodel.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/card_content.dart';
@@ -16,6 +17,7 @@ import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/resources/theme.dart';
+import 'package:sitter_swipe/services/preferences/app_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
@@ -170,7 +172,7 @@ class SwipePageState extends State<SwipePage> {
                         ),
                       ),
                       Text(
-                        "Can't find anymore sitters!",
+                        AppStrings.noMoreSitters,
                         style: Fonts.bold,
                       ),
                       const SizedBox(height: 30),
@@ -229,15 +231,30 @@ class SwipePageState extends State<SwipePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Icon(EvaIcons.pin, color: TanPallete.tan),
-                  Text.rich(TextSpan(
-                      text: "Franklin",
-                      style: Fonts.swipeScreenLocationTitle
-                          .copyWith(fontWeight: FontWeight.bold),
-                      children: [
-                        TextSpan(
-                            text: ", Tennessee",
-                            style: Fonts.swipeScreenLocationTitle)
-                      ]))
+                  StreamBuilder(
+                      stream: _viewModel.outputCityName,
+                      builder: (context, snapshotCityName) {
+                        return StreamBuilder(
+                            stream: _viewModel.outputStateProvinceName,
+                            builder: (context, snapshotStateName) {
+                              if (!snapshotCityName.hasData &&
+                                  !snapshotStateName.hasData) {
+                                return Text("Getting Location...",
+                                    style: Fonts.swipeScreenLocationTitle
+                                        .copyWith(fontSize: 8));
+                              } else {
+                                return Text.rich(TextSpan(
+                                    text: snapshotCityName.data + ", ",
+                                    style: Fonts.swipeScreenLocationTitle
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                    children: [
+                                      TextSpan(
+                                          text: snapshotStateName.data,
+                                          style: Fonts.swipeScreenLocationTitle)
+                                    ]));
+                              }
+                            });
+                      })
                 ],
               )
             ],

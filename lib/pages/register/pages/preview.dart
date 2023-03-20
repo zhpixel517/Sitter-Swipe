@@ -1,28 +1,28 @@
-// bio and other information
+// preview the completed profile
 import 'package:flutter/material.dart';
 import 'package:sitter_swipe/pages/register/pages.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 
-class About extends StatefulWidget {
-  const About({super.key});
+class Preview extends StatefulWidget {
+  const Preview({super.key});
 
   @override
-  State<About> createState() => _AboutState();
+  State<Preview> createState() => _PreviewState();
 }
 
-class _AboutState extends State<About> {
+class _PreviewState extends State<Preview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          RegisterPageTitles.about,
+          RegisterPageTitles.preview,
           style: Fonts.bold,
         ),
       ),
       body: const Center(
-        child: Text("About"),
+        child: Text("Preview"),
       ),
     );
   }

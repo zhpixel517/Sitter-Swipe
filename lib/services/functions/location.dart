@@ -27,7 +27,6 @@ Future<List<Placemark>> getCityName() async {
       await Geolocator.checkPermission();
   if (locationPermissionStatus == LocationPermission.whileInUse ||
       locationPermissionStatus == LocationPermission.always) {
-    // TODO: get the location and send it to the view
     Position position = await getCurrentPosition();
     try {
       List<Placemark> placeMark =
@@ -35,9 +34,12 @@ Future<List<Placemark>> getCityName() async {
       // give this to the viewmodel
       return placeMark;
     } catch (error) {
+      print("Returned nothing because there was an error");
+      print("The error was $error");
       return [];
     }
   } else {
+    print("Returned nothing since the permission wasn't granted");
     return [];
   }
 }

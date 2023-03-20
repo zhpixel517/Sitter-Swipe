@@ -11,7 +11,9 @@ import 'package:sitter_swipe/pages/profile/profile_viewmodel.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/pages/settings/settings_viewmodel.dart';
 import 'package:sitter_swipe/pages/swipe/swipe_viewmodel.dart';
+import 'package:sitter_swipe/services/firebase/auth.dart';
 import 'package:sitter_swipe/services/network_info.dart';
+import 'package:sitter_swipe/services/preferences/app_preferences.dart';
 import 'package:sitter_swipe/services/responsive.dart';
 
 final instance = GetIt.instance;
@@ -55,4 +57,10 @@ Future<void> initAppModule() async {
 
   // helper classes
   instance.registerLazySingleton<Responsive>(() => const Responsive());
+
+  instance.registerLazySingleton<AuthService>(() => AuthService());
+
+  // instance.registerLazySingleton<SitterDatabase>(() => SitterDatabase());
+
+  instance.registerLazySingleton<AppPreferences>(() => AppPreferences());
 }

@@ -1,8 +1,6 @@
 // notifications screen
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:sitter_swipe/models/enums/notification_type.dart';
-import 'package:sitter_swipe/models/notification.dart';
 import 'package:sitter_swipe/pages/login/login.dart';
 import 'package:sitter_swipe/pages/notifications/notifications_viewmodel.dart';
 import 'package:sitter_swipe/pages/notifications/widgets/notification_item.dart';
@@ -10,6 +8,7 @@ import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/strings.dart';
+import 'package:sitter_swipe/services/di.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -21,6 +20,12 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   final NotificationPageViewModel _viewModel =
       instance<NotificationPageViewModel>();
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel.start();
+  }
 
   final List<NotificationCard> notifications = [];
   @override

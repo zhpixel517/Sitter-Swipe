@@ -12,6 +12,7 @@ import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/resources/theme.dart';
+import 'package:sitter_swipe/services/di.dart';
 
 class ChatSelection extends StatefulWidget {
   const ChatSelection({Key? key}) : super(key: key);

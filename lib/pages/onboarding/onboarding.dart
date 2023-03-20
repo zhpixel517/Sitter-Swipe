@@ -1,6 +1,7 @@
 // onboarding
 
 //! do I even need this?
+//TODO: where can I put this? can I put it after pressing the sign up button?
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:sitter_swipe/pages/onboarding/widgets/onboarding_page.dart';

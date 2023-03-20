@@ -8,7 +8,7 @@ import 'package:sitter_swipe/services/responsive.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Paint.enableDithering = true;
-  // await Firebase.initializeApp(); // TODO: install and setup firebase
+  await Firebase.initializeApp();
   await initAppModule();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.dark,

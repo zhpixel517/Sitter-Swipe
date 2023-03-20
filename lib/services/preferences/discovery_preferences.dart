@@ -2,6 +2,7 @@ import 'package:sitter_swipe/models/enums/prefferred_gender.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:sitter_swipe/pages/login/login.dart';
+import 'package:sitter_swipe/services/di.dart';
 
 class DiscoveryPreferences {
   int? range; //25;

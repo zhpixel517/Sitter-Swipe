@@ -38,6 +38,15 @@ class AuthService {
     }
   }
 
+  void verifyPhoneNumber(String number) async {
+    await _auth.verifyPhoneNumber(
+        phoneNumber: number,
+        verificationCompleted: (c) => print("completed"),
+        verificationFailed: (c) => print("failed"),
+        codeSent: (_, __) => print("sent"),
+        codeAutoRetrievalTimeout: (c) => print("teimout"));
+  }
+
   // auth state change stream
   Stream<ThisUser?> get user {
     return _auth

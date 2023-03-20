@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sitter_swipe/pages/login/login_viewmodel.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
@@ -7,8 +8,7 @@ import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:get_it/get_it.dart';
-
-final instance = GetIt.instance;
+import 'package:sitter_swipe/services/di.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -24,6 +24,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  Future<void> requestNeededPermissions() async {
+    await [Permission.location].request();
+  }
+
   @override
   void initState() {
     _bind();
@@ -37,8 +41,9 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  _bind() {
+  _bind() async {
     _viewModel.start();
+    await requestNeededPermissions();
     _emailController
         .addListener(() => _viewModel.setEmail(_emailController.text));
     _passwordController

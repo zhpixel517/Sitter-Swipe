@@ -7,8 +7,6 @@ class AppStrings {
   static const String loading = "Loading";
   static const String register = "Sign Up";
 
-  static const String phoneNumber = 'Phone Number';
-
   static const String forgotPassword = "Forgot Password?";
   static const String invalidEmail = "Invalid Email Format";
   static const String passwordError = "Password can't be blank";
@@ -27,6 +25,12 @@ class AppStrings {
 
   static const String youStartedAConversation =
       "You started a conversation with";
+
+  static const String imASitter =
+      "I'm a babysitter looking to sell my services";
+  static const String imAParent = "I'm a parent looking to hire a babysitter";
+
+  static const String noMoreSitters = "Can't find anymore sitters!";
 }
 
 class PageTitles {

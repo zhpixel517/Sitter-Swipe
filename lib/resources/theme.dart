@@ -48,7 +48,7 @@ ThemeData getApplicationTheme() {
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(TanPallete.tan),
-      elevation: MaterialStateProperty.all<double>(2.0),
+      elevation: MaterialStateProperty.all<double>(0.0),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(

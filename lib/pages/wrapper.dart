@@ -19,5 +19,5 @@ class Wrapper extends StatelessWidget {
 }
 
 
-// the widget will return either the main screen or the login screen
+// the widget will return either the home screen or the login screen
 // depending on if the user is logged in or not 

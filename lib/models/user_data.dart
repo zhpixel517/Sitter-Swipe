@@ -1,5 +1,4 @@
 import 'package:sitter_swipe/models/enums/prefferred_gender.dart';
-import 'package:flutter/material.dart';
 
 class UserData {
   /*
@@ -17,30 +16,33 @@ class UserData {
   final List? profileImages; // TODO: image locators from firebase of the person
   final String? profilePicture;
   final double? stars;
-  final bool? isFamily;
   final bool? isSitter;
   final List? reviews;
   final String? phoneNumber;
   final String? uid;
   final String? city;
   final String? stateOrProvince;
+  final String? country;
+  final List<String>? likes;
 
-  UserData(
-      {this.fullName,
-      this.userName,
-      this.age,
-      this.location,
-      this.gender,
-      this.profileImages,
-      this.profilePicture,
-      this.stars,
-      this.isFamily,
-      this.isSitter,
-      this.phoneNumber,
-      this.city,
-      this.stateOrProvince,
-      this.uid,
-      this.reviews});
+  UserData({
+    required this.fullName,
+    required this.userName,
+    required this.age,
+    required this.location,
+    required this.gender,
+    required this.profileImages,
+    required this.profilePicture,
+    required this.stars,
+    required this.isSitter,
+    required this.phoneNumber,
+    required this.city,
+    required this.stateOrProvince,
+    required this.uid,
+    required this.country,
+    required this.reviews,
+    this.likes,
+  });
 }
 
 // save the user data from firebase into a data class
@@ -49,8 +51,8 @@ class UserData {
 
 class ThisUser {
   final String? uid;
-  final UserData? userData = null; // TODO: add access to this user's data?
-  ThisUser({this.uid});
+  final UserData? userData; // TODO: add access to this user's data?
+  ThisUser({this.uid, this.userData});
 }
 
 ThisUser? globalThisUser;

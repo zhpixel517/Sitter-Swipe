@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sitter_swipe/models/base_viewmodel.dart';
+import 'package:sitter_swipe/services/di.dart';
+import 'package:sitter_swipe/services/firebase/auth.dart';
+import 'package:sitter_swipe/services/firebase/database.dart';
 import 'package:sitter_swipe/services/functions/email_check.dart';
 
 class LoginViewModel extends BaseViewModel
@@ -39,6 +43,8 @@ class LoginViewModel extends BaseViewModel
   login() {
     //! Some firebase junk goes here
     //! do I need something like a LoginUseCase? State Renderer?
+    final AuthService authService = instance<AuthService>();
+    authService.signIn(_email, _password);
   }
 
   @override

@@ -19,6 +19,7 @@ import 'package:sitter_swipe/services/responsive.dart';
 final instance = GetIt.instance;
 
 Future<void> initAppModule() async {
+  instance.allowReassignment = true;
   final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
 
   // shared preferences instance

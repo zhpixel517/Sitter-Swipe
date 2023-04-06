@@ -140,7 +140,6 @@ class SwipePageState extends State<SwipePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool noCardsLeft = false;
     matchEngine = MatchEngine(swipeItems: cards);
     return SafeArea(
       child: Padding(
@@ -280,8 +279,8 @@ class SwipePageState extends State<SwipePage> {
           flex: 7,
           child: TextField(
               focusNode: searchBarFocusNode,
-              decoration: searchBarDecoration(
-                  searchBarFocusNode, AppStrings.sitterSearch)),
+              decoration: searchBarDecoration(searchBarFocusNode,
+                  AppStrings.sitterSearch, EvaIcons.search)),
         ),
         Expanded(
           flex: 3,

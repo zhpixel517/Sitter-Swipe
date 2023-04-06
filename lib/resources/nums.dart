@@ -7,6 +7,7 @@ class AppPadding {
   static const double p10 = 10;
   static const double p18 = 18;
   static const double p8 = 8.0;
+  static const double p5 = 5.0;
 
   static const double conversationChoiceVerticalPadding = 10.0;
 
@@ -31,4 +32,6 @@ class AppSizes {
 
   static const double swipeCardBorderRadius = 20.0;
   static const double searchBarBorderRadius = swipeCardBorderRadius;
+
+  static const double phoneNumberLength = 10;
 }

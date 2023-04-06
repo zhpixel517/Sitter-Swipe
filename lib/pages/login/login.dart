@@ -1,5 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sitter_swipe/pages/login/login_viewmodel.dart';
 import 'package:sitter_swipe/resources/colors.dart';
@@ -7,7 +9,7 @@ import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
-import 'package:get_it/get_it.dart';
+import 'package:sitter_swipe/resources/theme.dart';
 import 'package:sitter_swipe/services/di.dart';
 
 class LoginPage extends StatefulWidget {
@@ -52,138 +54,162 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: AppPadding.globalContentSidePadding),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 150.0),
-                    child: Text(
-                      "SitterSwipe",
-                      style: Fonts.bold
-                          .copyWith(color: TanPallete.tan, fontSize: 50),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppPadding.globalContentSidePadding),
+            child: SingleChildScrollView(
+              // TODO: fix logo
+              child: Column(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 150.0),
+                      child: Text(
+                        "SitterSwipe",
+                        style: Fonts.bold
+                            .copyWith(color: TanPallete.tan, fontSize: 50),
+                      ),
                     ),
                   ),
-                ),
-                Column(
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: AppPadding.p10),
-                      child: StreamBuilder<bool>(
-                          stream: _viewModel.outputIsEmailValid,
-                          builder: (context, snapshot) {
-                            return TextField(
-                              focusNode: emailNode,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                  errorText: snapshot.data ?? true
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: AppPadding.p10),
+                        child: StreamBuilder<bool>(
+                            stream: _viewModel.outputIsEmailValid,
+                            builder: (context, snapshot) {
+                              return TextField(
+                                focusNode: emailNode,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                    errorText: snapshot.data ?? true
+                                        ? null
+                                        : AppStrings.invalidEmail,
+                                    prefixIcon: Icon(
+                                      EvaIcons.email,
+                                      color: emailNode.hasFocus
+                                          ? Theme.of(context).primaryColor
+                                          : TanPallete.lightGrey,
+                                    ),
+                                    labelStyle: Fonts.bold.copyWith(
+                                        color: emailNode.hasFocus
+                                            ? Theme.of(context).primaryColor
+                                            : TanPallete.lightGrey,
+                                        fontSize: AppSizes.textFieldLabelSize),
+                                    labelText: AppStrings.email),
+                              );
+                            }),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: AppPadding.p10),
+                        child: StreamBuilder<bool>(
+                            stream: _viewModel.outputIsPasswordValid,
+                            builder: (context, snapshot) {
+                              return TextField(
+                                  obscureText: true,
+                                  focusNode: passwordNode,
+                                  keyboardType: TextInputType.text,
+                                  decoration: searchBarDecoration(passwordNode,
+                                      "Password", EvaIcons.lockOutline));
+                            }),
+                      ),
+                      /*
+                          InputDecoration(
+                                  labelText: AppStrings.password,
+                                  errorText: (snapshot.data ?? true)
                                       ? null
-                                      : AppStrings.invalidEmail,
+                                      : AppStrings.password,
                                   prefixIcon: Icon(
-                                    EvaIcons.email,
-                                    color: emailNode.hasFocus
+                                    EvaIcons.lock,
+                                    color: passwordNode.hasFocus
                                         ? Theme.of(context).primaryColor
                                         : TanPallete.lightGrey,
                                   ),
                                   labelStyle: Fonts.bold.copyWith(
-                                      color: emailNode.hasFocus
+                                      color: passwordNode.hasFocus
                                           ? Theme.of(context).primaryColor
                                           : TanPallete.lightGrey,
                                       fontSize: AppSizes.textFieldLabelSize),
-                                  labelText: AppStrings.email),
-                            );
-                          }),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: AppPadding.p10),
-                      child: StreamBuilder<bool>(
-                          stream: _viewModel.outputIsPasswordValid,
-                          builder: (context, snapshot) {
-                            return TextField(
-                              obscureText: true,
-                              focusNode: passwordNode,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                labelText: AppStrings.password,
-                                errorText: (snapshot.data ?? true)
-                                    ? null
-                                    : AppStrings.password,
-                                prefixIcon: Icon(
-                                  EvaIcons.lock,
-                                  color: passwordNode.hasFocus
-                                      ? Theme.of(context).primaryColor
-                                      : TanPallete.lightGrey,
                                 ),
-                                labelStyle: Fonts.bold.copyWith(
-                                    color: passwordNode.hasFocus
-                                        ? Theme.of(context).primaryColor
-                                        : TanPallete.lightGrey,
-                                    fontSize: AppSizes.textFieldLabelSize),
-                              ),
-                            );
-                          }),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: AppPadding.p10),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.baseScreen);
-                    },
-                    style: Theme.of(context)
-                        .elevatedButtonTheme
-                        .style!
-                        .copyWith(
-                            minimumSize: MaterialStateProperty.all(
-                                const Size(double.infinity, 30.0)),
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.symmetric(
-                                    horizontal: AppPadding
-                                        .elevatedButtonHorizontalPadding,
-                                    vertical: AppPadding
-                                        .elevatedButtonVerticalPadding))),
-                    child: Text(
-                      AppStrings.login,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(color: Colors.white),
-                    ),
+                      */
+                    ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, Routes.register);
-                        },
-                        child: Text(
-                          AppStrings.register,
-                          style: Fonts.secondaryFont,
-                        )),
-                    TextButton(
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: AppPadding.p10),
+                    child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, Routes.forgotPassword);
+                        //TODO: push login actions
+                        Navigator.pushNamed(context, Routes.baseScreen);
+                        _viewModel.login();
                       },
+                      style: Theme.of(context)
+                          .elevatedButtonTheme
+                          .style!
+                          .copyWith(
+                              minimumSize: MaterialStateProperty.all(
+                                  const Size(double.infinity, 30.0)),
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(
+                                      horizontal: AppPadding
+                                          .elevatedButtonHorizontalPadding,
+                                      vertical: AppPadding
+                                          .elevatedButtonVerticalPadding))),
                       child: Text(
-                        AppStrings.forgotPassword,
-                        style: Fonts.secondaryFont,
+                        AppStrings.login,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge!
+                            .copyWith(color: Colors.white),
                       ),
                     ),
-                  ],
-                ),
-                // TODO: Register text?
-              ],
+                  ),
+                  SignInButton(
+                    Buttons.GoogleDark,
+                    text: "Sign in with Google",
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(
+                            AppSizes.elevatedButtonBorderRadius))),
+                    elevation: 0.0,
+                    onPressed: () {},
+                  ),
+                  SignInButton(
+                    Buttons.AppleDark,
+                    elevation: 0.0,
+                    text: "Sign in with Apple",
+                    onPressed: () {},
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, Routes.register);
+                          },
+                          child: Text(
+                            AppStrings.register,
+                            style: Fonts.secondaryFont,
+                          )),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.forgotPassword);
+                        },
+                        child: Text(
+                          AppStrings.forgotPassword,
+                          style: Fonts.secondaryFont,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

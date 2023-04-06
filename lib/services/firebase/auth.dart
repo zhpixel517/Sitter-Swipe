@@ -38,11 +38,11 @@ class AuthService {
     }
   }
 
-  void verifyPhoneNumber(String number) async {
+  verifyPhoneNumber(String number) async {
     await _auth.verifyPhoneNumber(
         phoneNumber: number,
         verificationCompleted: (c) => print("completed"),
-        verificationFailed: (c) => print("failed"),
+        verificationFailed: (c) => print(c),
         codeSent: (_, __) => print("sent"),
         codeAutoRetrievalTimeout: (c) => print("teimout"));
   }

@@ -1,9 +1,11 @@
 // profile role - sitter or parent/family
 import 'package:flutter/material.dart';
 import 'package:sitter_swipe/pages/register/pages.dart';
+import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/strings.dart';
+import 'package:sitter_swipe/services/di.dart';
 
 class Role extends StatefulWidget {
   const Role({super.key});
@@ -13,12 +15,15 @@ class Role extends StatefulWidget {
 }
 
 class _RoleState extends State<Role> {
+  final RegisterViewModel _viewModel = instance<RegisterViewModel>();
+
   bool isSitter = false;
-  bool isParent = false;
+  bool isParent = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
@@ -33,14 +38,20 @@ class _RoleState extends State<Role> {
             RadioListTile(
               value: isSitter,
               groupValue: isSitter,
-              onChanged: (value) {},
+              onChanged: (value) {
+                isSitter = value!;
+                _viewModel.setIsSitter(value);
+              },
               activeColor: TanPallete.tan,
               title: const Text(AppStrings.imASitter),
             ),
             RadioListTile(
               value: isParent,
               groupValue: isSitter,
-              onChanged: (value) {},
+              onChanged: (value) {
+                isSitter = value!;
+                _viewModel.setIsSitter(value);
+              },
               activeColor: TanPallete.tan,
               title: const Text(AppStrings.imAParent),
             ),

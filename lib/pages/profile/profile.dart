@@ -3,6 +3,7 @@
 // use a hero animation?
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -26,12 +27,21 @@ class UserProfile extends StatefulWidget {
   String? fullName;
   bool isSelf;
   bool isFamily; // is a group of children
+  bool? didComeFromInterestedScreen;
+  int? indexFromInterestedScreen;
+  bool? didComeFromRegisteredScreen;
   final String? profileImage;
   final String? age;
+  final String? bio;
   //final MatchEngine? matchEngineInstance;
   UserProfile(
       this.userName, this.fullName, this.isSelf, this.isFamily, this.age,
-      {required this.profileImage, /*this.matchEngineInstance*/ Key? key})
+      {required this.profileImage,
+      this.bio,
+      this.didComeFromInterestedScreen,
+      this.indexFromInterestedScreen,
+      this.didComeFromRegisteredScreen,
+      /*this.matchEngineInstance*/ Key? key})
       : super(key: key);
 
   @override
@@ -54,6 +64,7 @@ class _UserProfileState extends State<UserProfile> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(body: LayoutBuilder(builder: (context, constraints) {
       return SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
         child: Column(
           children: [
             SizedBox(
@@ -70,12 +81,18 @@ class _UserProfileState extends State<UserProfile> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Image(
-                          // put a carousel here with multiple images
-                          fit: BoxFit.cover,
-                          alignment: Alignment.center,
-                          image: NetworkImage(widget.profileImage!),
-                        ),
+                        widget.didComeFromRegisteredScreen != null
+                            ? Image(
+                                image: FileImage(File(widget.profileImage!)),
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
+                              )
+                            : Image(
+                                // put a carousel here with multiple images
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
+                                image: NetworkImage(widget.profileImage!),
+                              ),
                         imageBlur()
                       ],
                     ),
@@ -88,37 +105,41 @@ class _UserProfileState extends State<UserProfile> {
                             horizontal: AppPadding.globalContentSidePadding),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: widget.isSelf
-                              ? [
-                                  _customTopIconButton(EvaIcons.settings, () {
-                                    Navigator.pushNamed(
-                                        context, Routes.settings);
-                                  })
-                                ]
-                              : [
-                                  _customTopIconButton(EvaIcons.arrowBack, () {
-                                    Navigator.pop(context);
-                                  }),
-                                  CircleAvatar(
-                                    backgroundColor: TanPallete.tan,
-                                    child: PopupMenuButton(
-                                        icon: const Icon(
-                                          EvaIcons.moreVertical,
-                                          color: Colors.white,
-                                        ),
-                                        itemBuilder: ((context) {
-                                          return listPopUpOptions
-                                              .map((String item) =>
-                                                  PopupMenuItem(
-                                                    textStyle:
-                                                        Fonts.mediumStyle,
-                                                    value: item,
-                                                    child: Text(item),
-                                                  ))
-                                              .toList();
-                                        })),
-                                  )
-                                ],
+                          children: widget.didComeFromRegisteredScreen != null
+                              ? []
+                              : widget.isSelf
+                                  ? [
+                                      _customTopIconButton(EvaIcons.settings,
+                                          () {
+                                        Navigator.pushNamed(
+                                            context, Routes.settings);
+                                      })
+                                    ]
+                                  : [
+                                      _customTopIconButton(EvaIcons.arrowBack,
+                                          () {
+                                        Navigator.pop(context);
+                                      }),
+                                      CircleAvatar(
+                                        backgroundColor: TanPallete.tan,
+                                        child: PopupMenuButton(
+                                            icon: const Icon(
+                                              EvaIcons.moreVertical,
+                                              color: Colors.white,
+                                            ),
+                                            itemBuilder: ((context) {
+                                              return listPopUpOptions
+                                                  .map((String item) =>
+                                                      PopupMenuItem(
+                                                        textStyle:
+                                                            Fonts.mediumStyle,
+                                                        value: item,
+                                                        child: Text(item),
+                                                      ))
+                                                  .toList();
+                                            })),
+                                      )
+                                    ],
                         ),
                       ),
                     ),
@@ -165,7 +186,13 @@ class _UserProfileState extends State<UserProfile> {
                         }),
                         _buildProfileActionButton(
                             EvaIcons.heart, ButtonLabels.like, () async {
-                          Navigator.pop(context);
+                          if (widget.didComeFromInterestedScreen == true &&
+                              widget.indexFromInterestedScreen != null) {
+                            Navigator.pop(
+                                context, widget.indexFromInterestedScreen);
+                          } else {
+                            Navigator.pop(context);
+                          }
                           await Future.delayed(
                               const Duration(milliseconds: 100), () {});
                           SwipePageState.matchEngine!.currentItem!.like();
@@ -237,7 +264,8 @@ class _UserProfileState extends State<UserProfile> {
                         height: widget.isSelf ? 0 : 15,
                       ),
                       Text(
-                        "This is a Sitter Swipe Bio. I'm thinking that prospective babysitters or families as well can decide what they want to write here here.",
+                        //"This is a Sitter Swipe Bio. I'm thinking that prospective babysitters or families as well can decide what they want to write here here.",
+                        widget.bio ?? "Blank bio!",
                         style: Fonts.mediumStyle
                             .copyWith(color: TanPallete.richBlack),
                       ),

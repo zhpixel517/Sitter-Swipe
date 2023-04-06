@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -10,10 +12,11 @@ import 'package:sitter_swipe/services/preferences/discovery_preferences.dart';
 
 import '../../../services/di.dart';
 
+// ignore: must_be_immutable
 class GenderChip extends StatefulWidget {
   bool selected;
-  PreferredGender preferredGender;
-  IconData icon;
+  final PreferredGender preferredGender;
+  final IconData icon;
   GenderChip(
       {required this.preferredGender,
       required this.icon,
@@ -72,7 +75,7 @@ dynamic showDiscoveryPreferences(
   // temp vars for getting user inputted data, bring in from getPrefs
   // ! ex: int? range = getPrefs('range');
   DiscoveryPreferences prefs = await getDiscoveryPreferences();
-  final SwipeViewModel _viewModel = instance<SwipeViewModel>();
+  final SwipeViewModel viewModel = instance<SwipeViewModel>();
   int? range = prefs.range;
   double? minimumRating = prefs.minimumRating;
   PreferredGender? preferredGender =
@@ -125,8 +128,8 @@ dynamic showDiscoveryPreferences(
                                 Text("Range - ${range.toString()} miles",
                                     style: Fonts.bold.copyWith(fontSize: 17)),
                                 Slider(
-                                  divisions: 200,
-                                  max: 200.0,
+                                  divisions: 100,
+                                  max: 100.0,
                                   value: range!.toDouble(),
                                   activeColor: TanPallete.tan,
                                   onChanged: (value) {
@@ -210,7 +213,7 @@ dynamic showDiscoveryPreferences(
               });
         });
       }).then((value) {
-    _viewModel.getUserFeed();
+    viewModel.getUserFeed();
     return DiscoveryPreferences(
             range: range,
             minimumRating: minimumRating,

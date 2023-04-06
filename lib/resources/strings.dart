@@ -31,6 +31,9 @@ class AppStrings {
   static const String imAParent = "I'm a parent looking to hire a babysitter";
 
   static const String noMoreSitters = "Can't find anymore sitters!";
+
+  static const String sentVerification =
+      "We just texted you a verification code!";
 }
 
 class PageTitles {
@@ -45,4 +48,9 @@ class ButtonLabels {
   static const pass = "Pass";
   static const like = "Like";
   static const message = "Message";
+}
+
+class Countries {
+  static const canada = "Canada";
+  static const us = "US";
 }

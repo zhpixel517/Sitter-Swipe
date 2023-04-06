@@ -1,11 +1,24 @@
 Start with frontend first.
 
+MVP - the ability to find people nearby, swipe on either a babysitter or find a family.
+      4 core screens + options. that's it. 
+      everything else is accessory to that - we can hand this off later to someone else.
+      deadline: June 2023. B4 Chicago.  
+
+
+restructure the database to group people by individual cities - not families and sitters. 
+querying the database for a huge amount of users will take FOREVER on the user side.
+
+
 Login:
     - viewmodel isn't sending any data
     - forgot password page visual tweaks
 
 Swipe:
     -  location picker
+    -  Firebase integration
+        -  test querying and populating
+    -  save swiped people, undo as well should be built in
 
 Interested:
     - more explanation
@@ -14,7 +27,7 @@ Interested:
 
 Chat:
     - search Function
-    - chat indicators - time
+    - chat indicators - time or typing indicators?
     - confirm delete
     - complete mark as read - viewmodel usage?
 
@@ -33,14 +46,18 @@ resources for parents - what to do before your sitter gets here
 Notifications:
     - visual tweaks
 
-    - Registration flow!!!
-        -   image cropper, mandatory image sizes
-    - hourly rates? where's the payment going to come in?
-    - login text field checking
-    - responsive layout!!
-    - permissions
-    - report users somehow? pedo shield is a MUST
-        - how to implement this background check?
+Registration flow!!!
+    - UI for each page
+    - provider for setting the state of the control buttons
+    
+    - image cropper, mandatory image sizes?
+
+- hourly rates? where's the payment going to come in?
+- login text field checking
+- responsive layout!!
+- permissions
+- report users somehow? pedo shield is a MUST
+- how to implement this background check?
 
 
 what happens when there's a match???

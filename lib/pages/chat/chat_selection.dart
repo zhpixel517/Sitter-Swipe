@@ -49,8 +49,8 @@ class _ChatSelectionState extends State<ChatSelection> {
           children: [
             TextField(
                 focusNode: messageSearchFocusNode,
-                decoration: searchBarDecoration(
-                    messageSearchFocusNode, AppStrings.messageSearch)),
+                decoration: searchBarDecoration(messageSearchFocusNode,
+                    AppStrings.messageSearch, EvaIcons.search)),
             conversations.isNotEmpty
                 ? Expanded(
                     child: ListView.builder(

@@ -121,6 +121,8 @@ class _ChatPageState extends State<ChatPage> {
                       padding:
                           const EdgeInsets.symmetric(vertical: AppPadding.p18),
                       child: TextField(
+                          minLines: 1,
+                          maxLines: 3,
                           controller: chatTextController,
                           decoration: InputDecoration(
                               hintText: "Aa",

@@ -13,7 +13,7 @@ class SwipeViewModel extends BaseViewModel
     with SwipeViewModelOutput, SwipeViewModelInputs {
   final StreamController _cityName = StreamController<String>.broadcast();
   final StreamController _stateName = StreamController<String>.broadcast();
-  final StreamController _sittersList = StreamController<List>.broadcast();
+  final StreamController _sittersList = StreamController.broadcast();
 
   @override
   Sink get inputCityName => _cityName.sink;
@@ -31,7 +31,7 @@ class SwipeViewModel extends BaseViewModel
   Stream get outputStateProvinceName => _stateName.stream;
 
   @override
-  Stream get sittersListOutput => _sittersList.stream;
+  Stream get sittersListOutput => _sittersList.stream.map((user) => user);
 
   @override
   void dispose() {
@@ -51,6 +51,7 @@ class SwipeViewModel extends BaseViewModel
   @override
   void start() async {
     await requestNeededPermissions();
+    //_queryTest();
     if (saveUserCity == null && saveUserStateOrProvince == null) {
       List<Placemark> cities = await getCityName();
       String? userCity = cities[0].locality;
@@ -59,7 +60,7 @@ class SwipeViewModel extends BaseViewModel
       inputStateProvinceName.add(userState);
       saveUserCity = userCity;
       saveUserStateOrProvince = userState;
-      getUserFeed();
+      inputSittersList.add(getUserFeed());
     } else {
       inputCityName.add(saveUserCity);
       inputStateProvinceName.add(saveUserStateOrProvince);

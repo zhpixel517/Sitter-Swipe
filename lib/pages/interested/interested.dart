@@ -1,6 +1,7 @@
 // families or other babysitters interested
 // part of baseScreen
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/interested/widgets/interested_person.dart';
 import 'package:sitter_swipe/resources/colors.dart';
@@ -16,6 +17,8 @@ class InterestedPage extends StatefulWidget {
 }
 
 class InterestedPageState extends State<InterestedPage> {
+  dynamic indexToAnimateOn;
+
   static List<InterestedPerson> interestedPeople = [
     InterestedPerson("Bianca", "@joe", girl1, "16"),
     InterestedPerson("Michael", "@joeeeeeeeeeeeeeeeeeee", boy1, "15"),
@@ -25,6 +28,7 @@ class InterestedPageState extends State<InterestedPage> {
   ];
   @override
   Widget build(BuildContext context) {
+    indexToAnimateOn = ModalRoute.of(context)?.settings.arguments;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -64,7 +68,17 @@ class InterestedPageState extends State<InterestedPage> {
                                   mainAxisSpacing: 10,
                                   crossAxisSpacing: 5),
                           itemBuilder: (context, index) {
-                            return interestedPeople[index];
+                            if (indexToAnimateOn != index) {
+                              return interestedPeople[index];
+                            } else {
+                              return Stack(
+                                children: [
+                                  Lottie.asset('json/heart-animation.json',
+                                      animate: true, repeat: true),
+                                  interestedPeople[index]
+                                ],
+                              );
+                            }
                           })
                       : const Center(
                           child: Icon(Icons.question_answer),

@@ -33,6 +33,7 @@ class InterestedPersonState extends State<InterestedPerson>
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(vsync: this);
   }
 
@@ -49,6 +50,8 @@ class InterestedPersonState extends State<InterestedPerson>
               false,
               false,
               widget.age,
+              didComeFromInterestedScreen: true,
+              indexFromInterestedScreen: 0,
               profileImage: widget.image,
             );
           }));

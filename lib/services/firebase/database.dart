@@ -1,57 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:sitter_swipe/models/user_data.dart';
+import 'package:sitter_swipe/resources/strings.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:sitter_swipe/services/di.dart';
 import 'package:sitter_swipe/services/preferences/discovery_preferences.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 
 class SitterDatabase {
   final String? uid;
   SitterDatabase({this.uid});
 
-  // TODO: install and setup firebase
+  // TODO: setup firebase
   // TODO: test firebase read and write
 
-  final CollectionReference sitterCollection =
-      FirebaseFirestore.instance.collection("sitters");
-  final CollectionReference familiesCollection =
-      FirebaseFirestore.instance.collection("families");
+  final CollectionReference users =
+      FirebaseFirestore.instance.collection("users");
+
+  final geo = GeoFlutterFire();
 
   Future updateUserData(UserData data) async {
-    if (data.isFamily! == true && data.isSitter! == false) {
-      return await familiesCollection.doc(uid).set({
-        "fullName": data.fullName,
-        "userName": data.userName,
-        "age": data.age,
-        "location": data.location,
-        "gender": data.gender,
-        "profileImages": data.profileImages,
-        "profilePicture": data.profilePicture,
-        "stars": data.stars,
-        "isFamily": data.isFamily,
-        "isSitter": data.isSitter,
-        "phoneNumber": data.phoneNumber,
-        "reviews": data.reviews,
-        "city": data.city,
-        "stateOrProvince": data.stateOrProvince,
-        "uid": uid
-      });
-    } else {
-      return await sitterCollection.doc(uid).set({
-        "fullName": data.fullName,
-        "userName": data.userName,
-        "age": data.age,
-        "location": data.location,
-        "gender": data.gender,
-        "profileImages": data.profileImages,
-        "profilePicture": data.profilePicture,
-        "stars": data.stars,
-        "isFamily": data.isFamily,
-        "isSitter": data.isSitter,
-        "phoneNumber": data.phoneNumber,
-        "reviews": data.reviews,
-        "city": data.city,
-        "stateOrProvince": data.stateOrProvince,
-        "uid": uid
-      });
-    }
+    return await users.doc(uid).set({
+      "fullName": data.fullName,
+      "userName": data.userName,
+      "age": data.age,
+      "location": data.location,
+      "gender": data.gender,
+      "profileImages": data.profileImages,
+      "profilePicture": data.profilePicture,
+      "stars": data.stars,
+      "isSitter": data.isSitter,
+      "phoneNumber": data.phoneNumber,
+      "reviews": data.reviews,
+      "city": data.city,
+      "stateOrProvince": data.stateOrProvince,
+      "uid": uid,
+      "likes": data.likes,
+    });
   }
 
   UserData _thisUserDataFromSnapshot(DocumentSnapshot snapshot) {
@@ -64,18 +49,20 @@ class SitterDatabase {
         profileImages: snapshot.get("profileImages"),
         profilePicture: snapshot.get("profilePicture"),
         stars: snapshot.get("stars"),
-        isFamily: snapshot.get("isFamily"),
         isSitter: snapshot.get("isSitter"),
         phoneNumber: snapshot.get("phoneNumber"),
         reviews: snapshot.get("reviews"),
         city: snapshot.get("city"),
         stateOrProvince: snapshot.get("stateOrProvince"),
+        country: snapshot.get("country"),
+        likes: snapshot.get("likes"),
         uid: uid);
   }
 
   List<UserData> _userListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return UserData(
+          country: doc.get("country"),
           fullName: doc.get("fullName"),
           userName: doc.get("userName"),
           age: doc.get("age"),
@@ -84,7 +71,6 @@ class SitterDatabase {
           profileImages: doc.get("profileImages"),
           profilePicture: doc.get("profilePicture"),
           stars: doc.get("stars"),
-          isFamily: doc.get("isFamily"),
           isSitter: doc.get("isSitter"),
           phoneNumber: doc.get("phoneNumber"),
           reviews: doc.get("reviews"),
@@ -109,34 +95,37 @@ class SitterDatabase {
     });
   }
 
-  Future<Stream<List<UserData>>> get foundSitters async {
+  Future<QuerySnapshot<Object?>> get foundSitters async {
     // TODO: where to implement discovery preferences?
     DiscoveryPreferences preferences = await getDiscoveryPreferences();
-    var collection = sitterCollection
-        .snapshots()
+    var query = users
+        .where("isSitter", isEqualTo: true)
+        .where("age",
+            isGreaterThanOrEqualTo: preferences.minAge,
+            isLessThanOrEqualTo: preferences.maxAge)
+        .where("stars", isGreaterThanOrEqualTo: preferences.minimumRating)
+        .where("gender",
+            isEqualTo:
+                EnumToString.convertToString(preferences.preferredGender))
+        .limit(30)
+        .get();
+    //TODO: geohashes
+
+    /*
         .map(_userListFromSnapshot)
-        .where((list) => filter(preferences, list));
-    return collection;
+        .where((list) => filter(preferences, list)); 
+        */
+    return query;
   }
 
   Stream<List<UserData>> get foundFamilies {
-    // TODO: where to implement discovery preferences?
-    return familiesCollection.snapshots().map(_userListFromSnapshot);
+    // TODO: where to implement the sitter side??
+    return users.snapshots().map(_userListFromSnapshot);
   }
 
   // get this user's information
-  Stream<UserData> userData({bool? isFamily, bool? isSitter}) {
-    if (isFamily! && isSitter! == false) {
-      return familiesCollection
-          .doc(uid)
-          .snapshots()
-          .map(_thisUserDataFromSnapshot);
-    } else {
-      return sitterCollection
-          .doc(uid)
-          .snapshots()
-          .map(_thisUserDataFromSnapshot);
-    }
+  Stream<UserData> userData() {
+    return users.doc(uid).snapshots().map(_thisUserDataFromSnapshot);
   }
 
   // **********************************************************
@@ -199,9 +188,6 @@ class SitterDatabase {
       return passedFamiliesList;
     }
   }
-
-  //! Thoughts: do I even need to separate families and sitters into two different collections?
-  // doing it that way makes it hard to like / pass because I have to know where to look
 
   /*
   Future<bool> likeUser(dynamic thisUserId, dynamic otherUserID) async {

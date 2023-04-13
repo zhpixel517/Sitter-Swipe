@@ -35,7 +35,7 @@ class RouteGenerator {
       case Routes.login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case Routes.register:
-        return MaterialPageRoute(builder: (_) => const RegisterPage());
+        return MaterialPageRoute(builder: (_) => RegisterPage());
       case Routes.onboarding:
         return MaterialPageRoute(builder: (_) => const OnboardingPage());
       case Routes.forgotPassword:

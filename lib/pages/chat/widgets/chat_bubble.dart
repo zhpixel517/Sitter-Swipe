@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sitter_swipe/pages/chat/widgets/other_chat_indicators.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
@@ -60,7 +61,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                 ),
               ),
             ),
-            Text("3:01 PM", style: Fonts.smallText)
+            ChatIndicators.timeIndicator("3:15", widget.isSelf!)
           ],
         ),
       ),

@@ -82,7 +82,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                                 ? "Enter a valid phone number"
                                 : null,
                         keyboardType: TextInputType.phone,
-                        decoration: searchBarDecoration(phoneNumberFocusNode,
+                        decoration: globalInputDecoration(phoneNumberFocusNode,
                             "Phone Number", EvaIcons.phoneCallOutline),
                       ),
                     ),

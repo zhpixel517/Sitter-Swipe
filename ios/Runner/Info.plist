@@ -4,6 +4,8 @@
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Sitter Swipe needs your location to find people near you.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Sitter Swipe needs access to your photo library so you can add images to your profile.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

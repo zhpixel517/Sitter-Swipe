@@ -4,6 +4,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sitter_swipe/pages/register/pages.dart';
+import 'package:sitter_swipe/pages/register/pages/role_specific_data.dart';
 import 'package:sitter_swipe/pages/register/provider/button_state_provider.dart';
 import 'package:sitter_swipe/pages/register/provider/next_action_provider.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
@@ -17,18 +18,19 @@ import 'package:sitter_swipe/services/responsive.dart';
 enum Direction { forward, backward }
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  RegisterPage({Key? key}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final List<Widget> registerPages = const [
+  List<Widget> registerPages = const [
     PhoneNumber(),
     VerifyPhone(),
     Credentials(),
     Role(),
+    RoleSpecificInput(),
     Birthday(),
     About(),
     ProfileImages(),
@@ -39,13 +41,9 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isFirstPage = true;
   int pageIndex = 0;
   final RegisterButtonActions registerButtonActions = RegisterButtonActions();
-  final instance = GetIt.instance;
   final _viewModel = GetIt.instance<RegisterViewModel>();
 
   void next(BuildContext context) {
-    final controlButtonBlurState =
-        Provider.of<BlurProvider>(context, listen: false);
-    // controlButtonBlurState.blur(); uncomment this line when finished
     FocusManager.instance.primaryFocus?.unfocus(); // hides keyboard
     setState(() {
       pageIndex++;

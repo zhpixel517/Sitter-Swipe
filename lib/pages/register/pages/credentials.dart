@@ -32,12 +32,29 @@ class _CredentialsState extends State<Credentials> {
   @override
   void initState() {
     super.initState();
+    emailController.text = _viewModel.userEmail ?? "";
+    passwordController.text = _viewModel.userPassword ?? "";
+    nameController.text = _viewModel.userFullName ?? "";
+  }
+
+  _checkBlur(BlurProvider provider) {
+    if (emailController.text == "" ||
+        passwordController.text == "" ||
+        nameController.text == "") {
+      provider.blur();
+    } else {
+      provider.unblur();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final controlButtonBlurState =
         Provider.of<BlurProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkBlur(controlButtonBlurState);
+    });
+
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -60,8 +77,9 @@ class _CredentialsState extends State<Credentials> {
                     focusNode: nameFocusNode,
                     onChanged: (value) {
                       _viewModel.setFullname(nameController.text);
+                      _checkBlur(controlButtonBlurState);
                     },
-                    decoration: searchBarDecoration(
+                    decoration: globalInputDecoration(
                         emailFocusNode, "Full name", EvaIcons.personOutline),
                   ),
                 ),
@@ -74,8 +92,9 @@ class _CredentialsState extends State<Credentials> {
                     focusNode: emailFocusNode,
                     onChanged: (value) {
                       _viewModel.setEmail(emailController.text);
+                      _checkBlur(controlButtonBlurState);
                     },
-                    decoration: searchBarDecoration(emailFocusNode,
+                    decoration: globalInputDecoration(emailFocusNode,
                         "Enter an email", EvaIcons.emailOutline),
                   ),
                 ),
@@ -87,8 +106,9 @@ class _CredentialsState extends State<Credentials> {
                     focusNode: passwordFocusNode,
                     onChanged: (value) {
                       _viewModel.setPassword(passwordController.text);
+                      _checkBlur(controlButtonBlurState);
                     },
-                    decoration: searchBarDecoration(emailFocusNode,
+                    decoration: globalInputDecoration(emailFocusNode,
                         "Create a password", EvaIcons.lockOutline),
                   ),
                 ),

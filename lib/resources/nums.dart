@@ -21,6 +21,10 @@ class AppSizes {
 
   static const double forgotPasswordAppBarTitleTextSize = 25.0;
 
+  static const double typingIndicatorSize = 20.0;
+
+  static const double gridAxisSpacing = 16.0;
+
   static const double textFieldLabelSize = 15.0;
 
   static const double s100 = 100.0;

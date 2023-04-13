@@ -9,6 +9,8 @@ function sharing/mapping mechanism.
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sitter_swipe/pages/register/pages/role_specific_data.dart';
+import 'package:sitter_swipe/pages/register/register.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/services/di.dart';
 import 'package:sitter_swipe/services/firebase/auth.dart';
@@ -18,6 +20,7 @@ enum NextActionType {
   phoneVerify,
   credentials,
   role,
+  roleSpecific,
   age,
   about,
   images,
@@ -55,12 +58,14 @@ class RegisterButtonActions extends ButtonActionsBase {
       case 3:
         return NextActionType.role;
       case 4:
-        return NextActionType.age;
+        return NextActionType.roleSpecific;
       case 5:
-        return NextActionType.about;
+        return NextActionType.age;
       case 6:
-        return NextActionType.images;
+        return NextActionType.about;
       case 7:
+        return NextActionType.images;
+      case 8:
         return NextActionType.preview;
       default:
         return NextActionType.none;
@@ -97,6 +102,13 @@ class RegisterButtonActions extends ButtonActionsBase {
         break;
       case NextActionType.none:
         break;
+      case NextActionType.roleSpecific:
+        roleSpecificAction(
+            _viewModel.userIsSitter!,
+            _viewModel.sitterAvailability,
+            _viewModel.children,
+            _viewModel.sitterChargeRate);
+        break;
     }
   }
 
@@ -122,7 +134,8 @@ class RegisterButtonActions extends ButtonActionsBase {
 
   @override
   void imagesAction(List<XFile> imageLocators) {
-    _viewModel.setProfileDisplayImages(imageLocators);
+    _viewModel.userProfileImages =
+        imageLocators; // I don't think this is working
   }
 
   @override
@@ -141,8 +154,8 @@ class RegisterButtonActions extends ButtonActionsBase {
   }
 
   @override
-  Future<void> previewAction() {
-    throw UnimplementedError();
+  void previewAction() {
+    _viewModel.register();
   }
 
   @override
@@ -151,32 +164,18 @@ class RegisterButtonActions extends ButtonActionsBase {
   }
 
   @override
-  Function? returnCorrectActionFromActionType(NextActionType actionType) {
-    switch (actionType) {
-      case NextActionType.phoneNumber:
-        return phoneNumberContinueAction;
-      case NextActionType.phoneVerify:
-        return phoneVerifyAction;
-      case NextActionType.credentials:
-        return credentialsAction;
-      case NextActionType.role:
-        return roleAction;
-      case NextActionType.age:
-        return ageAction;
-      case NextActionType.about:
-        return aboutAction;
-      case NextActionType.images:
-        return imagesAction;
-      case NextActionType.preview:
-        return previewAction;
-      case NextActionType.none:
-        break;
+  void roleSpecificAction(bool isSitter, dynamic sitterAvailability,
+      Map? children, String? chargeRate) {
+    if (isSitter) {
+      _viewModel.setAvailability(sitterAvailability);
+      _viewModel.setRate(chargeRate);
+    } else {
+      _viewModel.setChildrenInfo(children);
     }
   }
 }
 
 abstract class ButtonActionsBase {
-  Function? returnCorrectActionFromActionType(NextActionType actionType);
   Future<void> phoneNumberContinueAction(
       String phoneNumber); // send phone number to firebase
   void phoneVerifyAction(); // verify the code sent and check if its correct
@@ -186,7 +185,9 @@ abstract class ButtonActionsBase {
   void roleAction(bool isSitter); // user is a parent or a sitter
   void aboutAction(String bio, String homeAddress); // save info about profile
   void imagesAction(List<XFile> imageLocators); //  save profile images
-  Future<void> previewAction(); // send and register data and login
+  void previewAction(); // send and register data and login
+  void roleSpecificAction(bool isSitter, dynamic sitterAvailability,
+      Map children, String chargeRate);
 }
 
 /*

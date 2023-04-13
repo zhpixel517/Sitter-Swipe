@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:sitter_swipe/models/user_data.dart';
 import 'package:sitter_swipe/services/firebase/database.dart';
 
@@ -28,6 +29,7 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      print("result from registration function is $result");
       User user = result.user!;
 
       // create a new document for the user with the uid with empty datya
@@ -38,7 +40,14 @@ class AuthService {
     }
   }
 
+  String _convertToProperlyFormattedPhoneNumber(String number) {
+    RegExp phone = RegExp(r'(\d{3})(\d{3})(\d{4})');
+    //TODO: phone number regex
+    return number;
+  }
+
   verifyPhoneNumber(String number) async {
+    String formattedNumber = _convertToProperlyFormattedPhoneNumber(number);
     await _auth.verifyPhoneNumber(
         phoneNumber: number,
         verificationCompleted: (c) => print("completed"),

@@ -19,7 +19,7 @@ class Conversation extends StatefulWidget {
       required this.read,
       required this.image,
       this.userName,
-      this.latestMessageWasSelf,
+      required this.latestMessageWasSelf,
       Key? key})
       : super(key: key);
 

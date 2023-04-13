@@ -347,5 +347,3 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 }
-
-enum SwipeDirection { left, right }

@@ -34,6 +34,11 @@ class AppStrings {
 
   static const String sentVerification =
       "We just texted you a verification code!";
+
+  static const String anyTimeOnWeekdays = "Weekdays";
+  static const String anyTimeOnWeekNights = "Weeknights";
+  static const String weekendsOnly = "Weekends only";
+  static const String anytime = "Any time";
 }
 
 class PageTitles {

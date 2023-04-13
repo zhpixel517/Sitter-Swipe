@@ -11,6 +11,15 @@ import 'package:sitter_swipe/services/preferences/app_preferences.dart';
 
 class SwipeViewModel extends BaseViewModel
     with SwipeViewModelOutput, SwipeViewModelInputs {
+  /*
+
+  This is another method of using a viewmodel
+  this is the way that I learned first.
+  It's not the best and a little bit overkill for this usercase,
+  but it works.
+
+  */
+
   final StreamController _cityName = StreamController<String>.broadcast();
   final StreamController _stateName = StreamController<String>.broadcast();
   final StreamController _sittersList = StreamController.broadcast();
@@ -34,9 +43,7 @@ class SwipeViewModel extends BaseViewModel
   Stream get sittersListOutput => _sittersList.stream.map((user) => user);
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-  }
+  void dispose() {}
 
   Stream<List<UserData>> getUserFeed() {
     // find matches based off of discovery preferences from firebase
@@ -51,7 +58,6 @@ class SwipeViewModel extends BaseViewModel
   @override
   void start() async {
     await requestNeededPermissions();
-    //_queryTest();
     if (saveUserCity == null && saveUserStateOrProvince == null) {
       List<Placemark> cities = await getCityName();
       String? userCity = cities[0].locality;

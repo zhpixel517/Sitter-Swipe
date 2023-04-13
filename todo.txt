@@ -47,8 +47,7 @@ Notifications:
     - visual tweaks
 
 Registration flow!!!
-    - UI for each page
-    - provider for setting the state of the control buttons
+    - gender input 
     
     - image cropper, mandatory image sizes?
 

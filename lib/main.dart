@@ -11,9 +11,9 @@ void main() async {
   await Firebase.initializeApp();
   await initAppModule();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark));
+      statusBarIconBrightness: Brightness.light));
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   runApp(MyApp());
 }

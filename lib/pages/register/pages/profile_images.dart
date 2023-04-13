@@ -1,8 +1,13 @@
 // get all of their profile images
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sitter_swipe/pages/register/pages.dart';
+import 'package:sitter_swipe/pages/register/provider/button_state_provider.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
@@ -19,14 +24,28 @@ class ProfileImages extends StatefulWidget {
 class _ProfileImagesState extends State<ProfileImages> {
   final RegisterViewModel _viewModel = instance<RegisterViewModel>();
   final ImagePicker imagePicker = ImagePicker();
-  List<XFile> selectedImages = [];
+  List selectedImages = List.filled(6, null);
 
   // 6 empty image references.
   // I did this so that I could place an images on a particular index
-  // in order to properly order the images later???
+  // in order to properly order the images later
+
+  _checkBlur(BlurProvider provider) {
+    if (const ListEquality().equals(selectedImages, List.filled(6, null))) {
+      // if our selected images are empty
+      // for some reason, selectedImages == List.filled(6, null) is always false
+      provider.blur();
+    } else {
+      provider.unblur();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final blurProvider = Provider.of<BlurProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkBlur(blurProvider);
+    });
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -46,8 +65,8 @@ class _ProfileImagesState extends State<ProfileImages> {
           children: [
             GridView.count(
               crossAxisCount: 2,
-              mainAxisSpacing: 16.0,
-              crossAxisSpacing: 16.0,
+              mainAxisSpacing: AppSizes.gridAxisSpacing,
+              crossAxisSpacing: AppSizes.gridAxisSpacing,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               children: List.generate(6, (index) {
@@ -56,28 +75,40 @@ class _ProfileImagesState extends State<ProfileImages> {
                     // select image and return it to the viewmodel
                     final XFile? image = await imagePicker.pickImage(
                         source: ImageSource.gallery);
-                    print(image);
-                    selectedImages.add(image!);
-                    _viewModel.setProfileDisplayImages(selectedImages);
+                    setState(() {
+                      selectedImages[index] = image!;
+                    });
+                    _viewModel.addProfileDisplayImage(selectedImages[index]);
+                    _checkBlur(blurProvider);
                   },
                   child: Container(
                     decoration: const BoxDecoration(
                         color: TanPallete.creamWhite,
                         borderRadius: BorderRadius.all(
-                            Radius.circular(AppSizes.swipeCardBorderRadius))),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(AppPadding.p5),
-                          child: Icon(
-                            EvaIcons.cameraOutline,
-                            color: TanPallete.lightGrey,
+                            Radius.circular(AppSizes.searchBarBorderRadius))),
+                    child: selectedImages[index] != null
+                        ? ClipRRect(
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(
+                                    AppSizes.searchBarBorderRadius)),
+                            child: Image.file(
+                              File(selectedImages[index].path),
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(AppPadding.p5),
+                                child: Icon(
+                                  EvaIcons.cameraOutline,
+                                  color: TanPallete.lightGrey,
+                                ),
+                              ),
+                              Text('Tap to add photo', style: Fonts.smallText),
+                            ],
                           ),
-                        ),
-                        Text('Tap to add photo', style: Fonts.smallText),
-                      ],
-                    ),
                   ),
                 );
               }),

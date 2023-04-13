@@ -116,8 +116,10 @@ class _LoginPageState extends State<LoginPage> {
                                   obscureText: true,
                                   focusNode: passwordNode,
                                   keyboardType: TextInputType.text,
-                                  decoration: searchBarDecoration(passwordNode,
-                                      "Password", EvaIcons.lockOutline));
+                                  decoration: globalInputDecoration(
+                                      passwordNode,
+                                      "Password",
+                                      EvaIcons.lockOutline));
                             }),
                       ),
                       /*

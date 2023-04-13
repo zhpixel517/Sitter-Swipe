@@ -279,7 +279,7 @@ class SwipePageState extends State<SwipePage> {
           flex: 7,
           child: TextField(
               focusNode: searchBarFocusNode,
-              decoration: searchBarDecoration(searchBarFocusNode,
+              decoration: globalInputDecoration(searchBarFocusNode,
                   AppStrings.sitterSearch, EvaIcons.search)),
         ),
         Expanded(

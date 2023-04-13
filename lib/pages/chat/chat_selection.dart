@@ -24,7 +24,17 @@ class ChatSelection extends StatefulWidget {
 class _ChatSelectionState extends State<ChatSelection> {
   final ChatViewModel _viewModel = instance<ChatViewModel>();
   final FocusNode messageSearchFocusNode = FocusNode();
-  List<Conversation> conversations = [];
+  List<Conversation> conversations = [
+    Conversation(
+      "",
+      "test",
+      "12:30",
+      name: "Zachary ",
+      read: false,
+      image: "",
+      latestMessageWasSelf: false,
+    )
+  ];
 
   @override
   void initState() {
@@ -49,7 +59,7 @@ class _ChatSelectionState extends State<ChatSelection> {
           children: [
             TextField(
                 focusNode: messageSearchFocusNode,
-                decoration: searchBarDecoration(messageSearchFocusNode,
+                decoration: globalInputDecoration(messageSearchFocusNode,
                     AppStrings.messageSearch, EvaIcons.search)),
             conversations.isNotEmpty
                 ? Expanded(

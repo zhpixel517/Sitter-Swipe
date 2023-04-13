@@ -60,7 +60,7 @@ ThemeData getApplicationTheme() {
   );
 }
 
-InputDecoration searchBarDecoration(
+InputDecoration globalInputDecoration(
     FocusNode focusNode, String labelText, IconData prefixIcon) {
   return InputDecoration(
       filled: true,

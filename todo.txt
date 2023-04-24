@@ -1,18 +1,32 @@
-Start with frontend first.
+order of operations - 
+- complete firebase upload datapoints for parents
+- phone number verification 
+- pull data and populate swipe cards
+- profile page cases depending on where we came from
+- discovery page slider ui is wack
+- filtering based on location
+- send likes and passes
+- interested page like animation + tab ui udpdate
+- interested page data
+- wrapper
+- reviews
+- chats
+- blocking
+- notifications 
+- settings
+- update profile screen
+- responsive ui
+- clean and upload
 
 MVP - the ability to find people nearby, swipe on either a babysitter or find a family.
       4 core screens + options. that's it. 
       everything else is accessory to that - we can hand this off later to someone else.
-      deadline: June 2023. B4 Chicago.  
-
-
-restructure the database to group people by individual cities - not families and sitters. 
-querying the database for a huge amount of users will take FOREVER on the user side.
+      deadline: June 2023. B4 Chicago. You can do it!!
 
 
 Login:
-    - viewmodel isn't sending any data
     - forgot password page visual tweaks
+    - proper text field checking
 
 Swipe:
     -  location picker

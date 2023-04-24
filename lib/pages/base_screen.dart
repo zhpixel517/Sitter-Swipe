@@ -45,14 +45,16 @@ class _BaseScreen extends State<BaseScreen> {
     const SwipePage(),
     const InterestedPage(),
     const ChatSelection(),
-    UserProfile(
-      "Zachary",
-      "Zachary",
-      true,
-      false,
-      "18",
-      profileImage: boy2,
-    ) // TODO: get profile data here from firebase
+    UserProfile("Zachary", "Zachary", true, false, "18",
+        didComeFromRegisteredScreen: false,
+        profileImages: const [
+          boy2,
+          boy1,
+          edp445Image,
+          girl1,
+          girl2,
+          girl3
+        ]) // TODO: get profile data here from firebase
   ];
 
   void updateIndex(int newIndex) {

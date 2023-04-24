@@ -1,4 +1,6 @@
-import 'package:sitter_swipe/models/enums/prefferred_gender.dart';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserData {
   /*
@@ -11,19 +13,24 @@ class UserData {
   final String? fullName;
   final String? userName; // ex: @something
   final int? age;
-  final dynamic location; // TODO: add a location identifier or a coordinate
-  final PreferredGender? gender; // TODO: convert this to a string for firebase
-  final List? profileImages; // TODO: image locators from firebase of the person
+  final GeoPoint location; // TODO: add a location identifier or a coordinate
+  final String? gender; // TODO: convert this to a string for firebase
+  List<File>? profileImages; // TODO: image locators from firebase of the person
+  List<String>? profileImageDownloadUrls;
   final String? profilePicture;
   final double? stars;
   final bool? isSitter;
   final List? reviews;
   final String? phoneNumber;
-  final String? uid;
+  String? uid; // this will be set in a later function, so not final
   final String? city;
   final String? stateOrProvince;
   final String? country;
   final List<String>? likes;
+  final String? bio;
+  final String? availability;
+  final String? willPayRate;
+  final Map? children;
 
   UserData({
     required this.fullName,
@@ -38,9 +45,14 @@ class UserData {
     required this.phoneNumber,
     required this.city,
     required this.stateOrProvince,
-    required this.uid,
+    this.uid, // set later. see services/firebase/auth.dart
+    this.profileImageDownloadUrls, // set later. see services/firebase/auth.dart
+    this.children, // only set if we are a parent
     required this.country,
     required this.reviews,
+    required this.bio,
+    required this.availability,
+    required this.willPayRate,
     this.likes,
   });
 }

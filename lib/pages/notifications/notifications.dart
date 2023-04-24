@@ -1,7 +1,6 @@
 // notifications screen
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:sitter_swipe/pages/login/login.dart';
 import 'package:sitter_swipe/pages/notifications/notifications_viewmodel.dart';
 import 'package:sitter_swipe/pages/notifications/widgets/notification_item.dart';
 import 'package:sitter_swipe/resources/colors.dart';

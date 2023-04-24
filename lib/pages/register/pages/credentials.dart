@@ -22,12 +22,14 @@ class _CredentialsState extends State<Credentials> {
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   final FocusNode nameFocusNode = FocusNode();
-  final FocusNode nickNameFocusNode = FocusNode();
+  final FocusNode confirmPasswordFocusNode = FocusNode();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController nickNameController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -40,7 +42,9 @@ class _CredentialsState extends State<Credentials> {
   _checkBlur(BlurProvider provider) {
     if (emailController.text == "" ||
         passwordController.text == "" ||
-        nameController.text == "") {
+        nameController.text == "" ||
+        confirmPasswordController.text == "" &&
+            confirmPasswordController.text != passwordController.text) {
       provider.blur();
     } else {
       provider.unblur();
@@ -110,6 +114,20 @@ class _CredentialsState extends State<Credentials> {
                     },
                     decoration: globalInputDecoration(emailFocusNode,
                         "Create a password", EvaIcons.lockOutline),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppPadding.p10),
+                  child: TextFormField(
+                    obscureText: true,
+                    controller: confirmPasswordController,
+                    focusNode: confirmPasswordFocusNode,
+                    onChanged: (value) {
+                      //_viewModel.setPassword(passwordController.text);
+                      _checkBlur(controlButtonBlurState);
+                    },
+                    decoration: globalInputDecoration(emailFocusNode,
+                        "Confirm password", EvaIcons.lockOutline),
                   ),
                 ),
               ],

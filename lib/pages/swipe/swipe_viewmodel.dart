@@ -59,7 +59,7 @@ class SwipeViewModel extends BaseViewModel
   void start() async {
     await requestNeededPermissions();
     if (saveUserCity == null && saveUserStateOrProvince == null) {
-      List<Placemark> cities = await getCityName();
+      List cities = await getCityName();
       String? userCity = cities[0].locality;
       String? userState = cities[0].administrativeArea;
       inputCityName.add(userCity);

@@ -109,7 +109,7 @@ class _BirthdayState extends State<Birthday> {
               Text(
                 _viewModel.userIsSitter!
                     ? "Your age will be shown on your profile"
-                    : "We need this to help verify your identity",
+                    : "We need this to help verify your identity. This won't be shown on your profile.",
                 textAlign: TextAlign.center,
                 style: Fonts.smallText,
               )

@@ -38,7 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: MediaQuery.of(context).size.height * 0.3,
                 child: const Center(
                     child: CircleAvatar(
-                  radius: 100.0,
+                  radius: 120.0,
                   backgroundColor: TanPallete.tan,
                   backgroundImage: NetworkImage(boy2),
                 )),
@@ -65,6 +65,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: "Profile Settings",
                   icon: EvaIcons.person,
                   toggle: false,
+                ),
+                SettingsTile(
+                  toggle: false,
+                  title: "Log out",
+                  icon: EvaIcons.logOut,
                 ),
                 SettingsTile(
                   title: "Use miles",

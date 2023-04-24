@@ -5,12 +5,16 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sitter_swipe/app/constants.dart';
+import 'package:sitter_swipe/models/child.dart';
 import 'package:sitter_swipe/pages/base_screen.dart';
 import 'package:sitter_swipe/pages/chat/chat.dart';
+import 'package:sitter_swipe/pages/onboarding/widgets/onboarding_page.dart';
 import 'package:sitter_swipe/pages/swipe/swipe.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
@@ -30,17 +34,17 @@ class UserProfile extends StatefulWidget {
   bool? didComeFromInterestedScreen;
   int? indexFromInterestedScreen;
   bool? didComeFromRegisteredScreen;
-  final String? profileImage;
+  final List<String>? profileImages;
   final String? age;
   final String? bio;
   //final MatchEngine? matchEngineInstance;
   UserProfile(
       this.userName, this.fullName, this.isSelf, this.isFamily, this.age,
-      {required this.profileImage,
+      {required this.profileImages,
       this.bio,
       this.didComeFromInterestedScreen,
       this.indexFromInterestedScreen,
-      this.didComeFromRegisteredScreen,
+      required this.didComeFromRegisteredScreen,
       /*this.matchEngineInstance*/ Key? key})
       : super(key: key);
 
@@ -49,7 +53,9 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  List<String> listPopUpOptions = ["Call", "Block", "Report"];
+  List<String> listPopUpOptions = ["Block", "Report"];
+  Brightness statusBarBrightness = Brightness.light;
+  int? carouselIndex = 0;
 
   @override
   void initState() {
@@ -61,7 +67,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    //var width = MediaQuery.of(context).size.width;
     return Scaffold(body: LayoutBuilder(builder: (context, constraints) {
       return SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
@@ -70,7 +76,6 @@ class _UserProfileState extends State<UserProfile> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
               child: Stack(
-                fit: StackFit.expand,
                 children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
@@ -79,21 +84,53 @@ class _UserProfileState extends State<UserProfile> {
                         bottomRight:
                             Radius.circular(AppSizes.searchBarBorderRadius)),
                     child: Stack(
-                      fit: StackFit.expand,
                       children: [
-                        widget.didComeFromRegisteredScreen != null
-                            ? Image(
-                                image: FileImage(File(widget.profileImage!)),
-                                fit: BoxFit.cover,
-                                alignment: Alignment.center,
-                              )
-                            : Image(
-                                // put a carousel here with multiple images
-                                fit: BoxFit.cover,
-                                alignment: Alignment.center,
-                                image: NetworkImage(widget.profileImage!),
-                              ),
-                        imageBlur()
+                        CarouselSlider(
+                            items: List.generate(widget.profileImages!.length,
+                                (index) {
+                              return Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  widget.didComeFromRegisteredScreen!
+                                      ? Image(
+                                          image: FileImage(File(
+                                              widget.profileImages![index])),
+                                          fit: BoxFit.cover,
+                                          alignment: Alignment.center,
+                                        )
+                                      : Image(
+                                          image: NetworkImage(
+                                              widget.profileImages![index]),
+                                          fit: BoxFit.cover,
+                                          alignment: Alignment.center,
+                                        ),
+                                  imageBlur(constraints),
+                                ],
+                              );
+                            }),
+                            options: CarouselOptions(
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    carouselIndex = index;
+                                  });
+                                },
+                                height: double.infinity,
+                                viewportFraction: 1,
+                                enableInfiniteScroll: false)),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: AppPadding.p10),
+                            child: DotsIndicator(
+                              position: carouselIndex!.toDouble(),
+                              dotsCount: widget.profileImages!.length,
+                              decorator: const DotsDecorator(
+                                  activeColor: Colors.white,
+                                  color: TanPallete.darkGrey),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -105,7 +142,7 @@ class _UserProfileState extends State<UserProfile> {
                             horizontal: AppPadding.globalContentSidePadding),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: widget.didComeFromRegisteredScreen != null
+                          children: widget.didComeFromRegisteredScreen == false
                               ? []
                               : widget.isSelf
                                   ? [
@@ -209,7 +246,7 @@ class _UserProfileState extends State<UserProfile> {
                               widget.userName,
                               true,
                               name: widget.fullName,
-                              profileImageLocator: widget.profileImage,
+                              profileImageLocator: widget.profileImages![0],
                             );
                           }));
                         }),
@@ -235,12 +272,14 @@ class _UserProfileState extends State<UserProfile> {
                               children: [
                                 Column(
                                   children: [
-                                    Text(widget.age!,
+                                    // instead of "3", pull number of kids
+                                    Text(widget.isFamily ? "3" : widget.age!,
                                         style: Fonts.bold.copyWith(
                                             fontSize: SizeConfig
                                                     .safeBlockHorizontal! *
                                                 8)),
-                                    Text("Age", style: Fonts.smallText),
+                                    Text(widget.isFamily ? "Children" : "Age",
+                                        style: Fonts.smallText),
                                   ],
                                 ),
                                 Column(
@@ -272,6 +311,28 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   ),
                 ),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.all(AppPadding.globalContentSidePadding),
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: TanPallete.creamWhite,
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(AppSizes.searchBarBorderRadius))),
+                child: Padding(
+                    padding: const EdgeInsets.all(AppPadding.p10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Children",
+                          style: Fonts.mediumStyle,
+                        ),
+                        //TODO: make a query about their kids
+                      ],
+                    )),
               ),
             ),
             Padding(

@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final LoginViewModel _viewModel = instance<LoginViewModel>();
   final FocusNode emailNode = FocusNode();
   final FocusNode passwordNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -76,81 +77,93 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: AppPadding.p10),
-                        child: StreamBuilder<bool>(
-                            stream: _viewModel.outputIsEmailValid,
-                            builder: (context, snapshot) {
-                              return TextField(
-                                focusNode: emailNode,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
-                                    errorText: snapshot.data ?? true
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: AppPadding.p10),
+                          child: StreamBuilder<bool>(
+                              stream: _viewModel.outputIsEmailValid,
+                              builder: (context, snapshot) {
+                                return TextFormField(
+                                  validator: (text) => text!.isEmpty
+                                      ? AppStrings.invalidEmail
+                                      : null,
+                                  focusNode: emailNode,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                      errorText: snapshot.data ?? true
+                                          ? null
+                                          : AppStrings.invalidEmail,
+                                      prefixIcon: Icon(
+                                        EvaIcons.email,
+                                        color: emailNode.hasFocus
+                                            ? Theme.of(context).primaryColor
+                                            : TanPallete.lightGrey,
+                                      ),
+                                      labelStyle: Fonts.bold.copyWith(
+                                          color: emailNode.hasFocus
+                                              ? Theme.of(context).primaryColor
+                                              : TanPallete.lightGrey,
+                                          fontSize:
+                                              AppSizes.textFieldLabelSize),
+                                      labelText: AppStrings.email),
+                                );
+                              }),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: AppPadding.p10),
+                          child: StreamBuilder<bool>(
+                              stream: _viewModel.outputIsPasswordValid,
+                              builder: (context, snapshot) {
+                                return TextFormField(
+                                    validator: (text) => text!.isEmpty
+                                        ? "Enter your password"
+                                        : null,
+                                    obscureText: true,
+                                    focusNode: passwordNode,
+                                    keyboardType: TextInputType.text,
+                                    decoration: globalInputDecoration(
+                                        passwordNode,
+                                        "Password",
+                                        EvaIcons.lockOutline));
+                              }),
+                        ),
+                        /*
+                            InputDecoration(
+                                    labelText: AppStrings.password,
+                                    errorText: (snapshot.data ?? true)
                                         ? null
-                                        : AppStrings.invalidEmail,
+                                        : AppStrings.password,
                                     prefixIcon: Icon(
-                                      EvaIcons.email,
-                                      color: emailNode.hasFocus
+                                      EvaIcons.lock,
+                                      color: passwordNode.hasFocus
                                           ? Theme.of(context).primaryColor
                                           : TanPallete.lightGrey,
                                     ),
                                     labelStyle: Fonts.bold.copyWith(
-                                        color: emailNode.hasFocus
+                                        color: passwordNode.hasFocus
                                             ? Theme.of(context).primaryColor
                                             : TanPallete.lightGrey,
                                         fontSize: AppSizes.textFieldLabelSize),
-                                    labelText: AppStrings.email),
-                              );
-                            }),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: AppPadding.p10),
-                        child: StreamBuilder<bool>(
-                            stream: _viewModel.outputIsPasswordValid,
-                            builder: (context, snapshot) {
-                              return TextField(
-                                  obscureText: true,
-                                  focusNode: passwordNode,
-                                  keyboardType: TextInputType.text,
-                                  decoration: globalInputDecoration(
-                                      passwordNode,
-                                      "Password",
-                                      EvaIcons.lockOutline));
-                            }),
-                      ),
-                      /*
-                          InputDecoration(
-                                  labelText: AppStrings.password,
-                                  errorText: (snapshot.data ?? true)
-                                      ? null
-                                      : AppStrings.password,
-                                  prefixIcon: Icon(
-                                    EvaIcons.lock,
-                                    color: passwordNode.hasFocus
-                                        ? Theme.of(context).primaryColor
-                                        : TanPallete.lightGrey,
                                   ),
-                                  labelStyle: Fonts.bold.copyWith(
-                                      color: passwordNode.hasFocus
-                                          ? Theme.of(context).primaryColor
-                                          : TanPallete.lightGrey,
-                                      fontSize: AppSizes.textFieldLabelSize),
-                                ),
-                      */
-                    ],
+                        */
+                      ],
+                    ),
                   ),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: AppPadding.p10),
                     child: ElevatedButton(
                       onPressed: () {
-                        //TODO: push login actions
-                        Navigator.pushNamed(context, Routes.baseScreen);
-                        _viewModel.login();
+                        if (formKey.currentState!.validate()) {
+                          //TODO: push login actions
+                          Navigator.pushNamed(context, Routes.baseScreen);
+                          _viewModel.login();
+                        }
                       },
                       style: Theme.of(context)
                           .elevatedButtonTheme

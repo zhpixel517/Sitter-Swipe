@@ -1,25 +1,19 @@
 //swipe on families or babysitters
 // part of baseScreen
-import 'dart:developer';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:loading_indicator/loading_indicator.dart';
-import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/swipe/swipe_viewmodel.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/card_content.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/custom_icon_button.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/discovery_settings.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
+import 'package:sitter_swipe/resources/image_assets.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/resources/theme.dart';
-import 'package:sitter_swipe/services/preferences/app_preferences.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
 import '../../services/di.dart';
@@ -35,56 +29,67 @@ class SwipePageState extends State<SwipePage> {
   final FocusNode searchBarFocusNode = FocusNode();
   List<SwipeItem> cards = [
     SwipeItem(
-        content: const CardContent(
+        content: CardContent(
           alignment: Alignment.centerRight,
           rating: 4.2,
           hourlyRate: '17',
-          image: girl1,
-          fullName: "Bianca",
-          userName: "bianca_15",
-          age: "16",
+          image: ImageAssets.chilton,
+          fullName: "Paula Chilton",
+          userName: "chilton9000",
+          age: "27",
           isFamily: false,
           distance: "5",
         ),
         likeAction: () {}),
     SwipeItem(
-      content: const CardContent(
+      content: CardContent(
         alignment: Alignment.centerRight,
         rating: 4.0,
         hourlyRate: '14',
-        image: boy1,
-        userName: "mDog420",
-        fullName: "Michael",
-        age: "15",
+        image: ImageAssets.cleaver,
+        userName: "jennyRocks",
+        fullName: "Jennifer Cleaver",
+        age: "21",
         isFamily: false,
         distance: "15",
       ),
     ),
     SwipeItem(
-      onSlideUpdate: (SlideRegion? slideRegion) async {
-        log("Region $slideRegion");
-      },
-      content: const CardContent(
+      content: CardContent(
         alignment: Alignment.center,
         rating: 5.0,
         hourlyRate: '20',
-        image: girl3,
-        userName: "avery123",
-        fullName: "Avery",
-        age: "15",
+        image: ImageAssets.cummins,
+        userName: "my_real_name_is_chris",
+        fullName: "Tony Cummins",
+        age: "65",
         isFamily: false,
         distance: "3",
       ),
     ),
     SwipeItem(
-      content: const CardContent(
+      content: CardContent(
         alignment: Alignment.center,
         rating: 5.0,
         hourlyRate: '20',
-        image: boy2,
-        userName: "a_m_m_o_n",
-        fullName: "Ammon",
-        age: "18",
+        image: ImageAssets.qualls,
+        userName: "scrambled_brain",
+        fullName: "Jeremy Qualls",
+        age: "12",
+        isFamily: false,
+        distance: "3",
+        // matchEngineInstance: matchEngine,
+      ),
+    ),
+    SwipeItem(
+      content: CardContent(
+        alignment: Alignment.center,
+        rating: 5.0,
+        hourlyRate: '20',
+        image: ImageAssets.schneider,
+        userName: "momma_bear",
+        fullName: "Kris Schneider",
+        age: "23",
         isFamily: false,
         distance: "3",
         // matchEngineInstance: matchEngine,
@@ -141,63 +146,68 @@ class SwipePageState extends State<SwipePage> {
   @override
   Widget build(BuildContext context) {
     matchEngine = MatchEngine(swipeItems: cards);
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: AppPadding.globalContentSidePadding),
-        child: Column(
-          children: [
-            Expanded(
-              child: _buildTopBar(context),
-            ),
-            Expanded(
-              child: _buildSearchBar(context),
-            ),
-            Expanded(
-              flex: 7,
-              child: Center(
-                  child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          EvaIcons.questionMarkCircleOutline,
-                          size: 30,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.globalContentSidePadding),
+          child: Column(
+            children: [
+              Expanded(
+                child: _buildTopBar(context),
+              ),
+              Expanded(
+                child: _buildSearchBar(context),
+              ),
+              Expanded(
+                flex: 7,
+                child: Center(
+                    child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            EvaIcons.questionMarkCircleOutline,
+                            size: 30,
+                            color: TanPallete.lightGrey,
+                          ),
                         ),
-                      ),
-                      Text(
-                        AppStrings.noMoreSitters,
-                        style: Fonts.bold,
-                      ),
-                      const SizedBox(height: 30),
-                      ElevatedButton(
-                          onPressed: () {
-                            showDiscoveryPreferences(context, true);
-                          },
-                          child: const Text("Change Discovery Settings"))
-                    ],
-                  ),
-                  SwipeCards(
-                    upSwipeAllowed: false,
-                    matchEngine: matchEngine!,
-                    onStackFinished: () {},
-                    itemBuilder: (item, index) {
-                      return cards.isNotEmpty
-                          ? cards[index].content
-                          : const Center(
-                              child: Text(
-                                  "No more sitters found. Try change your discovery preferences?"));
-                    },
-                  ),
-                ],
-              )),
-            ),
-          ],
+                        Text(
+                          AppStrings.noMoreSitters,
+                          style: Fonts.mediumStyle
+                              .copyWith(color: TanPallete.lightGrey),
+                        ),
+                        const SizedBox(height: 30),
+                        ElevatedButton(
+                            onPressed: () {
+                              showDiscoveryPreferences(context, true);
+                            },
+                            child: const Text("Change Discovery Settings"))
+                      ],
+                    ),
+                    SwipeCards(
+                      upSwipeAllowed: false,
+                      matchEngine: matchEngine!,
+                      onStackFinished: () {},
+                      itemBuilder: (item, index) {
+                        return cards.isNotEmpty
+                            ? cards[index].content
+                            : const Center(
+                                child: Text(
+                                    "No more sitters found. Try change your discovery preferences?"));
+                      },
+                    ),
+                  ],
+                )),
+              ),
+            ],
+          ),
         ),
       ),
     );

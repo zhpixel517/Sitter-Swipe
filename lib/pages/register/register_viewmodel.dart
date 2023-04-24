@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sitter_swipe/models/base_viewmodel.dart';
-import 'package:sitter_swipe/models/enums/prefferred_gender.dart';
+import 'package:sitter_swipe/models/child.dart';
 import 'package:sitter_swipe/models/user_data.dart';
-import 'package:sitter_swipe/pages/register/provider/next_action_provider.dart';
-import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/services/firebase/auth.dart';
 
 class RegisterViewModel
@@ -21,16 +22,19 @@ class RegisterViewModel
   DateTime? userDateOfBirth;
   bool? userIsSitter;
   XFile? userProfilePicture;
-  List<XFile>? userProfileImages;
+  List<File>? userProfileImages = []; // list of download urls
   String? userBio;
   String? userCity;
   String? userStateOrProvince;
   String? userCountry;
   String? userHomeAddress;
   dynamic geoHash; // their geohash calculated later
-  Map? children;
+  List<Child>? children = [
+    const Child(name: "", age: "", hobbies: "")
+  ]; //init with default 1 kid
   String? sitterAvailability;
   String? sitterChargeRate;
+  Location? userLocation;
 
   @override
   void dispose() {
@@ -52,25 +56,26 @@ class RegisterViewModel
             fullName: userFullName!,
             userName: "userName",
             age: userAge,
-            location: null,
-            gender: PreferredGender.female,
-            profileImages: userProfileImages,
+            location: GeoPoint(userLocation!.latitude, userLocation!.longitude),
+            gender: userGender,
+            profileImages: userProfileImages, // userProfileImages!,
             profilePicture: userProfileImages![0].path,
             stars: null,
-            isSitter: true,
+            isSitter: userIsSitter,
             phoneNumber: userPhoneNumber,
             city: userCity,
             stateOrProvince: userStateOrProvince,
-            uid: '43L8dd2koho5VCk82uFl',
             country: userCountry,
+            bio: userBio,
+            willPayRate: sitterChargeRate,
+            availability: sitterAvailability,
             reviews: []));
   }
 
   //********* Setters *********//
 
   @override
-  setAddress(String address) {
-    //TODO: parse their address for information
+  setAddress(String address) async {
     setCity("city");
     setStateOrProvince("stateOrProvince");
     setCountry("");
@@ -128,9 +133,8 @@ class RegisterViewModel
   }
 
   @override
-  addProfileDisplayImage(XFile image) {
-    userProfileImages = [];
-    userProfileImages!.add(image);
+  addProfileDisplayImage(File image) {
+    userProfileImages?.add(image);
   }
 
   @override
@@ -159,8 +163,13 @@ class RegisterViewModel
   }
 
   @override
-  setChildrenInfo(Map? childrenInfo) {
+  setChildrenInfo(List<Child>? childrenInfo) {
     children = childrenInfo;
+  }
+
+  @override
+  setUserCoordinates(Location? location) {
+    userLocation = location;
   }
 
   // **** Helper Functions ***** //
@@ -189,14 +198,15 @@ abstract class RegisterViewModelInputs {
   setIsSitter(bool isSitter);
   setAge(DateTime dateOfBirth);
   setProfileImage(image);
-  addProfileDisplayImage(XFile image);
+  addProfileDisplayImage(File image);
   setCity(String city);
   setStateOrProvince(String stateOrProvince);
   setUserBio(String bio);
   setCountry(String country);
   setAvailability(dynamic dateRange);
   setRate(String rate);
-  setChildrenInfo(Map? childrenInfo);
+  setChildrenInfo(List<Child>? childrenInfo);
+  setUserCoordinates(Location? location);
 }
 
 class RegisterViewModelOutputs {}

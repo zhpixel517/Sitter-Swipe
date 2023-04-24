@@ -46,7 +46,8 @@ class CardContent extends StatelessWidget {
                         isFamily!,
                         age!,
                         // matchEngineInstance: ,
-                        profileImage: image,
+                        profileImages: [image!],
+                        didComeFromRegisteredScreen: false,
                       )));
         },
         child: Container(
@@ -74,8 +75,8 @@ class CardContent extends StatelessWidget {
                               return const Center(
                                   child: Icon(EvaIcons.questionMarkCircle));
                             },
-                            fit: BoxFit.fitHeight,
-                            image: NetworkImage(image!),
+                            fit: BoxFit.cover,
+                            image: AssetImage(image!),
                           ),
                           Align(
                             alignment: Alignment.bottomCenter,

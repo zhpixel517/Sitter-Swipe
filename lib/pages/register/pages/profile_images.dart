@@ -12,6 +12,7 @@ import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
+import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/services/di.dart';
 
 class ProfileImages extends StatefulWidget {
@@ -30,10 +31,32 @@ class _ProfileImagesState extends State<ProfileImages> {
   // I did this so that I could place an images on a particular index
   // in order to properly order the images later
 
+  _repopulateGrid() {
+    if (!const ListEquality()
+        .equals(_viewModel.userProfileImages, List.filled(6, null))) {
+      // if our profile already has some images, repopulate them.
+      // this is tricky because I have to match the format of List.filled
+      int numberOfNullVals = 6 - _viewModel.userProfileImages!.length;
+      final List emptyList = List.filled(numberOfNullVals, null);
+      final List savedImages = _viewModel.userProfileImages!;
+      selectedImages = [];
+      selectedImages
+        ..addAll(savedImages)
+        ..addAll(emptyList);
+
+      // will recreate list of len 6 to match the format
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _repopulateGrid();
+  }
+
   _checkBlur(BlurProvider provider) {
     if (const ListEquality().equals(selectedImages, List.filled(6, null))) {
       // if our selected images are empty
-      // for some reason, selectedImages == List.filled(6, null) is always false
       provider.blur();
     } else {
       provider.unblur();
@@ -73,10 +96,10 @@ class _ProfileImagesState extends State<ProfileImages> {
                 return InkWell(
                   onTap: () async {
                     // select image and return it to the viewmodel
-                    final XFile? image = await imagePicker.pickImage(
+                    final image = await imagePicker.pickImage(
                         source: ImageSource.gallery);
                     setState(() {
-                      selectedImages[index] = image!;
+                      selectedImages[index] = File(image!.path);
                     });
                     _viewModel.addProfileDisplayImage(selectedImages[index]);
                     _checkBlur(blurProvider);
@@ -116,7 +139,9 @@ class _ProfileImagesState extends State<ProfileImages> {
             Padding(
               padding: const EdgeInsets.all(AppPadding.p10),
               child: Text(
-                "Please follow our Community Guidelines and present yourself appropriately.",
+                _viewModel.userIsSitter!
+                    ? AppStrings.followGuidelinesSitter
+                    : AppStrings.followGuidelinesParent,
                 textAlign: TextAlign.center,
                 style: Fonts.smallText,
               ),

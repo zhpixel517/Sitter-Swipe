@@ -23,27 +23,70 @@ class _VerifyPhoneState extends State<VerifyPhone> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text(
-            RegisterPageTitles.verify,
-            style: Fonts.bold,
-          ),
+          title: Text(RegisterPageTitles.verify, style: Fonts.bold),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(AppStrings.sentVerification, style: Fonts.mediumStyle),
-            Container(
-              color: TanPallete.tan,
-              child: const Pinput(
-                  defaultPinTheme: PinTheme(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.globalContentSidePadding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(AppPadding.p8),
+                child: Text(
+                  AppStrings.sentVerification,
+                  style: Fonts.mediumStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppPadding.p8),
+                child: Pinput(
+                    pinAnimationType: PinAnimationType.fade,
+                    preFilledWidget: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(
-                              AppSizes.elevatedButtonBorderRadius)))),
-                  length: 4,
-                  androidSmsAutofillMethod: AndroidSmsAutofillMethod.none),
-            ),
-          ],
+                          border: Border.all(color: TanPallete.tan),
+                          borderRadius: BorderRadius.circular(
+                              AppSizes.searchBarBorderRadius)),
+                      width: AppSizes.pinputWidthAndHeight,
+                      height: AppSizes.pinputWidthAndHeight,
+                    ),
+                    submittedPinTheme: PinTheme(
+                        textStyle: Fonts.bold
+                            .copyWith(fontSize: AppSizes.typingIndicatorSize),
+                        width: AppSizes.pinputWidthAndHeight,
+                        height: AppSizes.pinputWidthAndHeight,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: TanPallete.tan),
+                            borderRadius: BorderRadius.circular(
+                                AppSizes.searchBarBorderRadius))),
+                    focusedPinTheme: PinTheme(
+                        textStyle: Fonts.bold
+                            .copyWith(fontSize: AppSizes.typingIndicatorSize),
+                        width: AppSizes.pinputWidthAndHeight,
+                        height: AppSizes.pinputWidthAndHeight,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: TanPallete.tan),
+                            borderRadius: BorderRadius.circular(
+                                AppSizes.searchBarBorderRadius))),
+                    defaultPinTheme: const PinTheme(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(
+                                AppSizes.elevatedButtonBorderRadius)))),
+                    length: 4,
+                    androidSmsAutofillMethod: AndroidSmsAutofillMethod.none),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(AppPadding.p8),
+                child: Text(
+                  "Data and messaging rates apply.",
+                  style: Fonts.smallText,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
+          ),
         ));
   }
 }

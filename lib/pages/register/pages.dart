@@ -18,6 +18,6 @@ class RegisterPageTitles {
   static const about = "Profile info";
   static const images = "Select images for profile";
   static const preview = "Preview";
-  static const sitterSpecificPageTitle = "Rate and Availability";
+  static const sitterSpecificPageTitle = "Availability";
   static const parentPageTitle = "Tell us about your kid(s)";
 }

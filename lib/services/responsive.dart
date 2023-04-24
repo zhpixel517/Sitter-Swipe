@@ -35,7 +35,7 @@ class SizeConfig {
 class Responsive extends StatelessWidget {
   final Widget? mobile;
   final Widget? tablet;
-  const Responsive({this.mobile, this.tablet});
+  const Responsive({super.key, this.mobile, this.tablet});
 
   static bool isMobile(BuildContext context) {
     return MediaQuery.of(context).size.width < 850;

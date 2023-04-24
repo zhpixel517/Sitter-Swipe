@@ -51,8 +51,9 @@ class InterestedPersonState extends State<InterestedPerson>
               false,
               widget.age,
               didComeFromInterestedScreen: true,
+              didComeFromRegisteredScreen: false,
               indexFromInterestedScreen: 0,
-              profileImage: widget.image,
+              profileImages: [widget.image],
             );
           }));
         },
@@ -71,7 +72,7 @@ class InterestedPersonState extends State<InterestedPerson>
                       image: NetworkImage(
                         widget.image,
                       )),
-                  imageBlur(),
+                  imageBlur(constraints),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(

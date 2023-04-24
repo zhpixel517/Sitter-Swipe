@@ -10,6 +10,11 @@ Future<Position> getCurrentPosition() async {
   return position;
 }
 
+Future<Location> getCoordinatesFromAddress(String address) async {
+  List<Location> locations = await locationFromAddress(address);
+  return locations[0];
+}
+
 // TODO: calculate distance between 2 people's home addresses
 // TODO: is this the right approach? firebase needs to know people's addresses
 // when will the distance be calculated? check out https://pub.dev/packages/geoflutterfire

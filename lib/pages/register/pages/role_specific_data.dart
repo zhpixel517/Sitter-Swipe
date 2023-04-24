@@ -1,9 +1,8 @@
-// page where a parent can enter in information about theif child
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sitter_swipe/models/child.dart';
 import 'package:sitter_swipe/pages/register/pages.dart';
 import 'package:sitter_swipe/pages/register/provider/button_state_provider.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
@@ -22,6 +21,14 @@ class RoleSpecificInput extends StatefulWidget {
 }
 
 class _RoleSpecificInputState extends State<RoleSpecificInput> {
+  /*
+
+  On the previous registration page, if the user indicated
+  that they are a sitter, [SitterAvailabilityPage] will show.
+  If not, [ChildrenInfoPage] will.
+
+  */
+
   bool? isSitter;
   final RegisterViewModel _viewModel = instance<RegisterViewModel>();
 
@@ -48,10 +55,8 @@ class ChildrenInfoPage extends StatefulWidget {
 
 class _ChildrenInfoPageState extends State<ChildrenInfoPage> {
   final RegisterViewModel _viewModel = instance<RegisterViewModel>();
-  Map childData = {
-    "2": {"age": "", "hobbies": ""},
-    "1": {"age": 3, "hobbies": "play"}
-  };
+
+  // start with one empty card
 
   @override
   void initState() {
@@ -59,12 +64,125 @@ class _ChildrenInfoPageState extends State<ChildrenInfoPage> {
     // repopulate with saved data - how?
   }
 
-  _saveChildData(String name, String age, String hobbies) {
-    _viewModel.children![name] = {"age": age, "hobbies": hobbies};
+  _checkBlur(BlurProvider provider) {
+    if (_viewModel.children!.isEmpty || !_viewModel.children![0].isComplete) {
+      provider.blur();
+    } else {
+      provider.unblur();
+    }
+  }
+
+  _saveChildData(int index, String name, String age, String hobbies) {
+    _viewModel.children![index] = Child(name: name, age: age, hobbies: hobbies);
+    _viewModel.setChildrenInfo(_viewModel.children!);
+  }
+
+  _addEmptyCard() {
+    setState(() {
+      _viewModel.children!.add(const Child(name: "", hobbies: "", age: ""));
+    });
+  }
+
+  _buildChildInfoCard(int index, BlurProvider provider) {
+    final TextEditingController childNameController =
+        TextEditingController(text: _viewModel.children![index].name);
+    final TextEditingController childAgeController =
+        TextEditingController(text: _viewModel.children![index].age);
+    final TextEditingController childHobbieController =
+        TextEditingController(text: _viewModel.children![index].hobbies);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppPadding.p5),
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(color: TanPallete.darkGrey),
+            borderRadius: const BorderRadius.all(
+                Radius.circular(AppSizes.elevatedButtonBorderRadius))),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppPadding.p10, vertical: AppPadding.p5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Child ${index + 1}",
+                    style: Fonts.smallText.copyWith(fontSize: 15),
+                    textAlign: TextAlign.start,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _viewModel.children!.removeAt(index);
+                        });
+                        _checkBlur(provider);
+                      },
+                      icon: Icon(
+                        EvaIcons.close,
+                        size: Fonts.smallText.fontSize,
+                        color: TanPallete.lightGrey,
+                      ))
+                ],
+              ),
+            ),
+            // I only need blank focus nodes for now
+            Padding(
+              padding: const EdgeInsets.all(AppPadding.p5),
+              child: TextFormField(
+                controller: childNameController,
+                onChanged: (value) {
+                  _checkBlur(provider);
+                  _saveChildData(index, childNameController.text,
+                      childAgeController.text, childHobbieController.text);
+                },
+                decoration: globalInputDecoration(
+                    FocusNode(), "Child's name", Icons.emoji_people_outlined),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(AppPadding.p5),
+              child: TextFormField(
+                controller: childAgeController,
+                onChanged: (value) {
+                  _checkBlur(provider);
+                  _saveChildData(index, childNameController.text,
+                      childAgeController.text, childHobbieController.text);
+                },
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                decoration: globalInputDecoration(
+                    FocusNode(), "Child's age", Icons.cake_outlined),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  AppPadding.p5, AppPadding.p5, AppPadding.p5, AppPadding.p10),
+              child: TextFormField(
+                  controller: childHobbieController,
+                  onChanged: (value) {
+                    _checkBlur(provider);
+                    _saveChildData(index, childNameController.text,
+                        childAgeController.text, childHobbieController.text);
+                  },
+                  decoration: globalInputDecoration(
+                      FocusNode(),
+                      "Hobbies, favorite toy/activities...",
+                      Icons.toys_outlined)),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final BlurProvider blurProvider =
+        Provider.of<BlurProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _checkBlur(blurProvider);
+    });
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -78,14 +196,18 @@ class _ChildrenInfoPageState extends State<ChildrenInfoPage> {
               horizontal: AppPadding.globalContentSidePadding),
           child: ListView(
             children: [
-              for (int i = 0; i <= childData.length; i++)
-                ChildInfoCard(index: i + 1),
+              for (Child child in _viewModel.children!)
+                _buildChildInfoCard(
+                    _viewModel.children!.indexOf(child), blurProvider),
               TextButton.icon(
                   style: ButtonStyle(
                     overlayColor: MaterialStateProperty.all(
                         Theme.of(context).splashColor),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _checkBlur(blurProvider);
+                    _addEmptyCard();
+                  },
                   icon: const Icon(
                     EvaIcons.personAddOutline,
                     color: TanPallete.tan,
@@ -113,6 +235,11 @@ class _SitterAvailabilityPageState extends State<SitterAvailabilityPage> {
   FocusNode availabilityFocusNode = FocusNode();
   TextEditingController availabilityTextController = TextEditingController();
   String? availability;
+
+  void initState() {
+    super.initState();
+    availabilityTextController.text = _viewModel.sitterAvailability ?? "";
+  }
 
   _checkBlur(BlurProvider provider) {
     if (availabilityTextController.text == "") {
@@ -187,8 +314,7 @@ class _SitterAvailabilityPageState extends State<SitterAvailabilityPage> {
             DropdownMenuItem(
               value: AppStrings.anyTimeOnWeekdays,
               onTap: () {
-                availabilityTextController.text =
-                    AppStrings.anyTimeOnWeekNights;
+                availabilityTextController.text = AppStrings.anyTimeOnWeekdays;
                 _viewModel.setAvailability(AppStrings.anyTimeOnWeekdays);
                 _checkBlur(provider);
               },
@@ -224,67 +350,6 @@ class _SitterAvailabilityPageState extends State<SitterAvailabilityPage> {
             ),
           ],
           onChanged: (val) {}),
-    );
-  }
-}
-
-class ChildInfoCard extends StatelessWidget {
-  final int? index;
-  const ChildInfoCard({
-    super.key,
-    this.index,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppPadding.p5),
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(color: TanPallete.darkGrey),
-            borderRadius: const BorderRadius.all(
-                Radius.circular(AppSizes.elevatedButtonBorderRadius))),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: AppPadding.p10, vertical: AppPadding.p5),
-              child: Text(
-                "Child $index",
-                style: Fonts.smallText,
-                textAlign: TextAlign.start,
-              ),
-            ),
-            // I only need blank focus nodes for now
-            Padding(
-              padding: const EdgeInsets.all(AppPadding.p5),
-              child: TextFormField(
-                decoration: globalInputDecoration(
-                    FocusNode(), "Child's name", Icons.emoji_people_outlined),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(AppPadding.p5),
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.done,
-                decoration: globalInputDecoration(
-                    FocusNode(), "Child's age", Icons.cake_outlined),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  AppPadding.p5, AppPadding.p5, AppPadding.p5, AppPadding.p10),
-              child: TextFormField(
-                  decoration: globalInputDecoration(
-                      FocusNode(),
-                      "Hobbies, favorite toy/activities...",
-                      Icons.toys_outlined)),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

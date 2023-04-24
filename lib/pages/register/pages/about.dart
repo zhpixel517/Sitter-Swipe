@@ -7,6 +7,7 @@ import 'package:sitter_swipe/pages/register/provider/button_state_provider.dart'
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
+import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/resources/theme.dart';
 import 'package:sitter_swipe/services/di.dart';
 
@@ -73,7 +74,9 @@ class _AboutState extends State<About> {
                     padding:
                         const EdgeInsets.symmetric(vertical: AppPadding.p5),
                     child: Text(
-                      "Enter a short bio about you. Be sure to mention your experience, hobbies, where you live, etc...",
+                      _viewModel.userIsSitter!
+                          ? AppStrings.bioLabelForSitter
+                          : AppStrings.bioLabelForParent,
                       textAlign: TextAlign.center,
                       style: Fonts.smallText,
                     ),
@@ -111,7 +114,7 @@ class _AboutState extends State<About> {
                         _checkBlur(blurProvider);
                       },
                       decoration: globalInputDecoration(addressFocusNode,
-                          "Home Address", EvaIcons.homeOutline),
+                          "Residence Address", EvaIcons.homeOutline),
                     ),
                   ),
                   Text(

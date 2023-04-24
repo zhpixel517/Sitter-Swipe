@@ -29,4 +29,5 @@ class Fonts {
 class FontSizes {
   static double secondaryFontSize = 15.0;
   static double stateRendererMessageSize = 16.0;
+  static double dollarAmountFontSize = 25.0;
 }

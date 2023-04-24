@@ -39,6 +39,20 @@ class AppStrings {
   static const String anyTimeOnWeekNights = "Weeknights";
   static const String weekendsOnly = "Weekends only";
   static const String anytime = "Any time";
+
+  static const String bioLabelForSitter =
+      "Enter a short bio about you. Be sure to mention your experience, hobbies, where you live, etc...";
+  static const String bioLabelForParent =
+      "Enter a short bio about you, your kids, and what kind of sitter you're looking for, etc...";
+
+  static const String followGuidelinesSitter =
+      "These images will be visible to potential parents that your babysit for. Please follow our Community Guidelines.";
+
+  static const String followGuidelinesParent =
+      "Potential sitters will see these, so present yourself and your children appropriately and safely. See Community Guidelines.";
+
+  static const String nothingHere =
+      "Nothing here...yet! Why don't you start swiping to get started?";
 }
 
 class PageTitles {

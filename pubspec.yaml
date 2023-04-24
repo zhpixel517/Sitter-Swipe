@@ -32,7 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: 
-  swipe_cards: ^1.0.0
+  swipe_cards: ^2.0.0+1
   get_it: ^7.2.0
   shared_preferences: ^2.0.17
   internet_connection_checker: 
@@ -41,9 +41,9 @@ dependencies:
   geocoding: ^2.0.5
   location: ^4.2.0
   eva_icons_flutter: 
-  lottie: ^1.4.3
+  lottie: ^2.3.2
   carousel_slider: ^4.1.1
-  loading_indicator: ^3.1.0
+  dots_indicator: ^2.1.0
   flutter_rating_bar: ^4.0.1
   pinput: ^2.2.12
   sliding_up_panel: ^2.0.0+1
@@ -57,6 +57,8 @@ dependencies:
   image_picker: ^0.8.7+1
   geoflutterfire2: ^2.3.15
   flutter_spinkit: ^5.1.0
+  firebase_storage: ^11.1.1
+  device_preview: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -81,7 +83,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
+    - assets/images/eic/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

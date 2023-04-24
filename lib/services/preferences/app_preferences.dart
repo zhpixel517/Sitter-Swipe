@@ -1,6 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sitter_swipe/models/enums/settings.dart';
-import 'package:sitter_swipe/pages/login/login.dart';
 import 'package:sitter_swipe/services/di.dart';
 
 class AppPreferences with AppPreferencesHelperFunctions {

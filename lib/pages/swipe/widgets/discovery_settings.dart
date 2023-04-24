@@ -102,7 +102,7 @@ dynamic showDiscoveryPreferences(
               onClosing: () {},
               builder: (context) {
                 return StatefulBuilder(builder: (context, setState) {
-                  bool any_other = true;
+                  bool anyOther = true;
                   bool male = false;
                   bool female = false;
                   return SizedBox(
@@ -158,7 +158,7 @@ dynamic showDiscoveryPreferences(
                                         child: GenderChip(
                                       preferredGender: PreferredGender.any,
                                       icon: Icons.transgender,
-                                      selected: any_other,
+                                      selected: anyOther,
                                     )),
                                     Expanded(
                                         child: GenderChip(

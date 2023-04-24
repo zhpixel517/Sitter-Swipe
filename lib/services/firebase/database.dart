@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sitter_swipe/models/user_data.dart';
-import 'package:sitter_swipe/resources/strings.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:sitter_swipe/services/di.dart';
 import 'package:sitter_swipe/services/preferences/discovery_preferences.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 
@@ -17,7 +18,37 @@ class SitterDatabase {
   final CollectionReference users =
       FirebaseFirestore.instance.collection("users");
 
+  final Reference storageReference = FirebaseStorage.instance.ref();
+
   final geo = GeoFlutterFire();
+
+  testGeo() async {
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    double radius = 5000; // meters
+
+    Stream<List<DocumentSnapshot>> stream = geo
+        .collection(collectionRef: users)
+        .within(
+            center: geo.point(
+                latitude: position.latitude, longitude: position.longitude),
+            radius: radius / 1000,
+            field: 'position');
+
+    List<DocumentSnapshot> nearbyUsers = [];
+
+    stream.listen((List<DocumentSnapshot> documentList) {
+      documentList.forEach((DocumentSnapshot document) {
+        double latitude = document['position'].latitude;
+        double longitude = document['position'].longitude;
+        double distanceBetween = Geolocator.distanceBetween(
+            position.latitude, position.longitude, latitude, longitude);
+        if (distanceBetween <= radius) {
+          nearbyUsers.add(document);
+        }
+      });
+    });
+  }
 
   Future updateUserData(UserData data) async {
     return await users.doc(uid).set({
@@ -26,16 +57,20 @@ class SitterDatabase {
       "age": data.age,
       "location": data.location,
       "gender": data.gender,
-      "profileImages": data.profileImages,
-      "profilePicture": data.profilePicture,
+      "profileImages": data.profileImageDownloadUrls,
+      "profilePicture": data.profileImageDownloadUrls![0],
       "stars": data.stars,
       "isSitter": data.isSitter,
       "phoneNumber": data.phoneNumber,
       "reviews": data.reviews,
-      "city": data.city,
+      //"city": data.city,
       "stateOrProvince": data.stateOrProvince,
       "uid": uid,
       "likes": data.likes,
+      "bio": data.bio,
+      "availability": data.availability,
+      "willPayRate": data.willPayRate,
+      "children": data.children
     });
   }
 
@@ -52,10 +87,13 @@ class SitterDatabase {
         isSitter: snapshot.get("isSitter"),
         phoneNumber: snapshot.get("phoneNumber"),
         reviews: snapshot.get("reviews"),
-        city: snapshot.get("city"),
+        city: null, //snapshot.get("city"),
         stateOrProvince: snapshot.get("stateOrProvince"),
         country: snapshot.get("country"),
         likes: snapshot.get("likes"),
+        bio: snapshot.get("bio"),
+        availability: snapshot.get("availability"),
+        willPayRate: snapshot.get("willPayRate"),
         uid: uid);
   }
 
@@ -74,12 +112,16 @@ class SitterDatabase {
           isSitter: doc.get("isSitter"),
           phoneNumber: doc.get("phoneNumber"),
           reviews: doc.get("reviews"),
-          city: doc.get("city"),
+          city: null, //doc.get("city"),
           stateOrProvince: doc.get("stateOrProvince"),
+          bio: doc.get("bio"),
+          availability: doc.get("availability"),
+          willPayRate: doc.get("willPayRate"),
           uid: uid);
     }).toList();
   }
 
+  /*
   filter(DiscoveryPreferences preferences, List<UserData> list) {
     return list.where((item) {
       if (item.location <=
@@ -94,7 +136,7 @@ class SitterDatabase {
       }
     });
   }
-
+*/
   Future<QuerySnapshot<Object?>> get foundSitters async {
     // TODO: where to implement discovery preferences?
     DiscoveryPreferences preferences = await getDiscoveryPreferences();
@@ -197,4 +239,19 @@ class SitterDatabase {
 
   Future<bool> passUser() async {}
   */
+
+  // ***********************************************************
+
+  Future<String> uploadImageToFirebase(File image, String uid) async {
+    String fileName = DateTime.now()
+        .millisecondsSinceEpoch
+        .toString(); // I hope this is unique enough
+
+    final userFolder = storageReference.child("$uid/$fileName");
+    UploadTask uploadTask = userFolder.putFile(image);
+    await uploadTask.whenComplete(() => null);
+    String downloadUrl =
+        await userFolder.getDownloadURL().then((String url) => url);
+    return downloadUrl;
+  }
 }

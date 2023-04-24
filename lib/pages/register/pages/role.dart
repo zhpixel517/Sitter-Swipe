@@ -21,11 +21,11 @@ class Role extends StatefulWidget {
 
 class _RoleState extends State<Role> {
   final RegisterViewModel _viewModel = instance<RegisterViewModel>();
-  FocusNode rateFocusNode = FocusNode();
-  TextEditingController rateTextController = TextEditingController();
 
   bool _isSitterSelected = false;
   bool _isParentSelected = false;
+
+  double? rate = AppSizes.basePay; // default
 
   @override
   void initState() {
@@ -35,12 +35,15 @@ class _RoleState extends State<Role> {
           ? _isSitterSelected = true
           : _isParentSelected = true;
     }
-    rateTextController.text = _viewModel.sitterChargeRate ?? "";
+    if (_viewModel.sitterChargeRate == null) {
+      rate = AppSizes.basePay; // default
+    } else {
+      rate = double.parse(_viewModel.sitterChargeRate!);
+    }
   }
 
   _checkBlur(BlurProvider provider) {
-    if (_isSitterSelected == false && _isParentSelected == false ||
-        (_isParentSelected == true && rateTextController.text == '')) {
+    if (_isSitterSelected == false && _isParentSelected == false) {
       provider.blur();
     } else {
       provider.unblur();
@@ -66,30 +69,24 @@ class _RoleState extends State<Role> {
             horizontal: AppPadding.globalContentSidePadding),
         child: Stack(
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  bottom:
-                      MediaQuery.of(context).viewInsets.bottom > 0 ? 100 : 0),
-              // if the keyboard is open, that means that the two toggle buttons gotta move up more
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildRoleChoiceButton(_isSitterSelected, () {
-                    setState(() {
-                      _isSitterSelected = true;
-                      _isParentSelected = false;
-                      _viewModel.setIsSitter(true);
-                    });
-                  }, AppStrings.imASitter, Icons.emoji_people_rounded),
-                  _buildRoleChoiceButton(_isParentSelected, () {
-                    setState(() {
-                      _isSitterSelected = false;
-                      _isParentSelected = true;
-                      _viewModel.setIsSitter(false);
-                    });
-                  }, AppStrings.imAParent, Icons.family_restroom),
-                ],
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildRoleChoiceButton(_isSitterSelected, () {
+                  setState(() {
+                    _isSitterSelected = true;
+                    _isParentSelected = false;
+                    _viewModel.setIsSitter(true);
+                  });
+                }, AppStrings.imASitter, Icons.emoji_people_rounded),
+                _buildRoleChoiceButton(_isParentSelected, () {
+                  setState(() {
+                    _isSitterSelected = false;
+                    _isParentSelected = true;
+                    _viewModel.setIsSitter(false);
+                  });
+                }, AppStrings.imAParent, Icons.family_restroom),
+              ],
             ),
             _isParentSelected
                 ? Column(
@@ -103,16 +100,27 @@ class _RoleState extends State<Role> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      TextFormField(
-                        controller: rateTextController,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          _viewModel.setRate(value);
-                          _checkBlur(blurProvider);
-                        },
-                        decoration: globalInputDecoration(
-                            rateFocusNode, "Rate", Icons.attach_money),
+                      Text(
+                        "\$${rate!.toString()}0",
+                        style: Fonts.mediumStyle
+                            .copyWith(fontSize: FontSizes.dollarAmountFontSize),
                       ),
+                      Slider(
+                          activeColor: TanPallete.tan,
+                          inactiveColor: TanPallete.creamWhite,
+                          thumbColor: TanPallete.tan,
+                          overlayColor:
+                              MaterialStateProperty.all(TanPallete.creamWhite),
+                          min: 5.0,
+                          max: 25.0,
+                          divisions: 20,
+                          value: rate!,
+                          onChanged: (val) {
+                            setState(() {
+                              rate = val;
+                            });
+                            _viewModel.setRate(val.toString());
+                          }),
                     ],
                   )
                 : Container(),

@@ -6,14 +6,15 @@ specific actions are needed for each screen and require some sort of
 function sharing/mapping mechanism. 
 */
 
-import 'package:flutter/widgets.dart';
+import 'dart:io';
+
+import 'package:geocoding/geocoding.dart';
 import 'package:get_it/get_it.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:sitter_swipe/pages/register/pages/role_specific_data.dart';
-import 'package:sitter_swipe/pages/register/register.dart';
+import 'package:sitter_swipe/models/child.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/services/di.dart';
 import 'package:sitter_swipe/services/firebase/auth.dart';
+import 'package:sitter_swipe/services/functions/location.dart';
 
 enum NextActionType {
   phoneNumber,
@@ -30,22 +31,6 @@ enum NextActionType {
 
 class RegisterButtonActions extends ButtonActionsBase {
   final RegisterViewModel _viewModel = GetIt.instance<RegisterViewModel>();
-
-  /*
-
-  Map returnArgumentFormatForActionFunction() {
-    return {
-      NextActionType.phoneNumber: [String],
-      NextActionType.phoneVerify: [String],
-      NextActionType.credentials: [String, String, String, String],
-      NextActionType.role: [bool],
-      NextActionType.age: [DateTime],
-      NextActionType.about: [String, String],
-      NextActionType.images: [List<XFile>],
-      NextActionType.preview: [],
-    };
-  }
-  */
 
   NextActionType returnActionTypeFromPageIndex(int index) {
     switch (index) {
@@ -72,18 +57,20 @@ class RegisterButtonActions extends ButtonActionsBase {
     }
   }
 
-  execute(NextActionType nextActionType) {
+  execute(NextActionType nextActionType) async {
     switch (nextActionType) {
       case NextActionType.phoneNumber:
-        phoneNumberContinueAction(_viewModel.userPhoneNumber!);
-        print("ran phone number action");
+        await phoneNumberContinueAction(_viewModel.userPhoneNumber!);
         break;
       case NextActionType.phoneVerify:
         phoneVerifyAction();
         break;
       case NextActionType.credentials:
-        credentialsAction(_viewModel.userFullName!, _viewModel.userEmail!,
-            _viewModel.userPassword!);
+        credentialsAction(
+            _viewModel.userFullName!,
+            _viewModel.userEmail!,
+            _viewModel
+                .userPassword!); // TODO need to check if the email is valid and not taken already FIRST
         break;
       case NextActionType.role:
         roleAction(_viewModel.userIsSitter!);
@@ -113,10 +100,12 @@ class RegisterButtonActions extends ButtonActionsBase {
   }
 
   @override
-  void aboutAction(String bio, String homeAddress) {
+  void aboutAction(String bio, String homeAddress) async {
     _viewModel.setUserBio(bio);
     // parse the homeaddress and put it into city/state/country/geopoint format
+    Location location = await getCoordinatesFromAddress(homeAddress);
     _viewModel.setAddress(homeAddress);
+    _viewModel.setUserCoordinates(location);
   }
 
   @override
@@ -126,14 +115,17 @@ class RegisterButtonActions extends ButtonActionsBase {
 
   @override
   void credentialsAction(String fullName, String email, String password) {
+    final AuthService _auth = instance<AuthService>();
     _viewModel.setFullname(fullName);
     _viewModel.setEmail(email);
     _viewModel.setPassword(password);
+    // _auth.registerWithEmailAndPassword(email, password, data)
+
     // do I even need the userName?
   }
 
   @override
-  void imagesAction(List<XFile> imageLocators) {
+  void imagesAction(List<File> imageLocators) {
     _viewModel.userProfileImages =
         imageLocators; // I don't think this is working
   }
@@ -142,7 +134,7 @@ class RegisterButtonActions extends ButtonActionsBase {
   Future<void> phoneNumberContinueAction(String phoneNumber) async {
     print("phone continue action");
     // verify with firebase
-    _viewModel.setPhoneNumber("+1$phoneNumber");
+    _viewModel.setPhoneNumber(phoneNumber);
     final authService = instance<AuthService>();
     await authService.verifyPhoneNumber(phoneNumber);
   }
@@ -165,7 +157,7 @@ class RegisterButtonActions extends ButtonActionsBase {
 
   @override
   void roleSpecificAction(bool isSitter, dynamic sitterAvailability,
-      Map? children, String? chargeRate) {
+      List<Child>? children, String? chargeRate) {
     if (isSitter) {
       _viewModel.setAvailability(sitterAvailability);
       _viewModel.setRate(chargeRate);
@@ -184,10 +176,10 @@ abstract class ButtonActionsBase {
   void ageAction(DateTime date); // save birthday/age
   void roleAction(bool isSitter); // user is a parent or a sitter
   void aboutAction(String bio, String homeAddress); // save info about profile
-  void imagesAction(List<XFile> imageLocators); //  save profile images
+  void imagesAction(List<File> imageLocators); //  save profile images
   void previewAction(); // send and register data and login
   void roleSpecificAction(bool isSitter, dynamic sitterAvailability,
-      Map children, String chargeRate);
+      List<Child> children, String chargeRate);
 }
 
 /*

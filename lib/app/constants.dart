@@ -27,7 +27,7 @@ const String boy1 =
 const String boy2 =
     "http://www.amusingmaralee.com/wp-content/uploads/2017/11/Untitled.png";
 
-Container imageBlur() {
+Container imageBlur(BoxConstraints constraints) {
   return Container(
     decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(

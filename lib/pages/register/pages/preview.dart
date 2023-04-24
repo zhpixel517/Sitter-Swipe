@@ -32,7 +32,10 @@ class _PreviewState extends State<Preview> {
         true,
         !_viewModel.userIsSitter!,
         _viewModel.userAge.toString(),
-        profileImage: _viewModel.userProfileImages![0].path,
+        profileImages: List.generate(
+            _viewModel.userProfileImages!.length,
+            (index) => _viewModel.userProfileImages![index]
+                .path), //  _viewModel.userProfileImages!,
         didComeFromRegisteredScreen: true,
         bio: _viewModel.userBio!,
       ),

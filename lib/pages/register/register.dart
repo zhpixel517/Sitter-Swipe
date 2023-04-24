@@ -43,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final RegisterButtonActions registerButtonActions = RegisterButtonActions();
   final _viewModel = GetIt.instance<RegisterViewModel>();
 
-  void next(BuildContext context) {
+  void next() {
     FocusManager.instance.primaryFocus?.unfocus(); // hides keyboard
     setState(() {
       pageIndex++;
@@ -69,8 +69,8 @@ class _RegisterPageState extends State<RegisterPage> {
           onTap: () async {
             final NextActionType nextActionType =
                 registerButtonActions.returnActionTypeFromPageIndex(index);
-            registerButtonActions.execute(nextActionType);
-            next(context);
+            await registerButtonActions.execute(nextActionType);
+            next();
           },
           child: const CircleAvatar(
             backgroundColor: TanPallete.tan,
@@ -158,6 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     style: ElevatedButton.styleFrom(
                                         elevation: 0.0),
                                     onPressed: () {
+                                      _viewModel.register();
                                       Navigator.pushNamed(
                                           context, Routes.baseScreen);
                                     },

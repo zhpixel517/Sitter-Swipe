@@ -15,6 +15,8 @@ class AppPadding {
 }
 
 class AppSizes {
+  static const double basePay = 10.0;
+  static const double pinputWidthAndHeight = 75.0;
   static const double elevatedButtonBorderRadius = 25.0;
   static const double focusedInputBorderSize = 3.0;
   static const double enabledInputBorderSize = 1.0;

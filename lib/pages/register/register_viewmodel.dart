@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sitter_swipe/models/base_viewmodel.dart';
-import 'package:sitter_swipe/models/child.dart';
+import 'package:sitter_swipe/models/person/child.dart';
 import 'package:sitter_swipe/models/user_data.dart';
 import 'package:sitter_swipe/services/firebase/auth.dart';
 
@@ -28,23 +28,18 @@ class RegisterViewModel
   String? userStateOrProvince;
   String? userCountry;
   String? userHomeAddress;
-  dynamic geoHash; // their geohash calculated later
   List<Child>? children = [
     const Child(name: "", age: "", hobbies: "")
   ]; //init with default 1 kid
   String? sitterAvailability;
-  String? sitterChargeRate;
+  String? sitterChargeRate = "10.00";
   Location? userLocation;
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-  }
+  void dispose() {}
 
   @override
-  void start() {
-    // TODO: implement start
-  }
+  void start() {}
 
   @override
   Future<void> register() async {
@@ -56,7 +51,8 @@ class RegisterViewModel
             fullName: userFullName!,
             userName: "userName",
             age: userAge,
-            location: GeoPoint(userLocation!.latitude, userLocation!.longitude),
+            location:
+                GeoFirePoint(userLocation!.latitude, userLocation!.longitude),
             gender: userGender,
             profileImages: userProfileImages, // userProfileImages!,
             profilePicture: userProfileImages![0].path,
@@ -69,6 +65,11 @@ class RegisterViewModel
             bio: userBio,
             willPayRate: sitterChargeRate,
             availability: sitterAvailability,
+            children: children!
+                .map((Child child) => {
+                      child.name: {"age": child.age, "hobbies": child.hobbies}
+                    })
+                .toList(),
             reviews: []));
   }
 

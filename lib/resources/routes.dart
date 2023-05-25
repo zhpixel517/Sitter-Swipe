@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sitter_swipe/pages/base_screen.dart';
+import 'package:sitter_swipe/pages/broadcast/broadcast.dart';
 import 'package:sitter_swipe/pages/forgot_password/forgot_password.dart';
 import 'package:sitter_swipe/pages/login/login.dart';
 import 'package:sitter_swipe/pages/notifications/notifications.dart';
@@ -18,6 +19,7 @@ class Routes {
   static const notifications = "/notifications";
   static const settings = '/settings';
   static const wrapper = '/wrapper';
+  static const broadcast = '/broadcast';
   // swipe, chats, and interested don't need to be here
   // they will be inside baseScreen
 
@@ -35,7 +37,7 @@ class RouteGenerator {
       case Routes.login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case Routes.register:
-        return MaterialPageRoute(builder: (_) => RegisterPage());
+        return MaterialPageRoute(builder: (_) => const RegisterPage());
       case Routes.onboarding:
         return MaterialPageRoute(builder: (_) => const OnboardingPage());
       case Routes.forgotPassword:
@@ -46,6 +48,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SettingsPage());
       case Routes.wrapper:
         return MaterialPageRoute(builder: (_) => Wrapper());
+      case Routes.broadcast:
+        return MaterialPageRoute(builder: (_) => const BroadcastPage());
       default:
         return unDefinedRoute();
     }

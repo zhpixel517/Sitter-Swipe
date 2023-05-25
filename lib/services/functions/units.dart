@@ -9,7 +9,7 @@ double kmToMiles(double km) {
 }
 
 int metersToMiles(int meters) {
-  return (meters / 1609).round();
+  return (meters * 0.000621371).round();
 }
 
 int metersToKM(int meters) {

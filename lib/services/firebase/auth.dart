@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:sitter_swipe/models/user_data.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/services/di.dart';
 import 'package:sitter_swipe/services/firebase/database.dart';
+import 'package:sitter_swipe/services/storage.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,7 +31,6 @@ class AuthService {
   Future<bool> registerWithEmailAndPassword(
       String email, String password, UserData data) async {
     // data should come from the information that was entered upon registration
-
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -60,6 +59,7 @@ class AuthService {
   }
 //TODO: need a check to see if the email is already taken or not FIRST
 
+  /// Returns a list of the download urls for each of the images uploaded
   Future<List<String>> _getDownloadUrlsForImages(
       UserData data, List<File> images) async {
     List<String> urls = [];
@@ -87,12 +87,14 @@ class AuthService {
 
   verifyPhoneNumber(String number) async {
     String formattedNumber = _convertToProperlyFormattedPhoneNumber(number);
+    /*
     await _auth.verifyPhoneNumber(
         phoneNumber: "+1$number",
         verificationCompleted: (c) => print("completed"),
         verificationFailed: (c) => print(c),
         codeSent: (_, __) => print("sent"),
         codeAutoRetrievalTimeout: (c) => print("teimout"));
+        */
   }
 
   // auth state change stream

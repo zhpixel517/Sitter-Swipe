@@ -4,7 +4,7 @@ import 'package:sitter_swipe/pages/profile/profile.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
-import 'package:swipe_cards/swipe_cards.dart';
+import 'package:sitter_swipe/resources/strings.dart';
 
 class CardContent extends StatelessWidget {
   final String? image; // for now, the url to image. later, a firebase uri
@@ -45,8 +45,12 @@ class CardContent extends StatelessWidget {
                         false,
                         isFamily!,
                         age!,
+                        bio: isFamily!
+                            ? AppStrings.exampleFamilyBio
+                            : AppStrings.exampleSitterBio,
+
                         // matchEngineInstance: ,
-                        profileImages: [image!],
+                        profileImages: [image!, "assets/images/sitter3a.png"],
                         didComeFromRegisteredScreen: false,
                       )));
         },
@@ -70,14 +74,14 @@ class CardContent extends StatelessWidget {
                         fit: StackFit.expand,
                         children: [
                           Image(
-                            alignment: alignment!,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Center(
-                                  child: Icon(EvaIcons.questionMarkCircle));
-                            },
-                            fit: BoxFit.cover,
-                            image: AssetImage(image!),
-                          ),
+                              alignment: alignment!,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                    child: Icon(EvaIcons.questionMarkCircle));
+                              },
+                              fit: BoxFit.cover,
+                              image: AssetImage(image!) //AssetImage(image!),
+                              ),
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: Container(
@@ -100,7 +104,9 @@ class CardContent extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "${fullName!}, ${age!}",
+                                        isFamily!
+                                            ? "$fullName"
+                                            : "${fullName!}, ${age!}",
                                         style: Fonts.bold.copyWith(
                                             color: Colors.white,
                                             fontSize: 25,

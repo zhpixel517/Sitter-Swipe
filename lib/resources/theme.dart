@@ -1,4 +1,3 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
@@ -11,7 +10,15 @@ ThemeData getApplicationTheme() {
     colorScheme: ThemeData().colorScheme.copyWith(secondary: TanPallete.tan),
     primaryColor: TanPallete.tan,
     listTileTheme: const ListTileThemeData(shape: BeveledRectangleBorder()),
+    /*
+    sliderTheme: const SliderThemeData(
+        activeTrackColor: TanPallete.tan,
+        inactiveTrackColor: TanPallete.creamWhite,
+        thumbColor: TanPallete.tan,
+        overlayColor: TanPallete.creamWhite),
+        */
     chipTheme: ChipThemeData(
+        elevation: 0,
         backgroundColor: TanPallete.lightGrey,
         labelStyle: Fonts.smallText.copyWith(color: Colors.white)),
     appBarTheme: AppBarTheme(

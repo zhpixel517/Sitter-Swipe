@@ -4,7 +4,6 @@ import 'package:sitter_swipe/models/enums/notification_type.dart';
 import 'package:sitter_swipe/models/notification.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
-import 'package:sitter_swipe/resources/routes.dart';
 
 class NotificationCard extends StatefulWidget {
   bool read;

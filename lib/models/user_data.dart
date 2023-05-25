@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 
 class UserData {
   /*
@@ -13,10 +13,11 @@ class UserData {
   final String? fullName;
   final String? userName; // ex: @something
   final int? age;
-  final GeoPoint location; // TODO: add a location identifier or a coordinate
-  final String? gender; // TODO: convert this to a string for firebase
-  List<File>? profileImages; // TODO: image locators from firebase of the person
-  List<String>? profileImageDownloadUrls;
+  final GeoFirePoint location;
+  final String? gender;
+  List<File>? profileImages; // this is for registration only
+  List?
+      profileImageDownloadUrls; // I want this to be List<String> but it won't work
   final String? profilePicture;
   final double? stars;
   final bool? isSitter;
@@ -30,7 +31,7 @@ class UserData {
   final String? bio;
   final String? availability;
   final String? willPayRate;
-  final Map? children;
+  final List? children; // Want it to be List<Map>
 
   UserData({
     required this.fullName,
@@ -61,11 +62,3 @@ class UserData {
 
 // send this data back to firebase as well when registering?
 
-class ThisUser {
-  final String? uid;
-  final UserData? userData; // TODO: add access to this user's data?
-  ThisUser({this.uid, this.userData});
-}
-
-ThisUser? globalThisUser;
-// TODO: put this user's data into App Preferences

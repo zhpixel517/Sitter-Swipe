@@ -1,8 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sitter_swipe/models/child.dart';
+import 'package:sitter_swipe/models/person/child.dart';
 import 'package:sitter_swipe/pages/register/pages.dart';
 import 'package:sitter_swipe/pages/register/provider/button_state_provider.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
@@ -24,7 +23,7 @@ class _RoleSpecificInputState extends State<RoleSpecificInput> {
   /*
 
   On the previous registration page, if the user indicated
-  that they are a sitter, [SitterAvailabilityPage] will show.
+  that they are a sitter, [SitterInfoPage] will show.
   If not, [ChildrenInfoPage] will.
 
   */
@@ -40,9 +39,7 @@ class _RoleSpecificInputState extends State<RoleSpecificInput> {
 
   @override
   Widget build(BuildContext context) {
-    return isSitter!
-        ? const SitterAvailabilityPage()
-        : const ChildrenInfoPage();
+    return isSitter! ? const SitterInfoPage() : const ChildrenInfoPage();
   }
 }
 
@@ -222,20 +219,21 @@ class _ChildrenInfoPageState extends State<ChildrenInfoPage> {
   }
 }
 
-class SitterAvailabilityPage extends StatefulWidget {
-  const SitterAvailabilityPage({super.key});
+class SitterInfoPage extends StatefulWidget {
+  const SitterInfoPage({super.key});
 
   @override
-  State<SitterAvailabilityPage> createState() => _SitterAvailabilityPageState();
+  State<SitterInfoPage> createState() => _SitterInfoPageState();
 }
 
-class _SitterAvailabilityPageState extends State<SitterAvailabilityPage> {
+class _SitterInfoPageState extends State<SitterInfoPage> {
   final RegisterViewModel _viewModel = instance<RegisterViewModel>();
   Key formKey = GlobalKey<FormState>();
   FocusNode availabilityFocusNode = FocusNode();
   TextEditingController availabilityTextController = TextEditingController();
   String? availability;
 
+  @override
   void initState() {
     super.initState();
     availabilityTextController.text = _viewModel.sitterAvailability ?? "";
@@ -269,7 +267,7 @@ class _SitterAvailabilityPageState extends State<SitterAvailabilityPage> {
             padding: const EdgeInsets.symmetric(
                 horizontal: AppPadding.globalContentSidePadding),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: AppPadding.p5),
@@ -296,7 +294,7 @@ class _SitterAvailabilityPageState extends State<SitterAvailabilityPage> {
                   "Your availability will be publicly shown on your profile.",
                   textAlign: TextAlign.center,
                   style: Fonts.smallText,
-                )
+                ),
               ],
             ),
           ),

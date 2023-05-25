@@ -5,7 +5,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:sitter_swipe/pages/onboarding/widgets/onboarding_page.dart';
-import 'package:sitter_swipe/resources/colors.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class _OnboardingScreenState extends State<OnboardingPage> {
         child: CarouselSlider(
           options:
               CarouselOptions(height: MediaQuery.of(context).size.height * 0.9),
-          items: [
+          items: const [
             CarouselPage(
               pageText: "Welcome to Sitter Swipe",
             )

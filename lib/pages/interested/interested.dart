@@ -2,6 +2,7 @@
 // part of baseScreen
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/interested/widgets/interested_person.dart';
@@ -25,7 +26,7 @@ class InterestedPageState extends State<InterestedPage>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     tabController!.addListener(() {}); // TODO: wanna change UI on the tabs
   }
 
@@ -35,9 +36,13 @@ class InterestedPageState extends State<InterestedPage>
     tabController!.dispose();
   }
 
-  static List<InterestedPerson> likedYou = [];
+  static List<InterestedPerson> likedYou = [
+    InterestedPerson("Zach", "@zach", boy1, "15"),
+  ];
 
   static List<InterestedPerson> youLiked = [];
+
+  static List<InterestedPerson> mutual = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +52,30 @@ class InterestedPageState extends State<InterestedPage>
           automaticallyImplyLeading: false,
           title: const Text(PageTitles.interested),
           bottom: TabBar(
+            onTap: (index) {
+              setState(() {
+                tabController!.index = index;
+              });
+            },
+            unselectedLabelStyle: Fonts.mediumStyle,
             indicatorColor: TanPallete.tan,
             dividerColor: TanPallete.creamWhite,
             labelColor: TanPallete.darkGrey,
-            labelStyle: Fonts.mediumStyle,
+            labelStyle: Fonts.bold,
             controller: tabController,
             tabs: [
               Tab(
                 text: "Liked you",
-                icon: tabController!.index == 0
-                    ? const Icon(
-                        EvaIcons.heart,
-                        color: TanPallete.tan,
-                      )
-                    : const Icon(EvaIcons.heartOutline),
+                icon: Badge(
+                  label: const Text(""), // # of new notifications
+                  isLabelVisible: false, //TODO: check notification
+                  child: tabController!.index == 0
+                      ? const Icon(
+                          EvaIcons.heart,
+                          color: TanPallete.tan,
+                        )
+                      : const Icon(EvaIcons.heartOutline),
+                ),
               ),
               Tab(
                 text: "You liked",
@@ -68,7 +83,23 @@ class InterestedPageState extends State<InterestedPage>
                     ? const Icon(Icons.volunteer_activism,
                         color: TanPallete.tan)
                     : const Icon(Icons.volunteer_activism_outlined),
-              )
+              ),
+              Tab(
+                  text: "Mutual",
+                  icon: Badge(
+                    label: const Text("1"),
+                    isLabelVisible: false,
+                    child: tabController!.index == 2
+                        ? SvgPicture.asset(
+                            "assets/icons/heart_check_filled.svg",
+                            width: 24.0,
+                            height: 24.0,
+                            color: TanPallete.tan)
+                        : SvgPicture.asset("assets/icons/heart_check.svg",
+                            width: 24.0,
+                            height: 24.0,
+                            color: TanPallete.lightGrey),
+                  ))
             ],
           ),
         ),
@@ -79,6 +110,7 @@ class InterestedPageState extends State<InterestedPage>
                     padding: const EdgeInsets.symmetric(
                         horizontal: AppPadding.globalContentSidePadding),
                     child: GridView.builder(
+                      shrinkWrap: true,
                       itemCount: likedYou.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -101,13 +133,14 @@ class InterestedPageState extends State<InterestedPage>
                     ),
                   ),
                 ])
-              : _emptyIndicator(),
+              : _emptyIndicator(false),
           youLiked.isNotEmpty
               ? Column(children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: AppPadding.globalContentSidePadding),
                     child: GridView.builder(
+                      shrinkWrap: true,
                       itemCount: youLiked.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -130,11 +163,41 @@ class InterestedPageState extends State<InterestedPage>
                     ),
                   ),
                 ])
-              : _emptyIndicator()
+              : _emptyIndicator(false),
+          mutual.isNotEmpty
+              ? Column(children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppPadding.globalContentSidePadding),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: likedYou.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 5),
+                      itemBuilder: (context, index) {
+                        if (indexToAnimateOn != index) {
+                          return mutual[index];
+                        } else {
+                          return Stack(
+                            children: [
+                              Lottie.asset('json/heart-animation.json',
+                                  animate: true, repeat: true),
+                              mutual[index]
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ])
+              : _emptyIndicator(true),
         ]));
   }
 
-  Center _emptyIndicator() {
+  Center _emptyIndicator(bool isOnMutualPage) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -150,7 +213,9 @@ class InterestedPageState extends State<InterestedPage>
             Padding(
               padding: const EdgeInsets.all(AppPadding.p8),
               child: Text(
-                AppStrings.nothingHere,
+                isOnMutualPage
+                    ? "${AppStrings.noSittersHereYet}\n\n${AppStrings.chatAddedAutomatically}"
+                    : AppStrings.noSittersHereYet,
                 style: Fonts.smallText,
                 textAlign: TextAlign.center,
               ),

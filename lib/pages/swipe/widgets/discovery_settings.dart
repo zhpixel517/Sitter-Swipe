@@ -4,6 +4,8 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sitter_swipe/models/enums/prefferred_gender.dart';
+import 'package:sitter_swipe/models/skills.dart';
+import 'package:sitter_swipe/pages/profile/widgets/skill_chips.dart';
 import 'package:sitter_swipe/pages/swipe/swipe_viewmodel.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
@@ -68,7 +70,6 @@ class _GenderChipState extends State<GenderChip> {
   }
 }
 
-// this does not work
 dynamic showDiscoveryPreferences(
     BuildContext context, bool lookingForSitter) async {
   // lookingFor Sitter will be true if the user is a parent looking to hire someone
@@ -83,6 +84,7 @@ dynamic showDiscoveryPreferences(
   int? minAge = prefs.minAge;
   int? maxAge = prefs.maxAge;
   return showModalBottomSheet(
+      isScrollControlled: true,
       elevation: 6.0,
       useRootNavigator: true,
       shape: const RoundedRectangleBorder(
@@ -110,8 +112,8 @@ dynamic showDiscoveryPreferences(
                     child: Padding(
                       padding: const EdgeInsets.all(
                           AppPadding.globalContentSidePadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: ListView(
+                        //crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             flex: 1,
@@ -128,10 +130,10 @@ dynamic showDiscoveryPreferences(
                                 Text("Range - ${range.toString()} miles",
                                     style: Fonts.bold.copyWith(fontSize: 17)),
                                 Slider(
+                                  activeColor: TanPallete.tan,
                                   divisions: 100,
                                   max: 100.0,
                                   value: range!.toDouble(),
-                                  activeColor: TanPallete.tan,
                                   onChanged: (value) {
                                     setState(() {
                                       range = value.round().toInt();
@@ -204,7 +206,30 @@ dynamic showDiscoveryPreferences(
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Skills & Qualifications",
+                                    style: Fonts.bold.copyWith(fontSize: 17)),
+                                Text(
+                                  "Tap to select",
+                                  style: Fonts.smallText,
+                                ),
+                                Wrap(
+                                  children: [
+                                    for (var item in Skill.values)
+                                      SkillChip(
+                                        skill: item,
+                                        displayedOnDiscoverySheet: true,
+                                      )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -213,7 +238,7 @@ dynamic showDiscoveryPreferences(
               });
         });
       }).then((value) {
-    viewModel.getUserFeed();
+    viewModel.getUserFeed(true);
     return DiscoveryPreferences(
             range: range,
             minimumRating: minimumRating,

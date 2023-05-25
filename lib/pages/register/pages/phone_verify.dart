@@ -74,7 +74,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(
                                 AppSizes.elevatedButtonBorderRadius)))),
-                    length: 4,
+                    length: 6,
                     androidSmsAutofillMethod: AndroidSmsAutofillMethod.none),
               ),
               Padding(

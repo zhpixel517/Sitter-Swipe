@@ -1,3 +1,4 @@
+/// Representation of a child. Only used in resgistration.
 class Child {
   final String? name;
   final String? age;

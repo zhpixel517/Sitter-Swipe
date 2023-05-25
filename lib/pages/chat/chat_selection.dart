@@ -3,12 +3,10 @@
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/chat/chat_viewmodel.dart';
 import 'package:sitter_swipe/pages/chat/widgets/conversation.dart';
-import 'package:sitter_swipe/pages/login/login.dart';
-import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
+import 'package:sitter_swipe/resources/image_assets.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/resources/theme.dart';
@@ -26,14 +24,42 @@ class _ChatSelectionState extends State<ChatSelection> {
   final FocusNode messageSearchFocusNode = FocusNode();
   List<Conversation> conversations = [
     Conversation(
+        "assets/images/IconKitchen-Output/ios/AppIcon-40@2x.png", "", "Now",
+        name: "B.A.B.Y",
+        read: false,
+        image: "assets/images/IconKitchen-Output/android/play_store_512.png",
+        latestMessageWasSelf: false,
+        isAiConversation: true),
+    Conversation(
       "",
-      "test",
-      "12:30",
-      name: "Zachary ",
-      read: false,
-      image: "",
+      "What time would best for you?",
+      "10:39",
+      name: "Paula",
+      read: true,
+      image: ImageAssets.chilton,
       latestMessageWasSelf: false,
-    )
+      isAiConversation: false,
+    ),
+    Conversation(
+      "",
+      "Hello! I found your profile and",
+      "9:45",
+      name: "Jeremy",
+      read: true,
+      image: ImageAssets.qualls,
+      latestMessageWasSelf: true,
+      isAiConversation: false,
+    ),
+    Conversation(
+      "",
+      "I'll let you know, thanks!",
+      "8:51",
+      name: "Kris",
+      read: true,
+      image: ImageAssets.schneider,
+      latestMessageWasSelf: false,
+      isAiConversation: false,
+    ),
   ];
 
   @override

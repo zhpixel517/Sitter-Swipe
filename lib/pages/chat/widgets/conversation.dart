@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sitter_swipe/app/constants.dart';
 import 'package:sitter_swipe/pages/chat/chat.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
@@ -14,12 +13,14 @@ class Conversation extends StatefulWidget {
   bool? latestMessageWasSelf;
   bool read;
   final String? image;
+  final bool? isAiConversation;
   Conversation(this.profileImage, this.latestMessage, this.time,
       {required this.name,
       required this.read,
       required this.image,
       this.userName,
       required this.latestMessageWasSelf,
+      required this.isAiConversation,
       Key? key})
       : super(key: key);
 
@@ -46,6 +47,7 @@ class _ConversationState extends State<Conversation> {
                 false,
                 name: widget.name,
                 profileImageLocator: widget.image,
+                isAi: widget.isAiConversation,
               );
             }));
           },
@@ -54,7 +56,7 @@ class _ConversationState extends State<Conversation> {
             children: [
               CircleAvatar(
                 backgroundColor: TanPallete.tan,
-                backgroundImage: NetworkImage(widget.image!),
+                backgroundImage: AssetImage(widget.image!),
               ),
               Expanded(
                 flex: 8,
@@ -63,21 +65,27 @@ class _ConversationState extends State<Conversation> {
                       horizontal: AppPadding.globalContentSidePadding),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: widget.isAiConversation!
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.start,
                     children: [
                       Text(
                         widget.name,
                         style: Fonts.mediumStyle,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Text(
-                        widget.latestMessageWasSelf!
-                            ? "You: ${widget.latestMessage}"
-                            : widget.latestMessage,
-                        style: widget.read
-                            ? Fonts.smallText
-                            : Fonts.bold.copyWith(color: TanPallete.darkGrey),
-                        overflow: TextOverflow.ellipsis,
-                      )
+                      widget.isAiConversation!
+                          ? const SizedBox()
+                          : Text(
+                              widget.latestMessageWasSelf!
+                                  ? "You: ${widget.latestMessage}"
+                                  : widget.latestMessage,
+                              style: widget.read
+                                  ? Fonts.smallText
+                                  : Fonts.bold
+                                      .copyWith(color: TanPallete.darkGrey),
+                              overflow: TextOverflow.ellipsis,
+                            )
                     ],
                   ),
                 ),

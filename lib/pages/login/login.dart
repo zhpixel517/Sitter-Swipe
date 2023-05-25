@@ -4,7 +4,6 @@ import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sitter_swipe/pages/login/login_viewmodel.dart';
-import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/routes.dart';
@@ -64,18 +63,20 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(
                 horizontal: AppPadding.globalContentSidePadding),
             child: SingleChildScrollView(
-              // TODO: fix logo
               child: Column(
                 children: [
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 150.0),
-                      child: Text(
-                        "SitterSwipe",
-                        style: Fonts.bold
-                            .copyWith(color: TanPallete.tan, fontSize: 50),
+                  Padding(
+                    padding: EdgeInsets.all(
+                        MediaQuery.of(context).size.width * 0.15),
+                    child: const Center(
+                        child: ClipRRect(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(AppSizes.elevatedButtonBorderRadius)),
+                      child: Image(
+                        image: AssetImage(
+                            "assets/images/IconKitchen-Output/ios/AppIcon~ios-marketing.png"),
                       ),
-                    ),
+                    )),
                   ),
                   Form(
                     key: formKey,
@@ -88,12 +89,15 @@ class _LoginPageState extends State<LoginPage> {
                               stream: _viewModel.outputIsEmailValid,
                               builder: (context, snapshot) {
                                 return TextFormField(
-                                  validator: (text) => text!.isEmpty
-                                      ? AppStrings.invalidEmail
-                                      : null,
-                                  focusNode: emailNode,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
+                                    validator: (text) => text!.isEmpty
+                                        ? AppStrings.invalidEmail
+                                        : null,
+                                    focusNode: emailNode,
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: globalInputDecoration(emailNode,
+                                        AppStrings.email, EvaIcons.emailOutline)
+
+                                    /* InputDecoration(
                                       errorText: snapshot.data ?? true
                                           ? null
                                           : AppStrings.invalidEmail,
@@ -109,8 +113,8 @@ class _LoginPageState extends State<LoginPage> {
                                               : TanPallete.lightGrey,
                                           fontSize:
                                               AppSizes.textFieldLabelSize),
-                                      labelText: AppStrings.email),
-                                );
+                                      labelText: AppStrings.email), */
+                                    );
                               }),
                         ),
                         Padding(

@@ -7,10 +7,8 @@ import 'package:sitter_swipe/pages/profile/profile.dart';
 import 'package:sitter_swipe/pages/swipe/swipe.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/nums.dart';
-import 'package:sitter_swipe/resources/theme.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:sitter_swipe/services/responsive.dart';
-import 'package:sitter_swipe/services/storage.dart';
 
 class BaseScreen extends StatefulWidget {
   int screenIndex; // starts with 0
@@ -28,7 +26,11 @@ class _BaseScreen extends State<BaseScreen> {
         label: "",
         activeIcon: Icon(EvaIcons.home)),
     BottomNavigationBarItem(
-        icon: Icon(EvaIcons.heartOutline),
+        icon: Badge(
+          label: Text("3"),
+          isLabelVisible: false,
+          child: Icon(EvaIcons.heartOutline),
+        ),
         label: "",
         activeIcon: Icon(EvaIcons.heart)),
     BottomNavigationBarItem(

@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sitter_swipe/services/functions/units.dart';
-import 'package:sitter_swipe/services/preferences/app_preferences.dart';
 
 Future<Position> getCurrentPosition() async {
   Position position = await Geolocator.getCurrentPosition(
@@ -12,14 +12,10 @@ Future<Position> getCurrentPosition() async {
 
 Future<Location> getCoordinatesFromAddress(String address) async {
   List<Location> locations = await locationFromAddress(address);
-  return locations[0];
+  return locations.first;
 }
 
-// TODO: calculate distance between 2 people's home addresses
-// TODO: is this the right approach? firebase needs to know people's addresses
-// when will the distance be calculated? check out https://pub.dev/packages/geoflutterfire
-
-Future<int> calculateDistance(Position location1, Position location2) async {
+int calculateDistance(Position location1, GeoPoint location2) {
   int distanceInMeters = Geolocator.distanceBetween(location1.latitude,
           location1.longitude, location2.latitude, location2.longitude)
       .round();

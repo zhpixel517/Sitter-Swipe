@@ -3,7 +3,7 @@ import 'package:sitter_swipe/resources/fonts.dart';
 
 class CarouselPage extends StatelessWidget {
   final String? pageText;
-  CarouselPage({this.pageText});
+  const CarouselPage({super.key, this.pageText});
 
   @override
   Widget build(BuildContext context) {

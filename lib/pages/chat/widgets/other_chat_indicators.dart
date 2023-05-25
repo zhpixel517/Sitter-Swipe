@@ -9,9 +9,12 @@ import 'package:sitter_swipe/resources/nums.dart';
 
 class ChatIndicators {
   static Widget timeIndicator(String time, bool isSelfMessage) {
-    return Text(time,
-        style: Fonts.smallText,
-        textAlign: isSelfMessage ? TextAlign.end : TextAlign.start);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppPadding.p5),
+      child: Text(time,
+          style: Fonts.smallText,
+          textAlign: isSelfMessage ? TextAlign.end : TextAlign.start),
+    );
   }
 
   static Widget readIndicator() {
@@ -20,6 +23,6 @@ class ChatIndicators {
 
   static Widget typingIndicator() {
     return const SpinKitThreeBounce(
-        color: TanPallete.darkGrey, size: AppSizes.typingIndicatorSize);
+        color: TanPallete.lightGrey, size: AppSizes.typingIndicatorSize);
   }
 }

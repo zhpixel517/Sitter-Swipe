@@ -18,7 +18,7 @@ import 'package:sitter_swipe/services/responsive.dart';
 enum Direction { forward, backward }
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -157,10 +157,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ? ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         elevation: 0.0),
-                                    onPressed: () {
-                                      _viewModel.register();
+                                    onPressed: () async {
+                                      //TODO: need to show some loading animation
                                       Navigator.pushNamed(
                                           context, Routes.baseScreen);
+
+                                      await _viewModel.register();
                                     },
                                     child: Text("Done", style: Fonts.bold),
                                   )

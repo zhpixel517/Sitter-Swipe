@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sitter_swipe/models/base_viewmodel.dart';
 import 'package:sitter_swipe/services/di.dart';
 import 'package:sitter_swipe/services/firebase/auth.dart';
-import 'package:sitter_swipe/services/firebase/database.dart';
 import 'package:sitter_swipe/services/functions/email_check.dart';
+import 'package:sitter_swipe/services/notifications/notification_service.dart';
 
 class LoginViewModel extends BaseViewModel
     with LoginViewModelInputs, LoginViewModelOutputs {
@@ -16,6 +15,8 @@ class LoginViewModel extends BaseViewModel
 
   final StreamController _isAllInputsValidStreamController =
       StreamController<void>.broadcast();
+
+  final _notifs = instance<NotificationService>();
 
   String _email = '';
   String _password = '';
@@ -28,7 +29,10 @@ class LoginViewModel extends BaseViewModel
   }
 
   @override
-  void start() {}
+  void start() {
+    NotificationService.initNotificationService();
+    NotificationService.showBroadcastNotification();
+  }
 
   @override
   Sink get inputEmail => _emailStreamController.sink;

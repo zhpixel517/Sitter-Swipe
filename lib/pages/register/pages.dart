@@ -1,4 +1,3 @@
-import 'package:sitter_swipe/pages/register/register.dart';
 
 export "pages/birthday.dart";
 export "pages/credentials.dart";

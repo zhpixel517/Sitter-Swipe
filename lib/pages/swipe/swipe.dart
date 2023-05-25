@@ -9,11 +9,11 @@ import 'package:sitter_swipe/pages/swipe/widgets/custom_icon_button.dart';
 import 'package:sitter_swipe/pages/swipe/widgets/discovery_settings.dart';
 import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
-import 'package:sitter_swipe/resources/image_assets.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/routes.dart';
 import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/resources/theme.dart';
+import 'package:stacked/stacked.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
 import '../../services/di.dart';
@@ -27,60 +27,89 @@ class SwipePage extends StatefulWidget {
 
 class SwipePageState extends State<SwipePage> {
   final FocusNode searchBarFocusNode = FocusNode();
+
+  List<SwipeItem> familyCards = [
+    SwipeItem(
+        content: const CardContent(
+            image: "assets/images/family1.png",
+            userName: "@the_lees",
+            fullName: "The Lees",
+            age: "",
+            rating: 4.6,
+            distance: "2",
+            hourlyRate: "13",
+            isFamily: true,
+            alignment: Alignment.center)),
+    SwipeItem(
+        content: const CardContent(
+            image: "assets/images/family2.png",
+            userName: "@the_lees",
+            fullName: "The Reindls",
+            age: "",
+            rating: 4.6,
+            distance: "2",
+            hourlyRate: "13",
+            isFamily: true,
+            alignment: Alignment.center)),
+  ];
+
   List<SwipeItem> cards = [
     SwipeItem(
-        content: CardContent(
-          alignment: Alignment.centerRight,
+      content: const CardContent(
+        alignment: Alignment.center,
+        rating: 5.0,
+        hourlyRate: '20',
+        image: "assets/images/sitter3.png", //ImageAssets.cummins,
+        userName: "@tony_pepperoni",
+        fullName: "Tony",
+        age: "15",
+        isFamily: false,
+        distance: "3",
+      ),
+    ),
+    SwipeItem(
+        content: const CardContent(
+          alignment: Alignment.topCenter,
           rating: 4.2,
           hourlyRate: '17',
-          image: ImageAssets.chilton,
-          fullName: "Paula Chilton",
+          image: "assets/images/sitter1.png",
+
+          ///girl1, //ImageAssets.chilton,
+          fullName: "Alice",
           userName: "chilton9000",
-          age: "27",
+          age: "20",
           isFamily: false,
           distance: "5",
         ),
         likeAction: () {}),
     SwipeItem(
-      content: CardContent(
+      content: const CardContent(
         alignment: Alignment.centerRight,
         rating: 4.0,
         hourlyRate: '14',
-        image: ImageAssets.cleaver,
+        image: "assets/images/sitter2.png", //ImageAssets.cleaver,
         userName: "jennyRocks",
-        fullName: "Jennifer Cleaver",
+        fullName: "Jennifer",
         age: "21",
         isFamily: false,
         distance: "15",
       ),
     ),
     SwipeItem(
-      content: CardContent(
+      content: const CardContent(
         alignment: Alignment.center,
         rating: 5.0,
         hourlyRate: '20',
-        image: ImageAssets.cummins,
-        userName: "my_real_name_is_chris",
-        fullName: "Tony Cummins",
-        age: "65",
-        isFamily: false,
-        distance: "3",
-      ),
-    ),
-    SwipeItem(
-      content: CardContent(
-        alignment: Alignment.center,
-        rating: 5.0,
-        hourlyRate: '20',
-        image: ImageAssets.qualls,
+        image: "assets/images/sitter4.png", //ImageAssets.qualls,
         userName: "scrambled_brain",
-        fullName: "Jeremy Qualls",
-        age: "12",
+        fullName: "Bianca",
+        age: "19",
         isFamily: false,
         distance: "3",
         // matchEngineInstance: matchEngine,
       ),
     ),
+    /*
     SwipeItem(
       content: CardContent(
         alignment: Alignment.center,
@@ -95,6 +124,7 @@ class SwipePageState extends State<SwipePage> {
         // matchEngineInstance: matchEngine,
       ),
     ),
+    */
   ]; // need to get these from the viewmodel/firebase
 
 /*
@@ -163,48 +193,52 @@ class SwipePageState extends State<SwipePage> {
               Expanded(
                 flex: 7,
                 child: Center(
-                    child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(
-                            EvaIcons.questionMarkCircleOutline,
-                            size: 30,
-                            color: TanPallete.lightGrey,
-                          ),
-                        ),
-                        Text(
-                          AppStrings.noMoreSitters,
-                          style: Fonts.mediumStyle
-                              .copyWith(color: TanPallete.lightGrey),
-                        ),
-                        const SizedBox(height: 30),
-                        ElevatedButton(
-                            onPressed: () {
-                              showDiscoveryPreferences(context, true);
-                            },
-                            child: const Text("Change Discovery Settings"))
-                      ],
-                    ),
-                    SwipeCards(
-                      upSwipeAllowed: false,
-                      matchEngine: matchEngine!,
-                      onStackFinished: () {},
-                      itemBuilder: (item, index) {
-                        return cards.isNotEmpty
-                            ? cards[index].content
-                            : const Center(
-                                child: Text(
-                                    "No more sitters found. Try change your discovery preferences?"));
-                      },
-                    ),
-                  ],
-                )),
+                    child: ViewModelBuilder<SwipeViewModel>.reactive(
+                        viewModelBuilder: () => SwipeViewModel(),
+                        builder: (context, model, child) {
+                          return Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      EvaIcons.questionMarkCircleOutline,
+                                      size: 30,
+                                      color: TanPallete.lightGrey,
+                                    ),
+                                  ),
+                                  Text(
+                                    AppStrings.noMoreSitters,
+                                    style: Fonts.mediumStyle
+                                        .copyWith(color: TanPallete.lightGrey),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        showDiscoveryPreferences(context, true);
+                                      },
+                                      child: const Text(
+                                          "Change Discovery Settings"))
+                                ],
+                              ),
+                              SwipeCards(
+                                  upSwipeAllowed: false,
+                                  matchEngine: matchEngine!,
+                                  onStackFinished: () {},
+                                  itemBuilder: (item, index) {
+                                    return cards.isNotEmpty
+                                        ? cards[index].content
+                                        : const Center(
+                                            child: Text(
+                                                "No more sitters found. Try change your discovery preferences?"));
+                                  })
+                            ],
+                          );
+                        })),
               ),
             ],
           ),
@@ -269,15 +303,32 @@ class SwipePageState extends State<SwipePage> {
             ],
           ),
         ),
-        IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, Routes.notifications);
-            },
-            icon: const Icon(
-              EvaIcons.bellOutline,
-              color: TanPallete.darkGrey,
-              size: AppSizes.largeIconSize,
-            ))
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppPadding.p5),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.broadcast);
+                },
+                icon: const Icon(
+                  Icons.settings_input_antenna,
+                  color: TanPallete.darkGrey,
+                  size: AppSizes.largeIconSize,
+                ),
+              ),
+            ),
+            IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.notifications);
+                },
+                icon: const Icon(
+                  EvaIcons.bellOutline,
+                  color: TanPallete.darkGrey,
+                  size: AppSizes.largeIconSize,
+                ))
+          ],
+        ),
       ],
     );
   }

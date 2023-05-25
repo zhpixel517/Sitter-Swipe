@@ -12,9 +12,13 @@ class ChatPage extends StatefulWidget {
   String? userName; // for firebase?
   bool
       cameFromProfile; // "View Profile" butotn won't show if they already came from the profile screen
+  bool? isAi;
   final String? profileImageLocator;
   ChatPage(this.userName, this.cameFromProfile,
-      {required this.name, required this.profileImageLocator, Key? key})
+      {required this.name,
+      required this.profileImageLocator,
+      required this.isAi,
+      key})
       : super(key: key);
 
   @override
@@ -25,22 +29,43 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController chatTextController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
+  List aiChat = [
+    const ChatBubble(
+      text:
+          "Hi! I'm the Babysitter Assistant for Busy Youths, or B.A.B.Y for short. I can help you with any sort of babysitting ideas that you need. Ask away!",
+      // "Hi! I'm your personalized AI helper. I can help you with finding recipies, coming up with ideas for games for kids, and with housekeeping tips! Ask me anything!",
+      isSelf: false,
+      isTyping: false,
+    ),
+    /*
+    const ChatBubble(
+      text: "any ideas of games I could play with 2 rowdy kids?",
+      isSelf: true,
+      isTyping: false,
+    ),
+    */
+  ];
+
   List chats = [
     const ChatBubble(
       text: "Hey! Need a sitter?",
       isSelf: true,
+      isTyping: false,
     ),
     const ChatBubble(
       text: "Yeah, that would be great. What does you schedule look like? ",
       isSelf: false,
+      isTyping: false,
     ),
     const ChatBubble(
       text: "Pretty free this next weekend.",
       isSelf: true,
+      isTyping: false,
     ),
     const ChatBubble(
       text: "How's yours looking?",
       isSelf: true,
+      isTyping: false,
     )
   ];
 
@@ -53,7 +78,7 @@ class _ChatPageState extends State<ChatPage> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: NetworkImage(widget.profileImageLocator!),
+              backgroundImage: AssetImage(widget.profileImageLocator!),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.03,
@@ -89,12 +114,12 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           Expanded(
             flex: 9,
-            child: chats.isNotEmpty
+            child: aiChat.isNotEmpty
                 ? ListView.builder(
                     controller: scrollController,
-                    itemCount: chats.length,
+                    itemCount: aiChat.length,
                     itemBuilder: (builder, index) {
-                      return chats[index];
+                      return aiChat[index];
                     })
                 : Align(
                     alignment: Alignment.bottomCenter,
@@ -146,10 +171,48 @@ class _ChatPageState extends State<ChatPage> {
                                 scrollController.jumpTo(bottomPosition);
                               }
                               if (chatTextController.text.isNotEmpty) {
+                                // temp for the presentation
                                 setState(() {
-                                  chats.add(ChatBubble(
+                                  if (widget.isAi!) {
+                                    aiChat.add(ChatBubble(
                                       text: chatTextController.text,
-                                      isSelf: true));
+                                      isSelf: true,
+                                      isTyping: false,
+                                    ));
+                                    aiChat.add(const ChatBubble(
+                                      text: "",
+                                      isSelf: false,
+                                      isTyping: true,
+                                    ));
+                                  }
+                                  /*
+                                  widget.isAi!
+                                      ? aiChat.add(const ChatBubble(
+                                          text: "",
+                                          isSelf: false,
+                                          isTyping: true,
+                                        ))
+                                      : chats.add(ChatBubble(
+                                          text: chatTextController.text,
+                                          isSelf: true,
+                                          isTyping: false,
+                                        ));
+                                        */
+                                  //! Just for show
+                                  Future.delayed(const Duration(seconds: 2),
+                                      () {
+                                    setState(() {
+                                      aiChat.removeLast();
+                                      aiChat.add(
+                                        const ChatBubble(
+                                          text:
+                                              "Sure! Here are some game ideas for rowdy kids: \n\nObstacle Course: Create an obstacle course in the backyard or living room with objects to climb over, under, and through. Time the kids to see who can complete the course the fastest, and add in challenges like carrying a ball or balloon between their legs. \n\nFreeze Dance: Play music and have the kids dance around, but when the music stops, they have to freeze in place. You can mix up the dance styles (e.g. ballet, hip-hop, silly) and make it more challenging by calling out poses they have to freeze in, like \"air guitar\" or \"statue of liberty.\" \n\nRemember, safety should always come first, so make sure to supervise the kids and adjust the games to fit their age, skill level, and space. Have fun!",
+                                          isSelf: false,
+                                          isTyping: false,
+                                        ),
+                                      );
+                                    });
+                                  });
                                   chatTextController.text = "";
                                 });
                               }

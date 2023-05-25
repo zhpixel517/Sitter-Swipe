@@ -5,15 +5,13 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sitter_swipe/models/user_data.dart';
+import 'package:sitter_swipe/resources/strings.dart';
 import 'package:sitter_swipe/services/preferences/discovery_preferences.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 
 class SitterDatabase {
   final String? uid;
   SitterDatabase({this.uid});
-
-  // TODO: setup firebase
-  // TODO: test firebase read and write
 
   final CollectionReference users =
       FirebaseFirestore.instance.collection("users");
@@ -38,7 +36,7 @@ class SitterDatabase {
     List<DocumentSnapshot> nearbyUsers = [];
 
     stream.listen((List<DocumentSnapshot> documentList) {
-      documentList.forEach((DocumentSnapshot document) {
+      for (var document in documentList) {
         double latitude = document['position'].latitude;
         double longitude = document['position'].longitude;
         double distanceBetween = Geolocator.distanceBetween(
@@ -46,16 +44,17 @@ class SitterDatabase {
         if (distanceBetween <= radius) {
           nearbyUsers.add(document);
         }
-      });
+      }
     });
   }
 
   Future updateUserData(UserData data) async {
+    print("called update user data");
     return await users.doc(uid).set({
       "fullName": data.fullName,
       "userName": data.userName,
       "age": data.age,
-      "location": data.location,
+      "location": data.location.data,
       "gender": data.gender,
       "profileImages": data.profileImageDownloadUrls,
       "profilePicture": data.profileImageDownloadUrls![0],
@@ -70,7 +69,7 @@ class SitterDatabase {
       "bio": data.bio,
       "availability": data.availability,
       "willPayRate": data.willPayRate,
-      "children": data.children
+      "children": data.isSitter! ? [] : data.children
     });
   }
 
@@ -100,13 +99,14 @@ class SitterDatabase {
   List<UserData> _userListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return UserData(
-          country: doc.get("country"),
+          profileImages: null,
+          country: null, // doc.get("country"),
           fullName: doc.get("fullName"),
-          userName: doc.get("userName"),
+          userName: null, //doc.get("userName"),
           age: doc.get("age"),
           location: doc.get("location"),
           gender: doc.get("gender"),
-          profileImages: doc.get("profileImages"),
+          profileImageDownloadUrls: doc.get("profileImages"),
           profilePicture: doc.get("profilePicture"),
           stars: doc.get("stars"),
           isSitter: doc.get("isSitter"),
@@ -117,6 +117,7 @@ class SitterDatabase {
           bio: doc.get("bio"),
           availability: doc.get("availability"),
           willPayRate: doc.get("willPayRate"),
+          children: doc.get("children"),
           uid: uid);
     }).toList();
   }
@@ -138,7 +139,6 @@ class SitterDatabase {
   }
 */
   Future<QuerySnapshot<Object?>> get foundSitters async {
-    // TODO: where to implement discovery preferences?
     DiscoveryPreferences preferences = await getDiscoveryPreferences();
     var query = users
         .where("isSitter", isEqualTo: true)
@@ -160,9 +160,27 @@ class SitterDatabase {
     return query;
   }
 
-  Stream<List<UserData>> get foundFamilies {
-    // TODO: where to implement the sitter side??
-    return users.snapshots().map(_userListFromSnapshot);
+  Future<QuerySnapshot> get userList {
+    return users.get()
+      ..then((snapshot) => _userListFromSnapshot(
+          snapshot)); //snapshots().map(_userListFromSnapshot);
+  }
+
+  /// Returns a [Stream] of [DocumentSnapshot]s of all the users within our given radius
+  Stream<List<DocumentSnapshot<Object?>>> testLocationQuery(
+      center, double radius) {
+    print("start");
+    var collection = GeoFlutterFire().collection(collectionRef: users);
+    var within = collection.within(
+        center: center,
+        radius: radius,
+        field: FirebaseDataPointKeys.location,
+        strictMode: true);
+    within.listen((event) {
+      print(event);
+    });
+
+    return within;
   }
 
   // get this user's information
@@ -242,6 +260,7 @@ class SitterDatabase {
 
   // ***********************************************************
 
+  /// Uploads a [File] to Firebase and the returns its download url
   Future<String> uploadImageToFirebase(File image, String uid) async {
     String fileName = DateTime.now()
         .millisecondsSinceEpoch

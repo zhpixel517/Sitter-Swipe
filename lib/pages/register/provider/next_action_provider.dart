@@ -10,7 +10,7 @@ import 'dart:io';
 
 import 'package:geocoding/geocoding.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sitter_swipe/models/child.dart';
+import 'package:sitter_swipe/models/person/child.dart';
 import 'package:sitter_swipe/pages/register/register_viewmodel.dart';
 import 'package:sitter_swipe/services/di.dart';
 import 'package:sitter_swipe/services/firebase/auth.dart';
@@ -32,6 +32,8 @@ enum NextActionType {
 class RegisterButtonActions extends ButtonActionsBase {
   final RegisterViewModel _viewModel = GetIt.instance<RegisterViewModel>();
 
+  /// Will return the correct action function type depending on whatever index was passed in.
+  /// This corresponds to each index of the [registerPages] variable in [register.dart].
   NextActionType returnActionTypeFromPageIndex(int index) {
     switch (index) {
       case 0:
@@ -57,6 +59,7 @@ class RegisterButtonActions extends ButtonActionsBase {
     }
   }
 
+  /// Depending on the [NextActionType], a this function executes another function, Will run each time that the next button is pressed.
   execute(NextActionType nextActionType) async {
     switch (nextActionType) {
       case NextActionType.phoneNumber:
@@ -115,7 +118,7 @@ class RegisterButtonActions extends ButtonActionsBase {
 
   @override
   void credentialsAction(String fullName, String email, String password) {
-    final AuthService _auth = instance<AuthService>();
+    final AuthService auth = instance<AuthService>();
     _viewModel.setFullname(fullName);
     _viewModel.setEmail(email);
     _viewModel.setPassword(password);

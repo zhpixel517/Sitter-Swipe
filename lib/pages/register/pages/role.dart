@@ -1,5 +1,4 @@
 // profile role - sitter or parent/family
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sitter_swipe/pages/register/pages.dart';
@@ -9,7 +8,6 @@ import 'package:sitter_swipe/resources/colors.dart';
 import 'package:sitter_swipe/resources/fonts.dart';
 import 'package:sitter_swipe/resources/nums.dart';
 import 'package:sitter_swipe/resources/strings.dart';
-import 'package:sitter_swipe/resources/theme.dart';
 import 'package:sitter_swipe/services/di.dart';
 
 class Role extends StatefulWidget {
@@ -107,10 +105,6 @@ class _RoleState extends State<Role> {
                       ),
                       Slider(
                           activeColor: TanPallete.tan,
-                          inactiveColor: TanPallete.creamWhite,
-                          thumbColor: TanPallete.tan,
-                          overlayColor:
-                              MaterialStateProperty.all(TanPallete.creamWhite),
                           min: 5.0,
                           max: 25.0,
                           divisions: 20,
@@ -119,7 +113,7 @@ class _RoleState extends State<Role> {
                             setState(() {
                               rate = val;
                             });
-                            _viewModel.setRate(val.toString());
+                            _viewModel.setRate(rate.toString());
                           }),
                     ],
                   )

@@ -1,5 +1,4 @@
 // ask for user's birthday and calculate their age
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sitter_swipe/pages/register/pages.dart';
@@ -33,7 +32,7 @@ class _BirthdayState extends State<Birthday> {
   }
 
   String _dateOfBirthToString(DateTime? pickedDate) {
-    return "${pickedDate!.month}/${pickedDate.day}/${pickedDate.year}";
+    return "${pickedDate?.month}/${pickedDate?.day}/${pickedDate?.year}";
   }
 
   _checkBlur(BlurProvider provider) {

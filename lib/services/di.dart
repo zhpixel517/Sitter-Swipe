@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sitter_swipe/pages/broadcast/broadcast_viewmodel.dart';
 import 'package:sitter_swipe/pages/chat/chat_viewmodel.dart';
 import 'package:sitter_swipe/pages/forgot_password/forgot_viewmodel.dart';
 import 'package:sitter_swipe/pages/interested/interested_viewmodel.dart';
@@ -13,6 +14,7 @@ import 'package:sitter_swipe/pages/settings/settings_viewmodel.dart';
 import 'package:sitter_swipe/pages/swipe/swipe_viewmodel.dart';
 import 'package:sitter_swipe/services/firebase/auth.dart';
 import 'package:sitter_swipe/services/network_info.dart';
+import 'package:sitter_swipe/services/notifications/notification_service.dart';
 import 'package:sitter_swipe/services/preferences/app_preferences.dart';
 import 'package:sitter_swipe/services/responsive.dart';
 
@@ -56,6 +58,9 @@ Future<void> initAppModule() async {
   instance.registerLazySingleton<NotificationPageViewModel>(
       () => NotificationPageViewModel());
 
+  instance
+      .registerLazySingleton<BroadcastViewModel>(() => BroadcastViewModel());
+
   // helper classes
   instance.registerLazySingleton<Responsive>(() => const Responsive());
 
@@ -64,4 +69,7 @@ Future<void> initAppModule() async {
   // instance.registerLazySingleton<SitterDatabase>(() => SitterDatabase());
 
   instance.registerLazySingleton<AppPreferences>(() => AppPreferences());
+
+  instance
+      .registerLazySingleton<NotificationService>(() => NotificationService());
 }

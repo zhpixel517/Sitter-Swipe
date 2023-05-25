@@ -1,9 +1,22 @@
+create UI for the following:
+
+ - fix discovery search ui
+ - matches ui - functional badges
+ - interested person like animation
+ - chats
+ - add more chips + qualifications
+ - certifacions on discovery preferences
+ - certifications to registration
+ - notifications ui
+ - search for sitters
+ - location drop down
+ - better stock images
+ - responsive
+
 order of operations - 
-- complete firebase upload datapoints for parents
 - phone number verification 
 - pull data and populate swipe cards
-- profile page cases depending on where we came from
-- discovery page slider ui is wack
+- profile page edits to match preview page
 - filtering based on location
 - send likes and passes
 - interested page like animation + tab ui udpdate
